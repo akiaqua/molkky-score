@@ -3215,10 +3215,10 @@ function renderResults(winnerName){
             <b>${i+1}位　${escapeHtml(p.name)}</b><b>${p.score}点</b>
           </div>
           <div class="result-grid" style="margin-top:8px">
-            <div><div class="label">平均得点</div><div class="value">${avg.toFixed(1)}</div></div>
-            <div><div class="label">ミス（0点）</div><div class="value">${p.misses}回</div></div>
-            <div><div class="label">ターン数</div><div class="value">${p.turns}</div></div>
-            <div><div class="label">1回の最高得点</div><div class="value">${p.best}点</div></div>
+            <div><div class="label">ミス回数</div><div class="value">${p.misses||0}回</div></div>
+            <div><div class="label">ミス率</div><div class="value">${teamMissRate(p)}%</div></div>
+            <div><div class="label">誤ヒット率</div><div class="value">${teamWrongHitRate(p)}%</div></div>
+            <div><div class="label">合計ターン</div><div class="value">${p.turns||0}回</div></div>
           </div>
           ${memberRows?`<div class="member-results"><div class="small" style="font-weight:800;margin-bottom:2px">メンバー別</div>${memberRows}</div>`:''}
         </div>`;
