@@ -1,6 +1,6 @@
 {
-  "name": "MOLKKY SCORE",
-  "short_name": "MOLKKY",
+  "name": "MOLKKY SCORE+ - モルック上達・成績管理",
+  "short_name": "MOLKKY SCORE+",
   "description": "モルックのセット得点・履歴・個人成績を記録するスコアアプリ",
   "start_url": "./",
   "scope": "./",

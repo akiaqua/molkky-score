@@ -2083,6 +2083,59 @@ body:has(#setup.hidden) .title-row{
   font-weight:1000;
   box-shadow:0 1px 2px rgba(0,0,0,.12);
 }
+
+/* ===== Android test v1.0.5: capture layout + throw status badges ===== */
+#resultCaptureHost .capture-member-result{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-rows:auto auto auto!important;
+  gap:4px 3px!important;
+  width:100%!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-name{
+  grid-column:1 / -1!important;grid-row:1!important;width:auto!important;
+  text-align:left!important;padding:0 2px 4px!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-stat{
+  grid-row:2!important;display:block!important;width:auto!important;min-width:0!important;
+  padding:4px 1px!important;text-align:center!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(2){grid-column:1!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(3){grid-column:2!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(4){grid-column:3!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(5){grid-column:4!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(6){grid-column:5!important}
+#resultCaptureHost .capture-member-result>.member-result-stat b{display:block!important;font-size:12px!important;white-space:nowrap!important}
+#resultCaptureHost .capture-member-result>.member-result-stat span{display:block!important;font-size:8px!important;white-space:nowrap!important}
+#resultCaptureHost .capture-member-result>.member-burst{grid-column:1/-1!important;grid-row:3!important}
+#resultCaptureHost .result-capture-history-row{
+  display:flex!important;align-items:center!important;gap:5px!important;flex-wrap:nowrap!important;
+  padding:7px 0!important;white-space:nowrap!important;
+}
+.result-capture-status{display:inline-block;font-weight:1000;border-radius:8px;padding:4px 7px;font-size:11px;line-height:1;white-space:nowrap}
+.result-capture-status.miss{color:#fff;background:#d93025;border:1px solid #b3261e}
+.result-capture-status.wrong{color:#fff;background:#e65f19;border:1px solid #b94710}
+#resultCaptureHost .result-capture-points{font-weight:900;font-size:12px;white-space:nowrap}
+
+/* ===== unified throw history (web/result/saved/capture) ===== */
+.throw-history-table{margin-top:8px;border-top:1px solid #dfe7e1}
+.throw-history-row{display:grid;grid-template-columns:58px minmax(58px,.9fr) minmax(62px,1fr) minmax(76px,1.15fr) 58px;gap:5px;align-items:center;padding:7px 2px;border-bottom:1px solid #edf1ee;font-size:11px}
+.throw-history-row>span{text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.throw-history-turn{font-weight:800;color:#52615b}
+.throw-history-team{font-weight:900}
+.throw-history-member{font-weight:800}
+.throw-history-result{font-weight:1000}
+.throw-history-result.miss{color:#fff;background:#d93025;border:1px solid #b3261e;border-radius:8px;padding:4px 3px}
+.throw-history-result.wrong{color:#fff;background:#e65f19;border:1px solid #b94710;border-radius:8px;padding:4px 3px}
+.throw-history-total{font-weight:1000}
+@media(max-width:390px){.throw-history-row{grid-template-columns:52px minmax(50px,.85fr) minmax(54px,.95fr) minmax(70px,1.15fr) 52px;gap:3px;font-size:10px}}
+.throw-history-team-block{margin-top:10px;padding-top:7px;border-top:1px solid #dfe7e1}
+.throw-history-team-title{font-weight:1000;font-size:12px;margin-bottom:3px}
+.throw-history-team-block .throw-history-row{grid-template-columns:62px minmax(72px,1fr) minmax(90px,1.2fr) 62px}
+@media(max-width:390px){.throw-history-team-block .throw-history-row{grid-template-columns:56px minmax(62px,1fr) minmax(82px,1.2fr) 56px;gap:3px}}
+#resultCaptureHost .result-capture-history-row{display:grid!important;grid-template-columns:58px minmax(58px,.9fr) minmax(62px,1fr) minmax(76px,1.15fr) 58px!important;gap:5px!important;align-items:center!important;flex-wrap:nowrap!important;white-space:nowrap!important}
+#resultCaptureHost .result-capture-history-row>span{text-align:center!important;min-width:0!important}
+
 </style>
   <meta name="theme-color" content="#0b4a38">
   <meta name="mobile-web-app-capable" content="yes">
@@ -2091,6 +2144,346 @@ body:has(#setup.hidden) .title-row{
   <meta name="apple-mobile-web-app-title" content="MOLKKY SCORE">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icon-192.png">
+
+<style>
+/* v14: 現在投擲中のチームを、得点入力画面でより明確に強調 */
+#players .player.active{
+  position:relative!important;
+  border:4px solid #19733f!important;
+  background:linear-gradient(180deg,#fffef7 0%,#e3f5df 100%)!important;
+  box-shadow:
+    0 0 0 4px rgba(25,115,63,.18),
+    0 6px 0 rgba(25,115,63,.30),
+    0 10px 20px rgba(25,115,63,.16)!important;
+  transform:translateY(-3px) scale(1.01)!important;
+}
+#players .player.active::before{
+  content:"▶ 投擲中";
+  position:absolute;
+  top:-12px;
+  right:8px;
+  z-index:3;
+  padding:4px 9px;
+  border-radius:999px;
+  background:#19733f;
+  color:#fff;
+  border:2px solid #fff;
+  box-shadow:0 2px 6px rgba(0,0,0,.16);
+  font-size:11px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:.03em;
+}
+#players .player.active .score{
+  color:#125c32!important;
+  text-shadow:0 2px 0 #fff!important;
+}
+</style>
+
+
+<style>
+/* v15: ゴール組み合わせ表示でチームカードの高さが変わらないよう表示領域を予約 */
+#players .player{
+  display:flex!important;
+  flex-direction:column!important;
+}
+#players .player .team-finish-combos{
+  min-height:64px!important;
+  height:64px!important;
+  margin-top:5px!important;
+  overflow:hidden!important;
+}
+#players .player:not(:has(.team-finish-combos))::after{
+  content:"";
+  display:block;
+  min-height:64px;
+  height:64px;
+  margin-top:5px;
+}
+
+/* v15: リザルト画面の可読性を上げる */
+#result .result-title{font-size:24px!important}
+#result .result-set-time{font-size:17px!important}
+#result .result-item .label,
+#result .result-grid .label{font-size:13px!important;line-height:1.25!important}
+#result .result-item .value,
+#result .result-grid .value{font-size:20px!important;line-height:1.2!important}
+#result .member-name,
+#result .saved-member-name,
+#result .result-member-name{font-size:16px!important}
+#result .member-stat,
+#result .saved-member-stat,
+#result .result-member-stat{font-size:14px!important}
+#result .member-stat b,
+#result .saved-member-stat b,
+#result .result-member-stat b{font-size:17px!important}
+#result .throw-history-row,
+#result .history-grid-row,
+#result .team-history-row{font-size:14px!important;line-height:1.25!important}
+#result .history-result-badge,
+#result .throw-result-badge{font-size:13px!important}
+
+/* v15: 保存画像内はスマホ表示より一段大きく */
+.result-capture-host{font-size:15px!important}
+.result-capture-host .result-title{font-size:26px!important}
+.result-capture-host .result-set-time{font-size:18px!important}
+.result-capture-host .label{font-size:14px!important;line-height:1.25!important}
+.result-capture-host .value{font-size:21px!important;line-height:1.2!important}
+.result-capture-host .saved-member-name,
+.result-capture-host .result-member-name,
+.result-capture-host .member-name{font-size:17px!important}
+.result-capture-host .saved-member-stat,
+.result-capture-host .result-member-stat,
+.result-capture-host .member-stat{font-size:14px!important}
+.result-capture-host .saved-member-stat b,
+.result-capture-host .result-member-stat b,
+.result-capture-host .member-stat b{font-size:18px!important}
+.result-capture-host .throw-history-row,
+.result-capture-host .history-grid-row,
+.result-capture-host .team-history-row{font-size:15px!important;line-height:1.3!important}
+.result-capture-host .history-result-badge,
+.result-capture-host .throw-result-badge{font-size:14px!important}
+</style>
+
+
+<style>
+/* v16: 組み合わせが不要な時は領域を残さず折りたたむ */
+#players .player .team-finish-combos{
+  min-height:0!important;
+  height:auto!important;
+  margin-top:5px!important;
+  overflow:visible!important;
+}
+#players .player:not(:has(.team-finish-combos))::after{
+  content:none!important;
+  display:none!important;
+  min-height:0!important;
+  height:0!important;
+  margin:0!important;
+}
+
+/* v16: リザルトの小見出しを濃く・大きくして視認性アップ */
+#result .result-item .label,
+#result .result-grid .label,
+#result .saved-member-stat span,
+#result .result-member-stat span,
+#result .member-stat span{
+  color:#33443d!important;
+  font-size:15px!important;
+  font-weight:800!important;
+  line-height:1.25!important;
+  opacity:1!important;
+}
+#result .result-item .value,
+#result .result-grid .value{
+  color:#14251f!important;
+  font-size:21px!important;
+  font-weight:1000!important;
+}
+#result .saved-member-stat b,
+#result .result-member-stat b,
+#result .member-stat b{
+  color:#14251f!important;
+  font-size:19px!important;
+  font-weight:1000!important;
+}
+
+/* 保存画像でも同じ視認性 */
+.result-capture-host .label,
+.result-capture-host .saved-member-stat span,
+.result-capture-host .result-member-stat span,
+.result-capture-host .member-stat span{
+  color:#33443d!important;
+  font-size:15px!important;
+  font-weight:800!important;
+  opacity:1!important;
+}
+.result-capture-host .value{
+  color:#14251f!important;
+  font-size:22px!important;
+  font-weight:1000!important;
+}
+.result-capture-host .saved-member-stat b,
+.result-capture-host .result-member-stat b,
+.result-capture-host .member-stat b{
+  color:#14251f!important;
+  font-size:19px!important;
+  font-weight:1000!important;
+}
+</style>
+
+
+<style>
+/* v17: メンバー名の横に合計得点、2段目は4項目 */
+#result .member-result,
+#result .saved-member{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:5px 3px!important;
+  align-items:stretch!important;
+}
+#result .member-result-name,
+#result .saved-member-name{
+  grid-column:1 / -1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  font-size:17px!important;
+  font-weight:1000!important;
+  padding:2px 3px 6px!important;
+}
+#result .member-total-score{
+  flex:0 0 auto!important;
+  padding:4px 9px!important;
+  border-radius:999px!important;
+  background:#eef5e8!important;
+  border:1px solid #cbdac1!important;
+  color:#203f2e!important;
+  font-size:17px!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+#result .member-result-stat,
+#result .saved-member-stat{
+  min-width:0!important;
+  text-align:center!important;
+  padding:6px 1px!important;
+}
+#result .member-result-stat b,
+#result .saved-member-stat b{
+  display:block!important;
+  font-size:19px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+#result .member-result-stat span,
+#result .saved-member-stat span{
+  display:block!important;
+  margin-top:3px!important;
+  font-size:13px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+
+/* 画像出力も同じ2段構成 */
+#resultCaptureHost .member-result,
+#resultCaptureHost .saved-member,
+#resultCaptureHost .capture-member-result{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:auto auto!important;
+  gap:5px 3px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#resultCaptureHost .member-result-name,
+#resultCaptureHost .saved-member-name,
+#resultCaptureHost .capture-member-result>.member-result-name{
+  grid-column:1 / -1!important;
+  grid-row:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+  padding:2px 3px 6px!important;
+  font-size:17px!important;
+  font-weight:1000!important;
+}
+#resultCaptureHost .member-total-score{
+  flex:0 0 auto!important;
+  padding:4px 9px!important;
+  border-radius:999px!important;
+  background:#eef5e8!important;
+  border:1px solid #cbdac1!important;
+  color:#203f2e!important;
+  font-size:17px!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+#resultCaptureHost .member-result-stat,
+#resultCaptureHost .saved-member-stat,
+#resultCaptureHost .capture-member-result>.member-result-stat{
+  grid-row:2!important;
+  display:block!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:6px 1px!important;
+  text-align:center!important;
+}
+#resultCaptureHost .member-result-stat:nth-of-type(2),
+#resultCaptureHost .saved-member-stat:nth-of-type(2){grid-column:1!important}
+#resultCaptureHost .member-result-stat:nth-of-type(3),
+#resultCaptureHost .saved-member-stat:nth-of-type(3){grid-column:2!important}
+#resultCaptureHost .member-result-stat:nth-of-type(4),
+#resultCaptureHost .saved-member-stat:nth-of-type(4){grid-column:3!important}
+#resultCaptureHost .member-result-stat:nth-of-type(5),
+#resultCaptureHost .saved-member-stat:nth-of-type(5){grid-column:4!important}
+#resultCaptureHost .member-result-stat b,
+#resultCaptureHost .saved-member-stat b{
+  display:block!important;
+  font-size:19px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+#resultCaptureHost .member-result-stat span,
+#resultCaptureHost .saved-member-stat span{
+  display:block!important;
+  margin-top:3px!important;
+  font-size:13px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+</style>
+
+
+<style>
+/* v18: 個人成績の項目名を濃くして読みやすく */
+#result .member-result-stat span,
+#result .saved-member-stat span{
+  color:#263a32!important;
+  font-weight:900!important;
+  opacity:1!important;
+}
+
+/* v18: 画像出力の個人成績を画面リザルトと同じ文字サイズ・濃さに統一 */
+#resultCaptureHost .member-result-name,
+#resultCaptureHost .saved-member-name,
+#resultCaptureHost .capture-member-result>.member-result-name{
+  font-size:17px!important;
+  font-weight:1000!important;
+  line-height:1.2!important;
+}
+#resultCaptureHost .member-total-score{
+  font-size:17px!important;
+  font-weight:1000!important;
+  line-height:1.2!important;
+}
+#resultCaptureHost .member-result-stat b,
+#resultCaptureHost .saved-member-stat b,
+#resultCaptureHost .capture-member-result>.member-result-stat b{
+  font-size:19px!important;
+  font-weight:1000!important;
+  line-height:1.1!important;
+  color:#14251f!important;
+}
+#resultCaptureHost .member-result-stat span,
+#resultCaptureHost .saved-member-stat span,
+#resultCaptureHost .capture-member-result>.member-result-stat span{
+  font-size:13px!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+  color:#263a32!important;
+  opacity:1!important;
+}
+</style>
+
 </head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
@@ -2294,7 +2687,7 @@ body:has(#setup.hidden) .title-row{
   <div id="result" class="card hidden"></div>
   <div id="sessionSummary" class="card session hidden"></div>
 
-  <div class="card">
+  <div id="gameLiveHistoryCard" class="card">
     <div class="row" style="justify-content:space-between">
       <strong>履歴</strong>
       
@@ -2549,12 +2942,12 @@ function openSavedGameDetail(id){
           <div class="small">平均 ${t.turns?((t.score||t.points||0)/t.turns).toFixed(1):'0.0'}点 ／ ミス ${t.misses||0}回 ／ ${t.turns||0}投</div>
           ${(t.members||[]).map((m,mi)=>`
             <div class="saved-member">
-              <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}">${escapeHtml(m.name)}さん</div>
+              <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}"><span>${escapeHtml(m.name)}さん</span><span class="member-total-score">合計 ${m.points||0}点</span></div>
               <div class="saved-member-stat"><b>${m.turns||0}回</b><span>投擲回数</span></div>
               <div class="saved-member-stat"><b>${m.misses||0}回</b><span>ミス回数</span></div>
               <div class="saved-member-stat"><b>${m.turns?(m.misses/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
               <div class="saved-member-stat"><b>${m.turns?(((m.wrongHits||0)/m.turns)*100).toFixed(1):'0.0'}%</b><span>誤ヒット率</span></div>
-              <div class="saved-member-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
+              
             </div>`).join('')}
         </div>`).join('')}
       <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'series',-1)">📥 累計成績を保存</button>
@@ -2576,21 +2969,17 @@ function openSavedGameDetail(id){
               <div class="saved-members-title">メンバー別</div>
               ${(t.members||[]).map(m=>`
                 <div class="saved-member">
-                  <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,set.teams||[])}">${escapeHtml(m.name)}さん</div>
+                  <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,set.teams||[])}"><span>${escapeHtml(m.name)}さん</span><span class="member-total-score">合計 ${m.points||0}点</span></div>
                   <div class="saved-member-stat"><b>${m.turns||0}回</b><span>投擲回数</span></div>
                   <div class="saved-member-stat"><b>${m.misses||0}回</b><span>ミス回数</span></div>
                   <div class="saved-member-stat"><b>${m.turns?(m.misses/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
                   <div class="saved-member-stat"><b>${m.turns?(((m.wrongHits||0)/m.turns)*100).toFixed(1):'0.0'}%</b><span>誤ヒット率</span></div>
-                  <div class="saved-member-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
+                  
                 </div>`).join('')}
             `:''}
           </div>`).join('')}
         <div style="font-weight:800;font-size:11px;margin:9px 0 5px">投擲履歴</div>
-        ${(set.history&&set.history.length)?set.history.map((h,hi)=>`
-          <div class="small" style="padding:4px 0;border-top:${hi?'1px solid #edf0ee':'0'}">
-            <span class="saved-turn-no">第${savedHistoryTurnNumber(set.history,hi,h)}ターン</span>
-            <span class="saved-history-team t${savedTeamColor(h.name,set.teams||[])}">${escapeHtml(h.name||'')}</span>${h.thrower?`・<span class="member-color-text c${globalMemberColor(h.name,h.thrower,set.teams||[])}">${escapeHtml(h.thrower)}</span>`:''}：<b>${h.points||0}点</b>${h.note==='50点超え→25点'?`　<span class="saved-history-total t${savedTeamColor(h.name,set.teams||[])}">${escapeHtml(h.note)}</span>`:` → <span class="saved-history-total t${savedTeamColor(h.name,set.teams||[])}">合計 ${h.after||0}点</span>${h.note?'　'+escapeHtml(h.note):''}`}
-          </div>`).join(''):'<div class="small">このセットの投擲履歴は保存されていません。</div>'}
+        ${throwHistoryMarkupByTeam(set.history||[],set.teams||[])}
         <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'set',${si})">📥 このセットの結果を保存</button>
       </div>`).join('')}`;
   window.scrollTo({top:0,behavior:'smooth'});
@@ -2619,12 +3008,12 @@ function buildSavedSeriesLikeLive(g){
               <div class="small" style="font-weight:800;margin-bottom:2px">メンバー別・累計</div>
               ${(t.members||[]).filter(m=>(m.turns||0)>0).map(m=>`
                 <div class="member-result capture-member-result">
-                  <div class="member-result-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}">${escapeHtml(m.name)}さん</div>
+                  <div class="member-result-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}"><span>${escapeHtml(m.name)}さん</span><span class="member-total-score">合計 ${m.points||0}点</span></div>
                   <div class="member-result-stat"><b>${m.turns||0}回</b><span>投擲回数</span></div>
                   <div class="member-result-stat"><b>${m.misses||0}回</b><span>ミス回数</span></div>
                   <div class="member-result-stat"><b>${m.turns?((m.misses||0)/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
                   <div class="member-result-stat"><b>${m.turns?(((m.wrongHits||0)/m.turns)*100).toFixed(1):'0.0'}%</b><span>誤ヒット率</span></div>
-                  <div class="member-result-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
+                  
                 </div>`).join('')}
             </div>`:''}
         </div>`).join('')}
@@ -2675,12 +3064,17 @@ async function saveSavedResultImage(id,kind,setIndex){
     const canvas=await html2canvas(host,{backgroundColor:'#eef2ef',scale:2,useCORS:true,logging:false});
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.94));
     if(!blob)throw new Error('image');
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download=`molkky-${kind==='series'?'total':'set'}-result-${Date.now()}.jpg`;
-    document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    const filename=`molkky-${kind==='series'?'total':'set'}-result-${Date.now()}.jpg`;
+    if(window.Android && typeof Android.saveImage==='function'){
+      Android.saveImage(canvas.toDataURL('image/jpeg',0.94),filename);
+    }else{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download=filename;
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+    }
   }catch(e){
     alert('結果画像を保存できませんでした。');
   }
@@ -3086,12 +3480,12 @@ function renderSessionSummary(){
               <div class="small" style="font-weight:800;margin-bottom:2px">メンバー別・累計</div>
               ${(p.memberStats||[]).filter(ms=>ms.seriesTurns>0).map(ms=>`
                 <div class="member-result">
-                  <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}">${escapeHtml(ms.name)}さん</div>
+                  <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}"><span>${escapeHtml(ms.name)}さん</span><span class="member-total-score">合計 ${ms.seriesPoints}点</span></div>
                   <div class="member-result-stat"><b>${ms.seriesTurns}回</b><span>投擲回数</span></div>
                   <div class="member-result-stat"><b>${ms.seriesMisses}回</b><span>ミス回数</span></div>
                   <div class="member-result-stat"><b>${(ms.seriesMisses/ms.seriesTurns*100).toFixed(1)}%</b><span>ミス率</span></div>
                   <div class="member-result-stat"><b>${(((ms.seriesWrongHits||0)/ms.seriesTurns)*100).toFixed(1)}%</b><span>誤ヒット率</span></div>
-                  <div class="member-result-stat"><b>${ms.seriesPoints}点</b><span>合計得点</span></div>
+                  
                   ${(ms.seriesBursts||0)>0?`<div class="member-burst">バースト ${ms.seriesBursts}回</div>`:''}
                 </div>`).join('')}
             </div>`:''}
@@ -3177,6 +3571,66 @@ function changePlayers(){
 }
 
 
+function throwHistoryMarkup(items, teamList){
+  const src=Array.isArray(items)?items:[];
+  if(!src.length)return '<div class="small" style="padding:8px 0">投擲履歴はありません。</div>';
+  const chronological=[...src].reverse();
+  const fallbackTurns={};
+  return `<div class="throw-history-table">${chronological.map((h,i)=>{
+    const team=h.name||'';
+    fallbackTurns[team]=(fallbackTurns[team]||0)+1;
+    const turnNo=h.turn||fallbackTurns[team];
+    const points=Number(h.points)||0;
+    const teamColor=savedTeamColor(team,teamList||players);
+    const member=h.thrower?`${escapeHtml(h.thrower)}さん`:'—';
+    let result='';
+    let resultClass='';
+    if(points===0){ result='MISS'; resultClass=' miss'; }
+    else if(h.wrongHit){ result=`誤ヒット ${points}点`; resultClass=' wrong'; }
+    else { result=`${points}点`; }
+    const total=h.note==='50点超え→25点'?'→25点':`→${Number(h.after)||0}点`;
+    return `<div class="throw-history-row">
+      <span class="throw-history-turn">第${turnNo}ターン</span>
+      <span class="throw-history-team t${teamColor}">${escapeHtml(team)}</span>
+      <span class="throw-history-member member-color-text c${globalMemberColor(team,h.thrower||'',teamList||players)}">${member}</span>
+      <span class="throw-history-result${resultClass}">${result}</span>
+      <span class="throw-history-total t${teamColor}">${total}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+
+function throwHistoryMarkupByTeam(items, teamList){
+  const src=Array.isArray(items)?items:[];
+  if(!src.length)return '<div class="small" style="padding:8px 0">投擲履歴はありません。</div>';
+  const teams=(Array.isArray(teamList)?teamList:players).map(t=>t.name).filter(Boolean);
+  const extra=[...new Set(src.map(h=>h.name).filter(Boolean))].filter(n=>!teams.includes(n));
+  return [...teams,...extra].map(team=>{
+    const entries=src.filter(h=>h.name===team).slice().reverse();
+    if(!entries.length)return '';
+    const teamColor=savedTeamColor(team,teamList||players);
+    return `<div class="throw-history-team-block">
+      <div class="throw-history-team-title t${teamColor}">${escapeHtml(team)}</div>
+      <div class="throw-history-table">${entries.map((h,i)=>{
+        const turnNo=h.turn||i+1;
+        const points=Number(h.points)||0;
+        const member=h.thrower?`${escapeHtml(h.thrower)}さん`:'—';
+        let result='',resultClass='';
+        if(points===0){result='MISS';resultClass=' miss';}
+        else if(h.wrongHit){result=`誤ヒット ${points}点`;resultClass=' wrong';}
+        else{result=`${points}点`;}
+        const total=h.note==='50点超え→25点'?'→25点':`→${Number(h.after)||0}点`;
+        return `<div class="throw-history-row">
+          <span class="throw-history-turn">第${turnNo}ターン</span>
+          <span class="throw-history-member member-color-text c${globalMemberColor(team,h.thrower||'',teamList||players)}">${member}</span>
+          <span class="throw-history-result${resultClass}">${result}</span>
+          <span class="throw-history-total t${teamColor}">${total}</span>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
 function teamMissRate(team, series=false){
   const turns=Number(series ? team.seriesTurns : team.turns)||0;
   const misses=Number(series ? team.seriesMisses : team.misses)||0;
@@ -3201,12 +3655,12 @@ function renderResults(winnerName){
           const mAvg=ms.turns?ms.points/ms.turns:0;
           const missRate=ms.turns?ms.misses/ms.turns*100:0;
           return `<div class="member-result">
-            <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}">${escapeHtml(ms.name)}さん</div>
+            <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}"><span>${escapeHtml(ms.name)}さん</span><span class="member-total-score">合計 ${ms.points}点</span></div>
             <div class="member-result-stat"><b>${ms.turns}回</b><span>投擲回数</span></div>
             <div class="member-result-stat"><b>${ms.misses}回</b><span>ミス回数</span></div>
             <div class="member-result-stat"><b>${missRate.toFixed(1)}%</b><span>ミス率</span></div>
             <div class="member-result-stat"><b>${(((ms.wrongHits||0)/ms.turns)*100).toFixed(1)}%</b><span>誤ヒット率</span></div>
-            <div class="member-result-stat"><b>${ms.points}点</b><span>合計得点</span></div>
+            
             ${(ms.bursts||0)>0?`<div class="member-burst">バースト ${ms.bursts}回</div>`:''}
           </div>`;
         }).join('');
@@ -3224,6 +3678,8 @@ function renderResults(winnerName){
         </div>`;
       }).join('')}
     </div>
+    <div style="font-weight:900;margin:13px 0 5px">🎯 投擲履歴</div>
+    ${throwHistoryMarkupByTeam(history,players)}
     <button class="secondary result-share-btn result-share-wide" onclick="saveResultSectionImage('set')">📥 このセットの結果を保存</button>`;
 }
 
@@ -3256,6 +3712,8 @@ function historyPersonColor(team,thrower){
 
 function render(){
   renderPending();
+  const liveHistoryCard=$('gameLiveHistoryCard');
+  if(liveHistoryCard) liveHistoryCard.classList.toggle('hidden',gameEnded);
   $('headerHome').classList.add('hidden');
   document.querySelector('.title-row')?.classList.add('non-home');
   if(players[current]){
@@ -3329,6 +3787,9 @@ function buildResultCapture(kind){
   // 保存画像には操作ボタンを含めない。
   clone.querySelectorAll('button,.end-actions,.result-share-btn').forEach(el=>el.remove());
 
+  // 画像出力ではメンバー名の下に5項目を必ず横一列で配置。
+  clone.querySelectorAll('.member-result').forEach(el=>el.classList.add('capture-member-result'));
+
   host.innerHTML='';
 
   const brand=document.createElement('div');
@@ -3343,78 +3804,7 @@ function buildResultCapture(kind){
 
   host.appendChild(clone);
 
-  if(kind==='set'){
-    const historyBox=document.createElement('div');
-    historyBox.className='result-capture-history';
-    const title=document.createElement('div');
-    title.className='result-capture-history-title';
-    title.textContent='🎯 投擲履歴';
-    historyBox.appendChild(title);
-
-    const list=document.createElement('div');
-    list.className='result-capture-history-list';
-    const chronological=[...history].reverse();
-
-    if(chronological.length){
-      const captureTeamTurns={};
-      chronological.forEach((h,i)=>{
-        captureTeamTurns[h.name]=(captureTeamTurns[h.name]||0)+1;
-        const turnNo=h.turn||captureTeamTurns[h.name];
-        const row=document.createElement('div');
-        row.className='result-capture-history-row';
-
-        const turn=document.createElement('span');
-        turn.className='result-capture-history-turn';
-        turn.textContent=`第${turnNo}ターン`;
-        row.appendChild(turn);
-
-        const team=document.createElement('span');
-        const teamName=h.name||'';
-        const teamIndex=Math.max(0,players.findIndex(p=>p.name===teamName))%4;
-        team.className=`result-capture-team t${teamIndex}`;
-        team.textContent=teamName||'チーム';
-        row.appendChild(team);
-
-        if(h.thrower){
-          const member=document.createElement('span');
-          member.className=`result-capture-member member-color-text c${historyPersonColor(teamName,h.thrower)}`;
-          member.textContent=`${h.thrower}さん`;
-          row.appendChild(member);
-        }
-
-        const pts=document.createElement('span');
-        pts.className='result-capture-points';
-        const points=Number(h.points)||0;
-        pts.textContent=points===0?'MISS':`+${points}`;
-        row.appendChild(pts);
-
-        const total=document.createElement('span');
-        if(h.note==='50点超え→25点'){
-          total.className=`result-capture-special t${teamIndex}`;
-          total.textContent='50点超え → 25点';
-        }else{
-          total.className=`result-capture-total t${teamIndex}`;
-          total.textContent=`→ ${h.after}点`;
-        }
-        row.appendChild(total);
-
-        if(h.note && h.note!=='50点超え→25点'){
-          const note=document.createElement('span');
-          note.className=`result-capture-special t${teamIndex}`;
-          note.textContent=h.note;
-          row.appendChild(note);
-        }
-        list.appendChild(row);
-      });
-    }else{
-      const empty=document.createElement('div');
-      empty.className='small';
-      empty.textContent='投擲履歴はありません。';
-      list.appendChild(empty);
-    }
-    historyBox.appendChild(list);
-    host.appendChild(historyBox);
-  }
+  // 投擲履歴は result の clone 内に含まれるため、画像用に重複追加しない。
 
   return host;
 }
@@ -3438,15 +3828,20 @@ async function saveResultSectionImage(kind){
     });
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.94));
     if(!blob)throw new Error('image');
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
     const label=kind==='series'?'total':'set';
-    a.download=`molkky-${label}-result-${Date.now()}.jpg`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    const filename=`molkky-${label}-result-${Date.now()}.jpg`;
+    if(window.Android && typeof Android.saveImage==='function'){
+      Android.saveImage(canvas.toDataURL('image/jpeg',0.94),filename);
+    }else{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download=filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+    }
   }catch(e){
     alert('結果画像を保存できませんでした。');
   }
