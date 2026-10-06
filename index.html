@@ -1220,59 +1220,868 @@ body:has(#setup.hidden) .title-row{
   min-height:0!important;
 }
 
-/* ===== CUMULATIVE RESULTS readability fix ===== */
-/* Keep cumulative/session summary opaque and readable regardless of inherited theme colors. */
-#sessionSummary,
-#sessionSummary *{
+/* ===== live set timer ===== */
+.game-timer-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:9px 2px 12px;padding:9px 13px;
+  border:2px solid #d7c58d;border-radius:14px;
+  background:linear-gradient(180deg,#fff9e8,#f3e4bb);
+  color:#496052;font-size:12px;font-weight:900;
+  box-shadow:0 3px 0 #cdbb84;
+}
+.game-timer-bar strong{
+  min-width:72px;text-align:center;font-size:21px;line-height:1;
+  letter-spacing:1px;color:#245f3c;font-variant-numeric:tabular-nums;
+}
+.elapsed-result{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin:7px 0 12px;padding:8px 10px;border-radius:12px;
+  background:#edf4dc;color:#53675a;font-size:12px;font-weight:800;
+}
+.elapsed-result b{font-size:17px;color:#245f3c;font-variant-numeric:tabular-nums}
+
+/* ===== timer embedded at right edge of turn row ===== */
+.turn-label-inline .thrower-turn-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  width:100%!important;
+}
+.turn-label-inline .turn-inline-timer{
+  margin-left:auto;
+  display:flex;align-items:center;gap:4px;
+  padding:3px 8px;
+  border:1.5px solid #c8b77f;
+  border-radius:10px;
+  background:rgba(255,250,231,.82);
+  color:#42604b;
+  font-size:11px;font-weight:900;
+  white-space:nowrap;
+}
+.turn-label-inline .turn-inline-timer strong{
+  min-width:42px;text-align:right;
+  font-size:13px;letter-spacing:.3px;
+  color:#245f3c;
+  font-variant-numeric:tabular-nums;
+}
+/* standalone timer no longer used */
+.game-timer-bar{display:none!important}
+
+/* ===== 誤ヒット ===== */
+#scoreInput .score-actions{
+  grid-template-columns:.8fr .9fr 1.05fr 1.2fr!important;
+}
+#scoreInput .score-actions .action-wrong-hit{
+  background:linear-gradient(180deg,#fff4c8,#e9cf78)!important;
+  color:#66501b!important;
+  border-color:#c9a94e!important;
+  box-shadow:0 4px 0 #ae8d39!important;
+  font-size:12px!important;
+  padding-left:4px!important;padding-right:4px!important;
+}
+#scoreInput .score-actions .action-wrong-hit.active{
+  background:linear-gradient(180deg,#f0b84f,#d58b25)!important;
+  color:#fff!important;border-color:#b6741c!important;
+  box-shadow:0 4px 0 #955e16!important;
+  transform:translateY(-1px);
+}
+.wrong-hit-badge{
+  display:inline-block;margin-left:5px;padding:2px 6px;border-radius:8px;
+  background:#fff0bd;color:#765817;font-size:10px;font-weight:900;
+  border:1px solid #dfbf5d;
+}
+
+/* ===== cumulative result readability ===== */
+#sessionSummary{
+  background:#fffdf6!important;
+  color:#173b2c!important;
+  border:2px solid #dfcf9f!important;
+}
+#sessionSummary, #sessionSummary *{
   text-shadow:none!important;
 }
-#sessionSummary{
-  color:#173b2c!important;
-}
-#sessionSummary .card,
-#sessionSummary .result-team,
-#sessionSummary .result-team-card,
-#sessionSummary .summary-team,
-#sessionSummary .team-result{
-  color:#173b2c!important;
+#sessionSummary .small{
+  color:#657268!important;
   opacity:1!important;
 }
-#sessionSummary h2,
-#sessionSummary h3,
-#sessionSummary h4,
-#sessionSummary .result-title,
-#sessionSummary .section-title,
-#sessionSummary .team-name,
-#sessionSummary .rank,
-#sessionSummary b,
+#sessionSummary .session-player{
+  background:#f4f8f1!important;
+  color:#173b2c!important;
+  border:1px solid #d9e4d8!important;
+  opacity:1!important;
+}
+#sessionSummary .session-player>b,
+#sessionSummary .session-player>span,
 #sessionSummary strong{
   color:#173b2c!important;
   opacity:1!important;
 }
-#sessionSummary .muted,
-#sessionSummary .sub,
-#sessionSummary small,
-#sessionSummary .label{
-  color:#657268!important;
-  opacity:1!important;
-}
-#sessionSummary .member-row,
-#sessionSummary .member-stats,
-#sessionSummary .member-summary{
-  background:#f7faf6!important;
+#sessionSummary .member-results{
+  background:#f8faf7!important;
+  border-color:#dce6dc!important;
   color:#173b2c!important;
-  border-color:#dce7dc!important;
+}
+#sessionSummary .member-result,
+#sessionSummary .member-result-stat,
+#sessionSummary .member-result-stat b,
+#sessionSummary .member-result-stat span{
+  color:#173b2c!important;
   opacity:1!important;
 }
-/* Preserve deliberate member-name colors while preventing faded text. */
-#sessionSummary .member-color-text,
-#sessionSummary .history-person{
-  opacity:1!important;
+#sessionSummary .member-result-stat span{
+  color:#657268!important;
+}
+
+/* ===== member result: throw count + compact five metrics ===== */
+.member-result{
+  align-items:center!important;
+}
+.member-result-stats{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:2px!important;
+  flex:1!important;
+  min-width:0!important;
+}
+.member-result-stat{
+  min-width:0!important;
+  padding:2px 1px!important;
+  text-align:center!important;
+}
+.member-result-stat b{
+  display:block!important;
+  font-size:12px!important;
+  white-space:nowrap!important;
+}
+.member-result-stat span{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+@media(max-width:360px){
+  .member-result-stat b{font-size:11px!important}
+  .member-result-stat span{font-size:7.5px!important}
+}
+
+/* ===== member stats: name row + five stats below ===== */
+.member-result{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:5px!important;
+  width:100%!important;
+}
+.member-result-name,
+.member-result>.member-color-text,
+.member-result>strong:first-child{
+  width:100%!important;
+  display:block!important;
+  text-align:left!important;
+}
+.member-result-stats{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3px!important;
+}
+.member-result-stat{
+  min-width:0!important;
+  text-align:center!important;
+  padding:3px 1px!important;
+}
+.member-result-stat b{
+  font-size:12px!important;
+}
+.member-result-stat span{
+  font-size:8px!important;
+  white-space:normal!important;
+  line-height:1.1!important;
+}
+
+/* ===== FIX: five member metrics must stay horizontal ===== */
+#result .member-result,
+#sessionSummary .member-result,
+.result-capture .member-result{
+  display:block!important;
+  width:100%!important;
+}
+#result .member-result-stats,
+#sessionSummary .member-result-stats,
+.result-capture .member-result-stats{
+  display:grid!important;
+  grid-template-columns:repeat(5,1fr)!important;
+  grid-auto-flow:column!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-top:5px!important;
+  gap:0!important;
+}
+#result .member-result-stat,
+#sessionSummary .member-result-stat,
+.result-capture .member-result-stat{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:3px 1px!important;
+}
+#result .member-result-stat b,
+#sessionSummary .member-result-stat b,
+.result-capture .member-result-stat b{
+  display:block!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+#result .member-result-stat span,
+#sessionSummary .member-result-stat span,
+.result-capture .member-result-stat span{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+
+/* ===== definitive member stats layout: name above, 5 metrics in one row ===== */
+#result .member-result,
+#sessionSummary .member-result{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  column-gap:2px!important;
+  row-gap:4px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#result .member-result-name,
+#sessionSummary .member-result-name{
+  grid-column:1 / -1!important;
+  grid-row:1!important;
+  width:100%!important;
+  min-width:0!important;
+  display:block!important;
+  text-align:left!important;
+  padding:0 2px 2px!important;
+}
+#result .member-result-stat,
+#sessionSummary .member-result-stat{
+  grid-row:2!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:2px 0!important;
+  display:block!important;
+  text-align:center!important;
+}
+#result .member-result-stat b,
+#sessionSummary .member-result-stat b{
+  display:block!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+#result .member-result-stat span,
+#sessionSummary .member-result-stat span{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+#result .member-burst,
+#sessionSummary .member-burst{
+  grid-column:1 / -1!important;
+  grid-row:3!important;
+}
+.result-heading-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:2px;
+}
+.result-heading-row .result-title{margin:0!important}
+.result-set-time{
+  flex:none;padding:4px 8px;border-radius:10px;
+  background:#edf4dc;border:1px solid #cfdda9;
+  color:#245f3c;font-size:12px;font-weight:900;
+  white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+
+/* ===== unified member result layout: live, history, and image output ===== */
+.saved-member,
+.saved-member-row,
+.saved-member-result,
+.result-capture .member-result,
+.result-capture .saved-member,
+.result-capture .saved-member-row,
+.result-capture .saved-member-result{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  column-gap:2px!important;
+  row-gap:4px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.saved-member-name,
+.saved-member>.member-color-text,
+.saved-member-row>.member-color-text,
+.saved-member-result>.member-color-text,
+.result-capture .member-result-name{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  display:block!important;
+  text-align:left!important;
+  padding:0 2px 2px!important;
+}
+.saved-member-stat,
+.result-capture .member-result-stat,
+.result-capture .saved-member-stat{
+  min-width:0!important;
+  width:auto!important;
+  margin:0!important;
+  padding:2px 0!important;
+  display:block!important;
+  text-align:center!important;
+}
+.saved-member-stat b,
+.result-capture .member-result-stat b,
+.result-capture .saved-member-stat b{
+  display:block!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+.saved-member-stat span,
+.result-capture .member-result-stat span,
+.result-capture .saved-member-stat span{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+/* Captured live result: force member name first row, five metrics second row */
+.result-capture .member-result{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  width:100%!important;
+}
+.result-capture .member-result-name{
+  grid-column:1 / -1!important;
+  grid-row:1!important;
+}
+.result-capture .member-result-stat{
+  grid-row:2!important;
+}
+
+/* ===== saved history: same layout as live results ===== */
+.saved-team-full{
+  padding:10px!important;
+  margin:8px 0!important;
+  border-radius:14px!important;
+  background:#f2f7f3!important;
+}
+.saved-team-summary{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px 12px!important;
+  padding:8px 0!important;
+  border-bottom:1px solid #dce6de!important;
+}
+.saved-team-summary>div{min-width:0!important}
+.saved-team-summary span{
+  display:block!important;color:#7a857e!important;
+  font-size:9px!important;line-height:1.1!important;
+}
+.saved-team-summary b{
+  display:block!important;color:#173b2c!important;
+  font-size:19px!important;line-height:1.2!important;margin-top:2px!important;
+}
+.saved-members-title{
+  margin:8px 0 5px!important;
+  color:#657268!important;font-size:10px!important;font-weight:900!important;
+}
+.saved-member{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3px!important;
+  padding:8px!important;
+  margin:6px 0!important;
+  border:1px solid #dfe7e1!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-sizing:border-box!important;
+}
+.saved-member-name{
+  grid-column:1/-1!important;
+  display:block!important;
+  width:100%!important;
+  padding:0 0 3px!important;
+  text-align:left!important;
+  font-size:11px!important;font-weight:900!important;
+}
+.saved-member-stat{
+  min-width:0!important;width:auto!important;
+  display:block!important;text-align:center!important;
+  padding:1px 0!important;margin:0!important;
+}
+.saved-member-stat b{
+  display:block!important;font-size:12px!important;
+  line-height:1.15!important;white-space:nowrap!important;
+}
+.saved-member-stat span{
+  display:block!important;font-size:7.5px!important;
+  line-height:1.1!important;white-space:nowrap!important;
+}
+.result-capture .saved-team-full,
+.result-capture .saved-member{
+  break-inside:avoid!important;
+}
+
+/* ===== saved set time ===== */
+.saved-set-title-right{
+  display:flex!important;align-items:center!important;gap:10px!important;
+}
+.saved-set-time{
+  padding:3px 7px!important;border-radius:9px!important;
+  background:#edf4dc!important;border:1px solid #cfdda9!important;
+  color:#245f3c!important;font-size:11px!important;font-weight:900!important;
+  white-space:nowrap!important;font-variant-numeric:tabular-nums!important;
+}
+
+/* ===== FIX cumulative image: member name row + five horizontal metrics ===== */
+#resultCaptureHost .capture-member-result{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-rows:auto auto!important;
+  grid-auto-flow:row!important;
+  width:100%!important;
+  gap:4px 2px!important;
+  box-sizing:border-box!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-name{
+  grid-column:1 / 6!important;
+  grid-row:1!important;
+  width:100%!important;
+  display:block!important;
+  text-align:left!important;
+  padding:0 2px 3px!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-stat{
+  grid-row:2!important;
+  display:block!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:3px 0!important;
+  text-align:center!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(2){grid-column:1!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(3){grid-column:2!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(4){grid-column:3!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(5){grid-column:4!important}
+#resultCaptureHost .capture-member-result>.member-result-stat:nth-of-type(6){grid-column:5!important}
+#resultCaptureHost .capture-member-result>.member-result-stat b{
+  display:block!important;font-size:12px!important;line-height:1.15!important;
+  white-space:nowrap!important;
+}
+#resultCaptureHost .capture-member-result>.member-result-stat span{
+  display:block!important;font-size:8px!important;line-height:1.1!important;
+  white-space:nowrap!important;
+}
+
+/* ===== compact score-entry screen experiment ===== */
+#game{
+  padding:4px!important;
+  background:linear-gradient(180deg,#e8f6e5 0%,#f8f3df 100%)!important;
+}
+#game>.card{
+  border:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  border-radius:0!important;
+  padding:5px!important;
+  margin-bottom:5px!important;
+}
+
+/* team score area: remove the large outer box feel */
+#players{
+  gap:6px!important;
+  margin-bottom:4px!important;
+}
+#players .player{
+  padding:8px 7px!important;
+  border-width:1.5px!important;
+  border-radius:15px!important;
+  box-shadow:none!important;
+}
+#players .score{
+  margin:3px 0!important;
+  font-size:40px!important;
+  line-height:1!important;
+}
+#players .score-remaining{
+  margin:4px 0!important;
+  padding:3px 4px!important;
+}
+#players .player-members{
+  height:auto!important;
+  min-height:20px!important;
+  margin-bottom:1px!important;
+}
+
+/* turn + keypad: flatter and tighter */
+#scoreInput{
+  padding:4px 0!important;
+  margin:0!important;
+}
+#turnBox,.turn-box,.thrower-box{
+  margin:2px 0 7px!important;
+  padding:7px 10px!important;
+  border-radius:13px!important;
+  box-shadow:none!important;
+}
+#scoreInput .keypad{
+  gap:6px!important;
+  margin:5px 0 7px!important;
+}
+#scoreInput .keypad button{
+  min-height:58px!important;
+  height:58px!important;
+  border-radius:13px!important;
+  box-shadow:0 3px 0 #b58a50!important;
+  font-size:20px!important;
+}
+
+/* action buttons: one-line labels */
+#scoreInput .score-actions{
+  gap:6px!important;
+  grid-template-columns:.72fr .95fr 1.08fr 1.22fr!important;
+  margin-top:5px!important;
+}
+#scoreInput .score-actions button{
+  min-height:58px!important;
+  height:58px!important;
+  padding:4px 2px!important;
+  font-size:12px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow:hidden!important;
+}
+#scoreInput .score-actions .action-wrong-hit{
+  font-size:11px!important;
+}
+#scoreInput .score-actions button:last-child{
+  font-size:11px!important;
+}
+
+/* history: no separate large framed card */
+#history,
+.history-card,
+#gameHistory{
+  margin-top:5px!important;
+  padding:7px 4px!important;
+  border:0!important;
+  border-top:1px solid #ddd5b8!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#history h2,#history h3,.history-title{
+  margin:2px 0 6px!important;
+}
+
+/* bottom home also flatter */
+.game-bottom-home{
+  margin:5px 0!important;
+  min-height:42px!important;
+  border-width:1px!important;
+  box-shadow:none!important;
+}
+
+/* ===== finish combination suggestions ===== */
+.finish-combos{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:3px 0 5px!important;
+  padding:4px 7px!important;
+  box-sizing:border-box!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:rgba(232,244,219,.72)!important;
+  color:#476052!important;
+  overflow:hidden!important;
+}
+.finish-combos.hidden{display:none!important}
+.finish-combos-label{
+  flex:none!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+.finish-combos-list{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:7px!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+}
+.finish-combos-list b{
+  font-size:11px!important;
+  color:#245f3c!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+@media(max-width:360px){
+  .finish-combos{gap:5px!important;padding-left:5px!important;padding-right:5px!important}
+  .finish-combos-list{gap:5px!important}
+  .finish-combos-list b{font-size:10px!important}
+}
+
+/* ===== finish suggestions directly below remaining score ===== */
+.player-finish-combos{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin:3px 0 2px!important;
+  padding:3px 4px!important;
+  border-radius:8px!important;
+  background:rgba(229,242,215,.78)!important;
+  color:#53675a!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+}
+.player-finish-combos span{
+  flex:none!important;
+  font-size:8px!important;
   font-weight:900!important;
 }
-/* Cumulative cards must never inherit transparent/faded result styling. */
-#sessionSummary [style*="opacity"]{
-  opacity:1!important;
+.player-finish-combos b{
+  min-width:0!important;
+  font-size:9px!important;
+  color:#245f3c!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+  white-space:nowrap!important;
+}
+@media(max-width:360px){
+  .player-finish-combos{gap:3px!important;padding-left:2px!important;padding-right:2px!important}
+  .player-finish-combos b{font-size:8px!important}
+}
+
+/* ===== finish suggestions under current thrower ===== */
+.turn-finish-combos{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin:7px 0 0!important;
+  padding:5px 8px 1px!important;
+  border-top:1px dashed rgba(77,116,79,.30)!important;
+  background:transparent!important;
+  color:#526a58!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+.turn-finish-combos span{
+  flex:none!important;
+  font-size:10px!important;
+  font-weight:900!important;
+}
+.turn-finish-combos b{
+  min-width:0!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  color:#245f3c!important;
+  white-space:nowrap!important;
+  letter-spacing:-.15px!important;
+}
+@media(max-width:360px){
+  .turn-finish-combos{gap:5px!important;padding-left:3px!important;padding-right:3px!important}
+  .turn-finish-combos b{font-size:10px!important}
+}
+
+/* ===== per-team two-row combination suggestions ===== */
+.team-finish-combos{
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin:5px 0 0!important;
+  padding:4px 5px!important;
+  border-radius:9px!important;
+  background:rgba(231,243,216,.78)!important;
+  color:#496052!important;
+  text-align:center!important;
+}
+.team-finish-combos .combo-head{
+  font-size:8px!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+  margin-bottom:2px!important;
+  white-space:nowrap!important;
+}
+.team-finish-combos .combo-row{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:8px!important;
+  min-height:12px!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+}
+.team-finish-combos .combo-row b{
+  font-size:9px!important;
+  font-weight:900!important;
+  color:#245f3c!important;
+  white-space:nowrap!important;
+}
+
+/* ===== score + remaining points on one line ===== */
+#players .player .score{
+  display:inline-block!important;
+  vertical-align:middle!important;
+  margin:3px 3px 3px 0!important;
+}
+#players .player .score-remaining{
+  display:inline-flex!important;
+  vertical-align:middle!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0 0 2px 4px!important;
+  padding:4px 7px!important;
+  border-radius:10px!important;
+  font-size:10px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* ===== refined compact team cards ===== */
+#players .player{
+  padding:6px 6px!important;
+}
+#players .player-members{
+  margin-bottom:0!important;
+  min-height:18px!important;
+}
+#players .player .score{
+  font-size:40px!important;
+  line-height:.95!important;
+  margin:1px 2px 2px 0!important;
+}
+#players .player .score-remaining{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  vertical-align:middle!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0 0 1px 3px!important;
+  padding:3px 5px!important;
+  border-radius:8px!important;
+  font-size:10px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+.team-finish-combos{
+  margin:2px 0 0!important;
+  padding:3px 3px 4px!important;
+}
+.team-finish-combos .combo-head{
+  font-size:10px!important;
+  line-height:1.1!important;
+  margin-bottom:3px!important;
+}
+.team-finish-combos .combo-row{
+  gap:9px!important;
+  min-height:15px!important;
+  line-height:1.1!important;
+}
+.team-finish-combos .combo-row b{
+  font-size:13px!important;
+  line-height:1.1!important;
+  letter-spacing:0!important;
+}
+#players .score-remaining + .player-finish-combos{margin-top:2px!important}
+
+/* ===== seven combination candidates: 4 + 3 ===== */
+.team-finish-combos .combo-row{
+  gap:6px!important;
+}
+.team-finish-combos .combo-row b{
+  font-size:12px!important;
+}
+
+/* ===== clearer wrong-hit selected state ===== */
+#wrongHitBtn{
+  position:relative!important;
+  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease!important;
+}
+#wrongHitBtn.active{
+  background:linear-gradient(180deg,#ff9f2f 0%,#e96b12 100%)!important;
+  color:#fff!important;
+  border-color:#a94708!important;
+  box-shadow:0 3px 0 #9b3d05, 0 0 0 3px rgba(255,143,31,.28)!important;
+  transform:translateY(1px)!important;
+  filter:saturate(1.12)!important;
+}
+#wrongHitBtn.active::after{
+  content:"ON";
+  position:absolute;
+  top:4px;
+  right:5px;
+  padding:1px 4px;
+  border-radius:8px;
+  background:#fff;
+  color:#c44e08;
+  font-size:8px;
+  line-height:1.2;
+  font-weight:1000;
+}
+
+/* ===== stronger wrong-hit ON state v2 ===== */
+#wrongHitBtn.active{
+  background:linear-gradient(180deg,#f36b2b 0%,#d94216 100%)!important;
+  color:#fff!important;
+  border:3px solid #8f260d!important;
+  box-shadow:
+    0 4px 0 #84230c,
+    0 0 0 4px rgba(230,67,22,.24),
+    inset 0 1px 0 rgba(255,255,255,.28)!important;
+  transform:translateY(1px)!important;
+  font-weight:1000!important;
+}
+#wrongHitBtn.active::before{
+  content:"✓";
+  display:inline-block;
+  margin-right:3px;
+  font-weight:1000;
+}
+#wrongHitBtn.active::after{
+  content:"ON";
+  position:absolute;
+  top:3px;
+  left:4px;
+  right:auto;
+  padding:2px 5px;
+  border-radius:8px;
+  background:#fff;
+  color:#b93612;
+  border:1px solid rgba(143,38,13,.28);
+  font-size:8px;
+  line-height:1.05;
+  font-weight:1000;
+  box-shadow:0 1px 2px rgba(0,0,0,.12);
 }
 </style>
   <meta name="theme-color" content="#0b4a38">
@@ -1471,6 +2280,7 @@ body:has(#setup.hidden) .title-row{
     <div class="turn score-actions">
       <button class="secondary" onclick="undoLast()">↶ 戻す</button>
       <button class="miss-btn action-miss" onclick="registerMiss()">MISS</button>
+        <button id="wrongHitBtn" class="action-wrong-hit" onclick="toggleWrongHit()">🎯 誤ヒット</button>
       <button class="primary" onclick="registerScore()">得点登録</button>
     </div>
   </div>
@@ -1501,15 +2311,49 @@ body:has(#setup.hidden) .title-row{
 <script>
 let players=[], current=0, pending=0, history=[];
 let selectedTeamCount=2;
+let wrongHit=false;
 let seriesGames=0;
 let gameEnded=false;
 let undoStack=[];
 let pendingOrder=[];
 let gameStartedAt=null;
+let gameEndedAt=null;
+let gameTimerId=null;
 let currentGameSaved=false;
 let savedSeriesId=null;
 
 function $(id){return document.getElementById(id)}
+
+function formatElapsed(ms){
+  const total=Math.max(0,Math.floor((Number(ms)||0)/1000));
+  const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), sec=total%60;
+  return h ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+           : `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+function currentElapsedMs(){
+  if(!gameStartedAt)return 0;
+  const end=gameEndedAt ? new Date(gameEndedAt).getTime() : Date.now();
+  return Math.max(0,end-new Date(gameStartedAt).getTime());
+}
+function updateGameTimer(){
+  const el=$('gameTimer');
+  if(el)el.textContent=formatElapsed(currentElapsedMs());
+}
+function startGameTimer(){
+  if(gameTimerId)clearInterval(gameTimerId);
+  gameEndedAt=null;
+  updateGameTimer();
+  gameTimerId=setInterval(updateGameTimer,1000);
+}
+function stopGameTimer(){
+  if(!gameEndedAt)gameEndedAt=new Date().toISOString();
+  if(gameTimerId){clearInterval(gameTimerId);gameTimerId=null;}
+  updateGameTimer();
+}
+function elapsedResultHtml(){
+  return gameStartedAt ? `<div class="elapsed-result">⏱ 経過時間 <b>${formatElapsed(currentElapsedMs())}</b></div>` : '';
+}
+
 
 function loadPreviousTeams(){
   try{
@@ -1542,23 +2386,24 @@ function saveCompletedGame(winnerName){
     const setRecord={
       setNumber:seriesGames||1,
       startedAt:gameStartedAt||new Date().toISOString(),
-      endedAt:new Date().toISOString(),
+      endedAt:gameEndedAt||new Date().toISOString(),
+      durationMs:currentElapsedMs(),
       winner:winnerName||'',
       history:[...history].reverse(),
       teams:ranking.map((p,i)=>({
         rank:i+1,name:p.name,score:p.score,turns:p.turns,points:p.totalPoints,
-        misses:p.misses,best:p.best,
+        misses:p.misses,wrongHits:p.wrongHits||0,best:p.best,
         members:(p.memberStats||[]).filter(ms=>ms.turns>0).map(ms=>({
-          name:ms.name,turns:ms.turns,points:ms.points,misses:ms.misses,bursts:ms.bursts||0
+          name:ms.name,turns:ms.turns,points:ms.points,misses:ms.misses,wrongHits:ms.wrongHits||0,bursts:ms.bursts||0
         }))
       }))
     };
     const seriesTeams=[...players].sort((a,b)=>(b.wins-a.wins)||(b.seriesScore-a.seriesScore)).map((p,i)=>({
       rank:i+1,name:p.name,wins:p.wins||0,score:p.seriesScore||0,
-      turns:p.seriesTurns||0,misses:p.seriesMisses||0,
+      turns:p.seriesTurns||0,misses:p.seriesMisses||0,wrongHits:p.seriesWrongHits||0,
       members:(p.memberStats||[]).filter(ms=>(ms.seriesTurns||0)>0).map(ms=>({
         name:ms.name,turns:ms.seriesTurns||0,points:ms.seriesPoints||0,
-        misses:ms.seriesMisses||0,bursts:ms.seriesBursts||0
+        misses:ms.seriesMisses||0,wrongHits:ms.seriesWrongHits||0,bursts:ms.seriesBursts||0
       }))
     }));
     const games=loadSavedGames();
@@ -1669,6 +2514,17 @@ function savedHistoryTurnNumber(history,index,item){
   return n;
 }
 
+
+function savedSetDurationMs(set){
+  if(!set)return 0;
+  if(Number(set.durationMs)>0)return Number(set.durationMs);
+  if(set.startedAt&&set.endedAt){
+    const a=new Date(set.startedAt).getTime(), b=new Date(set.endedAt).getTime();
+    if(Number.isFinite(a)&&Number.isFinite(b)&&b>=a)return b-a;
+  }
+  return 0;
+}
+
 function openSavedGameDetail(id){
   const g=loadSavedGames().find(x=>String(x.id)===String(id));
   if(!g)return;
@@ -1694,10 +2550,11 @@ function openSavedGameDetail(id){
           ${(t.members||[]).map((m,mi)=>`
             <div class="saved-member">
               <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}">${escapeHtml(m.name)}さん</div>
-              <div class="saved-member-stat"><b>${m.points||0}点</b>累計</div>
-              <div class="saved-member-stat"><b>${m.turns?(m.points/m.turns).toFixed(1):'0.0'}</b>平均</div>
-              <div class="saved-member-stat"><b>${m.misses||0}回</b>ミス</div>
-              <div class="saved-member-stat"><b>${m.turns?(m.misses/m.turns*100).toFixed(1):'0.0'}%</b>ミス率${m.bursts?`<br>💥${m.bursts}`:''}</div>
+              <div class="saved-member-stat"><b>${m.turns||0}回</b><span>投擲回数</span></div>
+              <div class="saved-member-stat"><b>${m.misses||0}回</b><span>ミス回数</span></div>
+              <div class="saved-member-stat"><b>${m.turns?(m.misses/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
+              <div class="saved-member-stat"><b>${m.turns?(((m.wrongHits||0)/m.turns)*100).toFixed(1):'0.0'}%</b><span>誤ヒット率</span></div>
+              <div class="saved-member-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
             </div>`).join('')}
         </div>`).join('')}
       <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'series',-1)">📥 累計成績を保存</button>
@@ -1705,11 +2562,28 @@ function openSavedGameDetail(id){
     <div style="font-weight:900;margin:13px 0 8px">セット別</div>
     ${sets.map((set,si)=>`
       <div class="saved-set-card" id="savedSetCapture${si}">
-        <div class="saved-set-title"><span>第${set.setNumber||si+1}セット</span><span>🏆 ${escapeHtml(set.winner||'結果なし')}</span></div>
+        <div class="saved-set-title"><span>第${set.setNumber||si+1}セット</span><span class="saved-set-title-right"><span class="saved-set-time">⏱ ${formatElapsed(savedSetDurationMs(set))}</span><span>🏆 ${escapeHtml(set.winner||'結果なし')}</span></span></div>
         ${(set.teams||[]).map(t=>`
-          <div class="saved-team">
+          <div class="saved-team saved-team-full">
             <div class="saved-team-top"><b>${t.rank||''}位　${escapeHtml(t.name)}</b><b>${t.score||0}点</b></div>
-            <div class="small">平均 ${t.turns?(t.points/t.turns).toFixed(1):'0.0'}点 ／ ミス ${t.misses||0}回 ／ ${t.turns||0}投</div>
+            <div class="saved-team-summary">
+              <div><span>ミス回数</span><b>${t.misses||0}回</b></div>
+              <div><span>ミス率</span><b>${teamMissRate(t)}%</b></div>
+              <div><span>誤ヒット率</span><b>${teamWrongHitRate(t)}%</b></div>
+              <div><span>合計ターン</span><b>${t.turns||0}回</b></div>
+            </div>
+            ${(t.members||[]).length?`
+              <div class="saved-members-title">メンバー別</div>
+              ${(t.members||[]).map(m=>`
+                <div class="saved-member">
+                  <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,set.teams||[])}">${escapeHtml(m.name)}さん</div>
+                  <div class="saved-member-stat"><b>${m.turns||0}回</b><span>投擲回数</span></div>
+                  <div class="saved-member-stat"><b>${m.misses||0}回</b><span>ミス回数</span></div>
+                  <div class="saved-member-stat"><b>${m.turns?(m.misses/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
+                  <div class="saved-member-stat"><b>${m.turns?(((m.wrongHits||0)/m.turns)*100).toFixed(1):'0.0'}%</b><span>誤ヒット率</span></div>
+                  <div class="saved-member-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
+                </div>`).join('')}
+            `:''}
           </div>`).join('')}
         <div style="font-weight:800;font-size:11px;margin:9px 0 5px">投擲履歴</div>
         ${(set.history&&set.history.length)?set.history.map((h,hi)=>`
@@ -1744,17 +2618,18 @@ function buildSavedSeriesLikeLive(g){
             <div class="member-results">
               <div class="small" style="font-weight:800;margin-bottom:2px">メンバー別・累計</div>
               ${(t.members||[]).filter(m=>(m.turns||0)>0).map(m=>`
-                <div class="member-result">
+                <div class="member-result capture-member-result">
                   <div class="member-result-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}">${escapeHtml(m.name)}さん</div>
-                  <div class="member-result-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
-                  <div class="member-result-stat"><b>${m.turns?((m.points||0)/m.turns).toFixed(1):'0.0'}</b><span>平均得点</span></div>
-                  <div class="member-result-stat"><b>${m.misses||0}回</b><span>ミス</span></div>
+                  <div class="member-result-stat"><b>${m.turns||0}回</b><span>投擲回数</span></div>
+                  <div class="member-result-stat"><b>${m.misses||0}回</b><span>ミス回数</span></div>
                   <div class="member-result-stat"><b>${m.turns?((m.misses||0)/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
-                  ${(m.bursts||0)>0?`<div class="member-burst">バースト ${m.bursts}回</div>`:''}
+                  <div class="member-result-stat"><b>${m.turns?(((m.wrongHits||0)/m.turns)*100).toFixed(1):'0.0'}%</b><span>誤ヒット率</span></div>
+                  <div class="member-result-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
                 </div>`).join('')}
             </div>`:''}
         </div>`).join('')}
     </div>`;
+  normalizeMemberStatsForCapture(wrap);
   return wrap;
 }
 
@@ -1986,11 +2861,11 @@ function startGame(){
       if(el && el.value.trim())members.push(el.value.trim());
     }
     return {name,members,score:0,zeros:0,eliminated:false,turns:0,totalPoints:0,misses:0,best:0,
-      seriesScore:0,wins:0,seriesTurns:0,seriesMisses:0};
+      seriesScore:0,wins:0,seriesTurns:0,seriesMisses:0,wrongHits:0,seriesWrongHits:0};
   });
   savePreviousTeams();
   current=0;pending=0;history=[];
-  gameStartedAt=new Date().toISOString();
+  gameStartedAt=new Date().toISOString();gameEndedAt=null;startGameTimer();
   currentGameSaved=false;
   seriesGames=0;
   savedSeriesId=null;
@@ -2006,8 +2881,56 @@ function startGame(){
 }
 
 function setPoint(n){if(gameEnded)return;pending=n;renderPending()}
-function registerMiss(){if(gameEnded)return;pending=0;registerScore()}
+
+function toggleWrongHit(){
+  if(gameEnded)return;
+  wrongHit=!wrongHit;
+  const btn=$('wrongHitBtn');
+  if(btn)btn.classList.toggle('active',wrongHit);
+}
+function resetWrongHit(){
+  wrongHit=false;
+  const btn=$('wrongHitBtn');
+  if(btn)btn.classList.remove('active');
+}
+
+function registerMiss(){if(gameEnded)return;resetWrongHit();pending=0;registerScore()}
 function addPoint(n){if(gameEnded)return;pending=n;renderPending()}
+
+function getFinishCombos(remaining){
+  if(remaining<1 || remaining>24)return [];
+  const pairs=[];
+  for(let high=12;high>=1;high--){
+    const low=remaining-high;
+    if(low<1||low>12||high<low)continue;
+    pairs.push([high,low]);
+  }
+  return pairs.slice(0,7);
+}
+
+function renderFinishCombos(){
+  document.querySelectorAll('.team-finish-combos,#turnFinishCombos').forEach(el=>el.remove());
+  const cards=document.querySelectorAll('#players .player');
+  players.forEach((p,i)=>{
+    if(!p || p.eliminated)return;
+    const remaining=50-(p.score||0);
+    const pairs=getFinishCombos(remaining);
+    if(!pairs.length)return;
+    const card=cards[i];
+    if(!card)return;
+
+    const el=document.createElement('div');
+    el.className='team-finish-combos';
+    const first=pairs.slice(0,3);
+    const second=pairs.slice(3,7);
+    const fmt=arr=>arr.map(x=>`<b>${x[0]}-${x[1]}</b>`).join('');
+    el.innerHTML=`<div class="combo-head">🎯 ${remaining}点の組み合わせ</div>
+      <div class="combo-row">${fmt(first)}</div>
+      ${second.length?`<div class="combo-row">${fmt(second)}</div>`:''}`;
+    card.appendChild(el);
+  });
+}
+
 function renderPending(){
   document.querySelectorAll('#scoreInput [data-score]').forEach(btn=>{
     btn.classList.toggle('score-selected',Number(btn.dataset.score)===Number(pending));
@@ -2034,7 +2957,7 @@ function registerScore(){
     if(!Array.isArray(p.memberStats))p.memberStats=[];
     let ms=p.memberStats.find(x=>x.name===thrower);
     if(!ms){
-      ms={name:thrower,turns:0,points:0,misses:0,bursts:0,seriesTurns:0,seriesPoints:0,seriesMisses:0,seriesBursts:0};
+      ms={name:thrower,turns:0,points:0,misses:0,wrongHits:0,bursts:0,seriesTurns:0,seriesPoints:0,seriesMisses:0,seriesWrongHits:0,seriesBursts:0};
       p.memberStats.push(ms);
     }
     ms.turns++;
@@ -2045,6 +2968,10 @@ function registerScore(){
       ms.misses++;
       ms.seriesMisses++;
     }
+    if(wrongHit){
+      ms.wrongHits=(ms.wrongHits||0)+1;
+      ms.seriesWrongHits=(ms.seriesWrongHits||0)+1;
+    }
   }
 
   p.turns++;
@@ -2052,6 +2979,7 @@ function registerScore(){
   p.seriesScore+=pending;
   p.seriesTurns++;
   if(pending===0){p.zeros++;p.misses++;p.seriesMisses++;}else p.zeros=0;
+  if(wrongHit){p.wrongHits=(p.wrongHits||0)+1;p.seriesWrongHits=(p.seriesWrongHits||0)+1;}
   if(pending>p.best)p.best=pending;
 
   let after=before+pending, note='';
@@ -2069,7 +2997,7 @@ function registerScore(){
   p.score=after;
 
   // 履歴にも投球者名を保存
-  const historyItem={name:p.name,thrower,points:pending,after,note,turn:p.turns};
+  const historyItem={name:p.name,thrower,points:pending,after,note,turn:p.turns,wrongHit:!!wrongHit};
   history.unshift(historyItem);
 
   if(p.zeros>=3){
@@ -2084,6 +3012,7 @@ function registerScore(){
         remaining.wins++;
         seriesGames++;
         gameEnded=true;
+        stopGameTimer();
         saveCompletedGame(remaining.name);
         $('winner').innerHTML=`<div class="win"><div style="font-size:28px">🏆</div><b>${escapeHtml(remaining.name)} の勝利！</b></div>`;
         render();
@@ -2099,6 +3028,7 @@ function registerScore(){
     p.wins++;
     seriesGames++;
     gameEnded=true;
+    stopGameTimer();
     saveCompletedGame(p.name);
     $('winner').innerHTML=`<div class="win"><div style="font-size:28px">🏆</div><b>${escapeHtml(p.name)} の勝利！</b></div>`;
     render();
@@ -2113,6 +3043,7 @@ function registerScore(){
     p.memberTurn=(Number.isInteger(p.memberTurn)?p.memberTurn:0)+1;
     p.memberTurn%=p.members.length;
   }
+  resetWrongHit();
   pending=0;
   for(let i=1;i<=players.length;i++){
     const idx=(current+i)%players.length;
@@ -2156,10 +3087,11 @@ function renderSessionSummary(){
               ${(p.memberStats||[]).filter(ms=>ms.seriesTurns>0).map(ms=>`
                 <div class="member-result">
                   <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}">${escapeHtml(ms.name)}さん</div>
-                  <div class="member-result-stat"><b>${ms.seriesPoints}点</b><span>合計得点</span></div>
-                  <div class="member-result-stat"><b>${(ms.seriesPoints/ms.seriesTurns).toFixed(1)}</b><span>平均得点</span></div>
-                  <div class="member-result-stat"><b>${ms.seriesMisses}回</b><span>ミス</span></div>
+                  <div class="member-result-stat"><b>${ms.seriesTurns}回</b><span>投擲回数</span></div>
+                  <div class="member-result-stat"><b>${ms.seriesMisses}回</b><span>ミス回数</span></div>
                   <div class="member-result-stat"><b>${(ms.seriesMisses/ms.seriesTurns*100).toFixed(1)}%</b><span>ミス率</span></div>
+                  <div class="member-result-stat"><b>${(((ms.seriesWrongHits||0)/ms.seriesTurns)*100).toFixed(1)}%</b><span>誤ヒット率</span></div>
+                  <div class="member-result-stat"><b>${ms.seriesPoints}点</b><span>合計得点</span></div>
                   ${(ms.seriesBursts||0)>0?`<div class="member-burst">バースト ${ms.seriesBursts}回</div>`:''}
                 </div>`).join('')}
             </div>`:''}
@@ -2216,7 +3148,7 @@ function startNextGame(){
     if(Array.isArray(p.memberStats))p.memberStats.forEach(ms=>{ms.turns=0;ms.points=0;ms.misses=0;ms.bursts=0;});
   });
   current=0;pending=0;history=[];gameEnded=false;undoStack=[];pendingOrder=[];
-  gameStartedAt=new Date().toISOString();currentGameSaved=false;
+  gameStartedAt=new Date().toISOString();gameEndedAt=null;startGameTimer();currentGameSaved=false;
   $('orderScreen').classList.add('hidden');
   $('game').classList.remove('hidden');
   $('winner').innerHTML='';
@@ -2229,6 +3161,7 @@ function startNextGame(){
 }
 
 function changePlayers(){
+  if(gameTimerId){clearInterval(gameTimerId);gameTimerId=null;}
   players=[];current=0;pending=0;history=[];seriesGames=0;savedSeriesId=null;gameEnded=false;undoStack=[];pendingOrder=[];
   $('game').classList.add('hidden');
   $('orderScreen').classList.add('hidden');
@@ -2243,11 +3176,23 @@ function changePlayers(){
   document.querySelector('.title-row')?.classList.remove('non-home');
 }
 
+
+function teamMissRate(team, series=false){
+  const turns=Number(series ? team.seriesTurns : team.turns)||0;
+  const misses=Number(series ? team.seriesMisses : team.misses)||0;
+  return turns ? Math.round(misses/turns*100) : 0;
+}
+function teamWrongHitRate(team, series=false){
+  const turns=Number(series ? team.seriesTurns : team.turns)||0;
+  const hits=Number(series ? team.seriesWrongHits : team.wrongHits)||0;
+  return turns ? Math.round(hits/turns*100) : 0;
+}
+
 function renderResults(winnerName){
   const ranking=[...players].sort((a,b)=>b.score-a.score);
   $('result').classList.remove('hidden');
   $('result').innerHTML=`
-    <div class="result-title">🏆 セットリザルト</div>
+    <div class="result-heading-row"><div class="result-title">🏆 セットリザルト</div><div class="result-set-time">⏱ ${formatElapsed(currentElapsedMs())}</div></div>
     <div class="small" style="margin-bottom:10px">${winnerName?escapeHtml(winnerName)+' が勝利！':''}</div>
     <div style="display:grid;gap:8px">
       ${ranking.map((p,i)=>{
@@ -2257,10 +3202,11 @@ function renderResults(winnerName){
           const missRate=ms.turns?ms.misses/ms.turns*100:0;
           return `<div class="member-result">
             <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}">${escapeHtml(ms.name)}さん</div>
-            <div class="member-result-stat"><b>${ms.points}点</b><span>合計得点</span></div>
-            <div class="member-result-stat"><b>${mAvg.toFixed(1)}</b><span>平均得点</span></div>
-            <div class="member-result-stat"><b>${ms.misses}回</b><span>ミス</span></div>
+            <div class="member-result-stat"><b>${ms.turns}回</b><span>投擲回数</span></div>
+            <div class="member-result-stat"><b>${ms.misses}回</b><span>ミス回数</span></div>
             <div class="member-result-stat"><b>${missRate.toFixed(1)}%</b><span>ミス率</span></div>
+            <div class="member-result-stat"><b>${(((ms.wrongHits||0)/ms.turns)*100).toFixed(1)}%</b><span>誤ヒット率</span></div>
+            <div class="member-result-stat"><b>${ms.points}点</b><span>合計得点</span></div>
             ${(ms.bursts||0)>0?`<div class="member-burst">バースト ${ms.bursts}回</div>`:''}
           </div>`;
         }).join('');
@@ -2318,8 +3264,14 @@ function render(){
     const memberColor=(cp.members&&member)?globalMemberColor(cp.name,member,players):0;
     const turnNo=(cp.turns||0)+1;
     $('turnLabel').innerHTML=member
-      ? `<div class="turn-label-inline"><div class="thrower-turn">ターン ${turnNo}</div><div class="thrower-current"><span class="thrower-team-inline team-color-${current}">${escapeHtml(cp.name)}</span><span class="member-color-text c${memberColor}">${escapeHtml(member)} さん</span><span>の番</span></div></div>`
-      : `<div class="turn-label-inline"><div class="thrower-turn">ターン ${turnNo}</div><div class="thrower-current"><span class="thrower-team-inline team-color-${current}">${escapeHtml(cp.name)}</span><span>の番</span></div></div>`;
+      ? `<div class="turn-label-inline"><div class="thrower-turn-row">
+  <div class="thrower-turn">ターン ${turnNo}</div>
+  <div class="turn-inline-timer"><span>⏱</span><strong id="gameTimer">${formatElapsed(currentElapsedMs())}</strong></div>
+</div><div class="thrower-current"><span class="thrower-team-inline team-color-${current}">${escapeHtml(cp.name)}</span><span class="member-color-text c${memberColor}">${escapeHtml(member)} さん</span><span>の番</span></div></div>`
+      : `<div class="turn-label-inline"><div class="thrower-turn-row">
+  <div class="thrower-turn">ターン ${turnNo}</div>
+  <div class="turn-inline-timer"><span>⏱</span><strong id="gameTimer">${formatElapsed(currentElapsedMs())}</strong></div>
+</div><div class="thrower-current"><span class="thrower-team-inline team-color-${current}">${escapeHtml(cp.name)}</span><span>の番</span></div></div>`;
   }else{
     $('turnLabel').textContent='今回の得点';
   }
@@ -2328,13 +3280,14 @@ function render(){
       <div class="name">${escapeHtml(p.name)}${p.eliminated?'（失格）':''}</div>
       ${p.members&&p.members.length?`<div class="player-members">${p.members.map((m,mi)=>`${mi===(p.memberTurn||0)&&i===current?'<b>':''}<span class="member-color-text c${globalMemberColor(p.name,m,players)}">${escapeHtml(m)}さん</span>${mi===(p.memberTurn||0)&&i===current?'</b>':''}`).join('・')}</div>`:'<div class="player-members"></div>'}
       <div class="score">${p.score}</div>
-      <div class="score-remaining">50点まで <b>あと${Math.max(0,50-p.score)}点</b></div>
+      <div class="score-remaining">残り${Math.max(0,50-p.score)}点！</div>
       <div class="miss-row">
         <span class="miss-label">MISS</span>
         ${[0,1,2].map(n=>`<span class="miss-dot ${n<p.zeros?'on':''}"></span>`).join('')}
       </div>
       <div class="meta" style="margin-top:5px;font-weight:700;color:#173b2c">通算 ${p.wins}勝 ｜ ${p.seriesScore}点</div>
     </div>`).join('');
+  renderFinishCombos();
   if(!history.length){
     $('history').innerHTML='<div class="small" style="padding:10px 0">まだありません</div>';
   }else{
@@ -2353,6 +3306,15 @@ function render(){
       }).join('')
     }</div>`;
   }
+}
+
+
+function normalizeMemberStatsForCapture(root){
+  if(!root)return;
+  root.querySelectorAll('.member-result-stat span,.saved-member-stat span').forEach(el=>{
+    if(el.textContent.trim()==='投擲数')el.textContent='投擲回数';
+    if(el.textContent.trim()==='ミス')el.textContent='ミス回数';
+  });
 }
 
 function buildResultCapture(kind){
@@ -2495,6 +3457,7 @@ function escapeHtml(s){
 }
 
 function goHome(){
+  if(gameTimerId){clearInterval(gameTimerId);gameTimerId=null;}
   const onFinishedResult = gameEnded && !$('game').classList.contains('hidden');
   if(onFinishedResult && !confirm('ホーム画面に戻りますか？\n現在のセットと累計成績はリセットされます。'))return;
   players=[];current=0;pending=0;history=[];seriesGames=0;gameEnded=false;undoStack=[];pendingOrder=[];
@@ -2516,20 +3479,26 @@ function resetGame(){
 </script>
 
 <script>
-
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', async () => {
     try {
       const reg = await navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'});
       await reg.update();
+
+      // When a newly installed worker is waiting, activate it immediately.
       if (reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+
       reg.addEventListener('updatefound', () => {
         const worker = reg.installing;
         if (!worker) return;
         worker.addEventListener('statechange', () => {
-          if (worker.state === 'installed' && navigator.serviceWorker.controller) worker.postMessage({type:'SKIP_WAITING'});
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            worker.postMessage({type:'SKIP_WAITING'});
+          }
         });
       });
+
+      // Reload once when the new worker takes control.
       let refreshing = false;
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (refreshing) return;
