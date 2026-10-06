@@ -787,6 +787,8 @@ function buildSavedSeriesLikeLive(g){
 }
 
 async function saveSavedResultImage(id,kind,setIndex){
+  const label=kind==='series'?'累計成績':'このセットの結果';
+  if(!confirm(`${label}の画像を保存しますか？`))return;
   try{
     if(typeof html2canvas!=='function'){
       alert('画像保存機能の読み込みに失敗しました。通信環境を確認してもう一度お試しください。');
@@ -1472,6 +1474,8 @@ function buildResultCapture(kind){
 
 async function saveResultSectionImage(kind){
   if(!gameEnded)return;
+  const label=kind==='series'?'累計成績':'このセットの結果';
+  if(!confirm(`${label}の画像を保存しますか？`))return;
   try{
     if(typeof html2canvas!=='function'){
       alert('画像保存機能の読み込みに失敗しました。通信環境を確認してもう一度お試しください。');
