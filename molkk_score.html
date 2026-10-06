@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173b2c">
+<title>MOLKKY SCORE</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#e9eee9;color:#17231d}
+#app{min-height:100vh;background:#f7faf7;padding:20px 14px 32px}
+.wrap{max-width:560px;margin:auto}
+h1{margin:4px 0 2px;font-size:28px;letter-spacing:.08em}
+.title-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.title-row h1{min-width:0}
+.sub{margin:0 0 18px;color:#64736a;font-size:13px}
+.card{background:#fff;border:1px solid #dbe5de;border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 4px 16px #173b2c12}
+label{font-size:13px;color:#66736b}
+.row{display:flex;gap:8px;align-items:center}
+select,input{width:100%;font:inherit;border:1px solid #cbd8cf;border-radius:12px;padding:13px;background:#fff}
+button{font:inherit;border:0;border-radius:13px;padding:12px 15px;font-weight:700;cursor:pointer}
+.primary{background:#173b2c;color:#fff;width:100%}
+.secondary{background:#e9f0eb;color:#173b2c}
+.danger{background:#f8e7e5;color:#8b3028}
+.players{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.player{border:1px solid #dbe5de;border-radius:16px;padding:13px;background:#fbfdfb}
+.player.active{border:2px solid #173b2c;padding:12px}
+.name{font-weight:700;min-height:20px}
+.player-members{font-size:11px;color:#718078;margin-top:2px;line-height:1.35;min-height:30px;max-height:30px;overflow:hidden;display:flex;align-items:flex-start;align-content:flex-start;flex-wrap:wrap}
+.player .score{margin-top:4px;text-align:center}
+.score{font-size:32px;font-weight:800;margin:3px 0}
+.meta{font-size:12px;color:#748078}
+.score-remaining{font-size:10px;font-weight:800;color:#718078;text-align:center;margin-top:-2px;margin-bottom:3px}
+.score-remaining b{font-size:11px;color:#496657}
+.miss-row{display:flex;align-items:center;gap:5px;margin-top:5px}
+.miss-label{font-size:11px;color:#748078;margin-right:2px}
+.miss-dot{width:13px;height:13px;border:2px solid #c7d0ca;border-radius:50%;display:inline-block;background:transparent}
+.miss-dot.on{background:#e0443e;border-color:#e0443e}
+.player.eliminated .miss-dot{opacity:.65}
+.turn{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:10px}
+.turn button{min-height:54px}
+.keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.keypad button{background:#eef3ef;color:#173b2c;min-height:52px}
+.keypad button.score-selected{background:#173b2c;color:#fff;box-shadow:0 0 0 2px #b9d0c2 inset}
+.score-actions{display:grid!important;grid-template-columns:1fr 1fr 1.25fr;gap:8px}
+.score-actions button{width:100%;margin:0}
+.score-actions .action-miss{background:#b9423a;color:#fff}
+
+.bigscore{text-align:center;font-size:38px;font-weight:900;padding:10px}
+.history{max-height:320px;overflow:auto}
+.history-teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.history-team{border:1px solid #dbe5de;border-radius:14px;padding:10px;background:#fbfdfb}
+.history-team-title{font-weight:800;font-size:14px;padding-bottom:7px;border-bottom:1px solid #e6ece8}
+.history-entry{display:grid;grid-template-columns:minmax(82px,1.35fr) 44px minmax(82px,1fr);gap:7px;align-items:center;padding:7px 0;border-bottom:1px solid #edf1ee;font-size:12px}
+.history-entry:last-child{border-bottom:0}
+.history-turn{color:#829087;font-size:10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-score{font-weight:900;font-size:15px;text-align:center;font-variant-numeric:tabular-nums}
+.history-total{color:#173b2c;background:#edf5f0;border:1px solid #d8e6dc;border-radius:8px;padding:4px 7px;font-weight:900;font-size:14px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media(max-width:390px){.history-teams{grid-template-columns:1fr}.history-entry{grid-template-columns:minmax(76px,1.3fr) 40px minmax(78px,1fr);gap:5px}.history-total{padding:4px 5px;font-size:13px}}
+.win{background:#173b2c;color:#fff;border-radius:16px;padding:16px;text-align:center;margin-bottom:12px}
+.hidden{display:none}
+.history-home-btn{width:100%;margin-top:12px}
+.rules-home-btn{width:100%;margin-top:8px}
+.home-section{margin-bottom:12px}
+.home-play{padding:16px}
+.home-section-head{display:flex;align-items:flex-start;gap:10px}
+.home-section-icon{font-size:24px;line-height:1;flex:0 0 auto}
+.home-section-desc{margin:2px 0 0}
+.home-link-section{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px;cursor:pointer;user-select:none}
+.home-link-section:active{transform:scale(.99);background:#f8fbf9}
+.home-link-main{display:flex;align-items:center;gap:11px;min-width:0}
+.home-link-title{font-size:16px;font-weight:900;color:#173b2c;margin-bottom:3px}
+.home-chevron{font-size:28px;line-height:1;color:#8b9990;font-weight:400}
+
+.rule-card{background:#f7faf8;border:1px solid #dbe5de;border-radius:13px;padding:12px;margin-top:9px}
+.rule-title{font-size:14px;font-weight:900;color:#173b2c;margin-bottom:5px}
+.rule-text{font-size:12px;line-height:1.65;color:#405047}
+.rule-example{font-size:11px;line-height:1.55;color:#68766e;background:#fff;border-radius:8px;padding:7px 8px;margin-top:7px}
+.rule-hero{display:flex;align-items:center;gap:12px;background:#173b2c;color:#fff;border-radius:15px;padding:12px 14px;margin-top:10px}
+.rule-hero-score{width:48px;height:48px;border-radius:50%;background:#fff;color:#173b2c;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:1000;flex:none}
+.rule-hero b{font-size:15px}.rule-hero span{font-size:10px;opacity:.85;line-height:1.4}
+.rule-section-label{font-size:12px;font-weight:900;color:#567064;margin:17px 2px 5px}
+.rule-score-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.rule-score-box{background:#f7faf8;border:1px solid #dbe5de;border-radius:13px;padding:10px;text-align:center}
+.rule-score-box b{display:block;font-size:12px;color:#173b2c;margin:5px 0 3px}
+.rule-score-box span{font-size:10px;color:#68766e;line-height:1.45}
+.rule-score-icon{display:inline-block;background:#173b2c;color:#fff;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:900}
+.rule-caution{border-left:4px solid #d99b22}.rule-win{border-left:4px solid #188038}.rule-burst{border-left:4px solid #e67c00}.rule-miss{border-left:4px solid #d93025}
+.skittle-layout{text-align:center;margin-top:7px;background:#fff;border-radius:10px;padding:7px 5px}
+.sk-row{display:flex;justify-content:center;gap:1px;margin:-1px 0}
+.sk-row span{width:27px;height:27px;border-radius:45% 45% 38% 38%;background:linear-gradient(135deg,#edcd9b,#c99b60);border:1px solid #987044;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:1000;color:#4f3824;box-sizing:border-box;box-shadow:inset -2px -2px 2px rgba(92,57,25,.08)}
+.sk-arrow{font-size:9px;color:#718078;margin-top:4px}
+.miss-demo{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:11px}.miss-demo span{font-size:15px}
+.rule-mini-note{font-size:9px;color:#829087;line-height:1.5;margin:13px 3px 0}
+.official-rule-link{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:14px;padding:13px 14px;border-radius:13px;background:#eef3ef;border:1px solid #d4dfd7;color:#173b2c;text-decoration:none;font-size:13px;font-weight:900}
+.official-rule-link:active{transform:scale(.99)}
+.official-rule-link span{font-size:16px;color:#718078}
+.external-link-note{text-align:center;font-size:9px;color:#829087;margin:5px 0 0}
+
+.rule-jma-note{display:inline-block;margin-top:6px;font-size:10px;color:#68766e}
+.rule-illust{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 2px;min-height:42px}
+.wood-stick{width:62px;height:19px;border-radius:10px;background:linear-gradient(180deg,#e7c58e,#c99c60);border:1px solid #9b7040;transform:rotate(-10deg);position:relative;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 2px 3px rgba(80,55,30,.12)}
+.wood-stick:before{content:'';position:absolute;left:4px;right:4px;top:4px;height:1px;background:rgba(120,78,38,.18);box-shadow:0 5px 0 rgba(120,78,38,.13)}
+.wood-stick:after{content:'MÖLKKY';font-size:6px;letter-spacing:.4px;font-weight:900;color:#6f4b28;position:absolute;left:15px;top:5px}
+.pin-mini{width:24px;height:39px;background:linear-gradient(100deg,#d4a86d 0%,#edcc98 48%,#c79659 100%);border:1px solid #966b3d;border-radius:3px 3px 7px 7px;display:flex;align-items:flex-start;justify-content:center;padding-top:5px;font-size:9px;font-weight:1000;color:#4f3824;box-sizing:border-box;position:relative;clip-path:polygon(15% 0,100% 0,100% 100%,0 100%,0 17%);box-shadow:inset -3px 0 3px rgba(92,57,25,.10)}
+.pin-mini:before{content:'';position:absolute;left:2px;right:2px;top:2px;height:1px;background:rgba(255,255,255,.45)}
+.throw-line{height:2px;width:72px;background:#b7c5bc;position:relative}
+.throw-line:after{content:'3〜4m';position:absolute;left:21px;top:-15px;font-size:9px;font-weight:900;color:#536159}
+.throw-person{font-size:27px;line-height:1}
+.score-illust{display:flex;align-items:flex-end;justify-content:center;gap:3px;margin:7px 0 2px}
+.score-illust .pin-mini{height:30px}
+.score-illust .fallen{transform:rotate(75deg);margin:0 6px 2px 3px}
+.over50-illust{display:flex;justify-content:center;align-items:center;gap:7px;margin:7px 0 3px}.over50-illust b{font-size:20px;color:#173b2c}.over50-illust span{font-size:10px;color:#718078}
+
+
+
+.saved-game-card{border:1px solid #dbe5de;border-radius:14px;background:#fbfdfb;margin-top:10px;overflow:hidden}
+.saved-game-head{width:100%;border:0;background:transparent;color:#173b2c;padding:12px;text-align:left;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.saved-game-head:active{transform:none}
+.saved-game-date{font-size:13px;font-weight:900}
+.saved-game-winner{font-size:11px;color:#68766e;margin-top:3px}
+.saved-game-participants{margin-top:7px;display:grid;gap:3px}
+.saved-game-teamline{font-size:10px;color:#536159;line-height:1.35;white-space:normal}
+.saved-game-teamline b{color:#173b2c}
+
+.saved-game-arrow{font-size:18px;color:#718078}
+.saved-games-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.saved-games-head .step-title{margin-bottom:0}
+.saved-clear-all{width:auto!important;flex:none;padding:5px 8px!important;min-height:28px;background:transparent;color:#9a4b46;border:1px solid #ead7d5;border-radius:8px;font-size:10px;font-weight:800}
+.saved-clear-all:active{background:#fff3f2}
+.saved-game-actions{display:flex;justify-content:flex-end;align-items:center;gap:4px;padding:0 10px 8px}
+.saved-game-actions button{flex:none;padding:4px 7px;border-radius:8px;font-size:10px;min-height:28px}
+.saved-favorite-btn{background:transparent;color:#8a6a00;border:1px solid #e5d9ad}
+.saved-favorite-btn.on{background:#fff7d8;color:#7a5b00}
+.saved-delete-btn{background:transparent;color:#9a4b46;border:1px solid #ead7d5}
+.saved-series-summary{background:#f6faf7;border:1px solid #dce8df;border-radius:12px;padding:11px;margin-bottom:12px}
+.saved-set-card{border:1px solid #e1e7e3;border-radius:12px;padding:11px;margin-bottom:10px;background:#fff}
+.saved-set-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-weight:900;color:#173b2c}
+.saved-history-team{display:inline-block;font-weight:900;padding:2px 6px;border-radius:6px;margin-right:1px}
+.saved-history-team.t0{background:#e8f0fe;color:#185abc}
+.saved-history-team.t1{background:#fce8e6;color:#b3261e}
+.saved-history-team.t2{background:#e6f4ea;color:#137333}
+.saved-history-team.t3{background:#fef7e0;color:#8a6800}
+.saved-history-total{display:inline-block;color:#173b2c;background:#edf5f0;border:1px solid #d8e6dc;font-weight:900;border-radius:8px;padding:4px 7px;margin-left:3px;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+
+.saved-detail-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.saved-detail-back{width:auto!important;padding:7px 10px!important;margin:0!important;font-size:11px!important}
+.saved-favorite-mark{color:#b48300;font-size:14px;margin-right:4px}
+
+.saved-game-detail{padding:0 10px 10px}
+.saved-team{background:#f2f6f3;border-radius:10px;padding:9px;margin-top:7px}
+.saved-team-top{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.saved-member{display:grid;grid-template-columns:minmax(64px,1.2fr) repeat(4,minmax(42px,1fr));gap:4px;align-items:center;background:#fff;border:1px solid #e3ebe5;border-radius:8px;padding:6px;margin-top:6px;font-size:9px}
+.saved-member-name{font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.saved-member-stat{text-align:center;color:#718078}
+.saved-member-stat b{display:block;color:#173b2c;font-size:11px}
+.saved-empty{text-align:center;padding:24px 8px;color:#718078;font-size:12px}
+
+.small{font-size:12px;color:#68766e}
+.result-title{font-size:20px;font-weight:800;margin-bottom:12px}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.result-item{background:#f2f6f3;border-radius:12px;padding:11px}
+.result-item .label{font-size:11px;color:#6d7a72}
+.result-item .value{font-size:22px;font-weight:800;margin-top:2px}
+.session{background:#173b2c;color:#fff}
+.session .small{color:#d8e4dc}
+.session-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+.session-player{background:#ffffff18;border-radius:12px;padding:10px}
+.session-player b{display:block;font-size:15px}
+.session-player span{font-size:13px}
+.end-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.end-actions button{min-height:52px}
+.end-action-btn{background:#fff;color:#173b2c;border:2px solid #fff;box-shadow:0 3px 10px #00000018}
+.miss-btn{background:#e0443e!important;color:#fff!important;font-weight:900}
+.game-input.locked{display:none}
+.team-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.team-btn{background:#eef3ef;color:#173b2c;border:2px solid transparent;min-height:70px;font-size:17px}
+.team-btn:active{transform:scale(.98)}
+.name-list{display:grid;gap:10px;margin:14px 0}
+.name-row{display:flex;align-items:center;gap:10px}
+.name-num{min-width:30px;text-align:center;font-weight:800;color:#173b2c}
+input::placeholder{color:#aab5ae;opacity:1}
+.step-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.back{margin-top:8px;width:100%}
+.order-list{display:grid;gap:9px;margin:14px 0}
+.order-row{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;background:#f2f6f3;border-radius:13px;padding:8px}
+.order-pos{font-weight:900;text-align:center;color:#173b2c}
+.order-name{font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.order-controls{display:flex;gap:5px}
+.order-controls button{padding:8px 10px;background:#fff;color:#173b2c;border:1px solid #d4dfd7}
+.order-controls button:disabled{opacity:.3}
+.order-note{font-size:12px;color:#68766e;line-height:1.5}
+.team-entry{background:#f4f7f5;border-radius:15px;padding:12px;margin-bottom:12px}
+.team-entry-title{font-weight:900;margin-bottom:8px}
+.member-list{display:grid;gap:7px;margin-top:8px}
+.member-input{width:100%;box-sizing:border-box}
+.member-label{font-size:11px;color:#718078;margin:2px 0 0 2px}
+.thrower-box{text-align:center;background:#f2f6f3;border-radius:14px;padding:10px 8px;margin-bottom:10px}
+.thrower-team{font-size:12px;font-weight:800;color:#66766d}
+.thrower-name{font-size:22px;font-weight:900;color:#173b2c;margin-top:2px}
+.member-results{margin-top:10px;border-top:1px solid #e1e8e3;padding-top:8px}
+.member-result{display:grid;grid-template-columns:minmax(68px,1.15fr) repeat(4,minmax(46px,1fr));gap:5px;align-items:center;padding:6px 0;border-bottom:1px solid #eef2ef;font-size:11px}
+.member-result:last-child{border-bottom:0}
+.member-result-name{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.member-result-stat{text-align:center}
+.member-result-stat b{display:block;font-size:13px;color:#173b2c}
+.member-result-stat span{display:block;font-size:9px;color:#718078}
+.member-burst{grid-column:1/-1;justify-self:end;font-size:9px;font-weight:800;color:#8a5a00;background:#fff4d6;border:1px solid #f2dda0;border-radius:999px;padding:2px 6px;margin-top:-2px}
+
+.history-person{font-weight:900;padding:2px 6px;border-radius:7px;display:inline-block}
+.history-person.c0{color:#d93025;background:#fce8e6}
+.history-person.c1{color:#1a73e8;background:#e8f0fe}
+.history-person.c2{color:#a56d00;background:#fef7e0}
+.history-person.c3{color:#188038;background:#e6f4ea}
+.history-person.c4{color:#9334e6;background:#f3e8fd}
+.history-person.c5{color:#e37400;background:#fff0df}
+.history-person.c6{color:#00838f;background:#e0f4f5}
+.history-person.c7{color:#c2185b;background:#fce4ec}
+.history-person.c8{color:#5e35b1;background:#ede7f6}
+.history-person.c9{color:#0277bd;background:#e1f5fe}
+.history-person.c10{color:#558b2f;background:#f1f8e9}
+.history-person.c11{color:#ad1457;background:#fce4ec}
+.history-person.c12{color:#6d4c41;background:#efebe9}
+.history-person.c13{color:#7b1fa2;background:#f3e5f5}
+.history-person.c14{color:#00695c;background:#e0f2f1}
+.history-person.c15{color:#ef6c00;background:#fff3e0}
+.member-color-text.c0{color:#d93025!important}
+.member-color-text.c1{color:#1a73e8!important}
+.member-color-text.c2{color:#a56d00!important}
+.member-color-text.c3{color:#188038!important}
+.member-color-text.c4{color:#9334e6!important}
+.member-color-text.c5{color:#e37400!important}
+.member-color-text.c6{color:#00838f!important}
+.member-color-text.c7{color:#c2185b!important}
+.member-color-text.c8{color:#5e35b1!important}
+.member-color-text.c9{color:#0277bd!important}
+.member-color-text.c10{color:#558b2f!important}
+.member-color-text.c11{color:#ad1457!important}
+.member-color-text.c12{color:#6d4c41!important}
+.member-color-text.c13{color:#7b1fa2!important}
+.member-color-text.c14{color:#00695c!important}
+.member-color-text.c15{color:#ef6c00!important}
+
+.result-share-btn{background:#eef3ef!important;color:#173b2c!important;border:1px solid #d4dfd7!important}
+.result-share-wide{width:100%!important;margin-top:8px}
+.member-input-row{position:relative}
+.session-player .member-results{background:#f7faf8;border:1px solid #d8e4dc;border-radius:12px;padding:9px 10px;margin-top:10px}
+.session-player .member-results>.small{color:#173b2c;font-size:12px;padding-bottom:5px;border-bottom:1px solid #d8e4dc}
+.session-player .member-result{background:#fff;border:1px solid #e4ebe6;border-radius:9px;padding:7px 6px;margin-top:6px}
+.session-player .member-result-name{padding-left:5px}
+
+.home-icon{width:38px;height:38px;padding:0;border-radius:50%;background:#fff;color:#173b2c;border:1px solid #cdd9d1;font-size:19px;line-height:1;flex:0 0 auto}
+.member-input-row{display:grid;grid-template-columns:1fr 38px;gap:7px;align-items:center}
+.member-input-row.first{grid-template-columns:1fr 38px}
+.member-remove{width:38px;height:38px;padding:0;border-radius:50%;background:#fff;color:#b13a35;border:1px solid #e6c7c5;font-size:20px;font-weight:800}
+.clear-input-row{display:grid;grid-template-columns:1fr 38px;gap:7px;align-items:center}
+.result-capture-host{position:fixed;left:-10000px;top:0;width:540px;background:#eef2ef;padding:16px;box-sizing:border-box;z-index:-1}
+.result-capture-brand{text-align:center;color:#173b2c;font-size:23px;font-weight:900;margin:2px 0 9px}
+.result-capture-meta{text-align:center;color:#68766e;font-size:13px;font-weight:700;margin:-2px 0 10px}
+.result-capture-host .capture-card{background:#fff;border-radius:14px;padding:15px;box-shadow:0 2px 8px #0000000b;margin:0}
+.result-capture-host .session.capture-card{background:#173b2c;color:#fff}
+.result-capture-host .result-title{font-size:21px;margin-bottom:9px}
+.result-capture-host .result-item{padding:10px;border-radius:10px}
+.result-capture-host .result-grid{gap:7px;margin-top:7px!important}
+.result-capture-host .result-item .label{font-size:11px}
+.result-capture-host .result-item .value{font-size:23px;margin-top:1px}
+.result-capture-host .member-results{margin-top:8px;padding-top:7px}
+.result-capture-host .member-result{padding:7px 0;gap:5px;font-size:12px}
+.result-capture-host .member-result-stat b{font-size:14px}
+.result-capture-host .member-result-stat span{font-size:10px}
+.result-capture-host .member-burst{font-size:10px;padding:2px 6px}
+.result-capture-host .session-grid{gap:8px;margin-top:9px}
+.result-capture-host .session-player{padding:11px;border-radius:10px}
+.result-capture-host .session-player b{font-size:17px}
+.result-capture-host .session-player span{font-size:14px}
+.result-capture-host .session-player>div[style]{margin-top:6px!important;font-size:13px!important;line-height:1.55!important}
+.result-capture-host .small{font-size:12px}
+
+.result-capture-host .member-result{grid-template-columns:minmax(72px,1.15fr) repeat(4,minmax(48px,1fr))}
+.result-capture-host .member-result-name{font-size:12px}
+
+.result-capture-history{margin-top:10px;background:#fff;border-radius:14px;padding:13px 15px;box-shadow:0 2px 8px #0000000b}
+.result-capture-history-title{font-size:17px;font-weight:900;color:#173b2c;margin-bottom:7px}
+.result-capture-history-list{display:grid;gap:4px}
+.result-capture-history-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:7px;align-items:center;padding:6px 0;border-bottom:1px solid #edf1ee;font-size:12px}
+.result-capture-history-row:last-child{border-bottom:0}
+.result-capture-history-turn{font-size:10px;color:#718078;font-weight:800}
+.result-capture-history-who{font-weight:800;min-width:0}
+.result-capture-history-score{font-weight:900;color:#173b2c;white-space:nowrap}
+.result-capture-history-note{grid-column:2/-1;font-size:10px;color:#8a5a00;margin-top:-3px}
+
+.result-capture-history-row{display:flex!important;align-items:center;gap:5px!important;flex-wrap:wrap;padding:7px 0!important}
+.result-capture-history-turn{width:34px;flex:0 0 34px}
+.result-capture-team{display:inline-block;font-weight:900;padding:3px 7px;border-radius:7px;font-size:11px;white-space:nowrap}
+.result-capture-team.t0{background:#e8f0fe;color:#185abc}
+.result-capture-team.t1{background:#fce8e6;color:#b3261e}
+.result-capture-team.t2{background:#e6f4ea;color:#137333}
+.result-capture-team.t3{background:#fef7e0;color:#8a6800}
+.result-capture-member{font-weight:900;padding:2px 5px;border-radius:6px;font-size:12px;white-space:nowrap}
+.result-capture-points{font-weight:900;font-size:12px;white-space:nowrap}
+.result-capture-total{display:inline-block;color:#173b2c;background:#edf5f0;border:1px solid #d8e6dc;font-weight:900;border-radius:8px;padding:4px 7px;font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.result-capture-special{display:inline-block;color:#8a5a00;background:#fff4d6;border:1px solid #f2dda0;font-weight:900;border-radius:8px;padding:4px 7px;font-size:11px;white-space:nowrap}
+
+.result-capture-total.t0{background:#e8f0fe;color:#185abc;border-color:#cbdaf7}
+.result-capture-total.t1{background:#fce8e6;color:#b3261e;border-color:#f3ccc8}
+.result-capture-total.t2{background:#e6f4ea;color:#137333;border-color:#c8e6d0}
+.result-capture-total.t3{background:#fef7e0;color:#8a6800;border-color:#f1e2ad}
+.result-capture-special.t0{background:#e8f0fe;color:#185abc;border-color:#cbdaf7}
+.result-capture-special.t1{background:#fce8e6;color:#b3261e;border-color:#f3ccc8}
+.result-capture-special.t2{background:#e6f4ea;color:#137333;border-color:#c8e6d0}
+.result-capture-special.t3{background:#fef7e0;color:#8a6800;border-color:#f1e2ad}
+
+.saved-history-total.t0{background:#e8f0fe;color:#185abc;border-color:#cbdaf7}
+.saved-history-total.t1{background:#fce8e6;color:#b3261e;border-color:#f3ccc8}
+.saved-history-total.t2{background:#e6f4ea;color:#137333;border-color:#c8e6d0}
+.saved-history-total.t3{background:#fef7e0;color:#8a6800;border-color:#f1e2ad}
+.saved-image-btn{width:100%;margin-top:9px;background:#eef3ef!important;color:#173b2c!important;border:1px solid #d4dfd7!important}
+</style>
+  <meta name="theme-color" content="#0b4a38">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MOLKKY SCORE">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+</head>
+<body>
+<div id="app"><div class="wrap">
+<div class="title-row">
+  <h1>🎯 MOLKKY SCORE</h1>
+  <button id="headerHome" class="home-icon hidden" onclick="goHome()" aria-label="ホーム画面に戻る" title="ホーム">⌂</button>
+</div>
+<p class="sub">モルックの得点をかんたん計算</p>
+
+<div id="setup">
+  <div class="card home-section home-play">
+    <div class="home-section-head">
+      <span class="home-section-icon">🎯</span>
+      <div>
+        <div class="step-title">セットをはじめる</div>
+        <p class="small home-section-desc">プレイするチーム数を選んでください。</p>
+      </div>
+    </div>
+    <div class="team-buttons">
+      <button class="team-btn" onclick="showNames(1)">1チーム</button>
+      <button class="team-btn" onclick="showNames(2)">2チーム</button>
+      <button class="team-btn" onclick="showNames(3)">3チーム</button>
+      <button class="team-btn" onclick="showNames(4)">4チーム</button>
+    </div>
+  </div>
+
+  <div class="card home-section home-link-section" onclick="openSavedGames()" role="button" tabindex="0">
+    <div class="home-link-main">
+      <span class="home-section-icon">📚</span>
+      <div>
+        <div class="home-link-title">過去のセット</div>
+        <div class="small">保存したセット結果・参加者・個人成績を見る</div>
+      </div>
+    </div>
+    <span class="home-chevron">›</span>
+  </div>
+
+  <div class="card home-section home-link-section" onclick="openRules()" role="button" tabindex="0">
+    <div class="home-link-main">
+      <span class="home-section-icon">📖</span>
+      <div>
+        <div class="home-link-title">モルック ルールブック</div>
+        <div class="small">得点方法や勝敗など基本ルールを確認する</div>
+      </div>
+    </div>
+    <span class="home-chevron">›</span>
+  </div>
+</div>
+
+<div id="rulesBook" class="card hidden">
+  <div class="step-title">📖 モルック ルールブック</div>
+  <p class="small">初めてでもこれだけ見れば遊べる、基本ルールまとめ。</p>
+
+  <div class="rule-hero">
+    <div class="rule-hero-score">50</div>
+    <div><b>ぴったり50点で勝利！</b><br><span>モルックを投げてスキットルを倒し、得点を重ねます。</span></div>
+  </div>
+
+  <div class="rule-section-label">① 準備</div>
+  <div class="rule-card">
+    <div class="rule-title">🪵 使うもの</div>
+    <div class="rule-illust"><div class="wood-stick"></div><div class="pin-mini">7</div><div class="pin-mini">12</div></div>
+    <div class="rule-text"><b>モルック</b>：投げる木の棒<br><b>スキットル</b>：1〜12の数字が書かれた12本のピン<br><b>モルッカーリ</b>：投げる位置を示す枠</div>
+  </div>
+
+  <div class="rule-card">
+    <div class="rule-title">📍 距離と配置</div>
+    <div class="rule-illust"><div class="throw-person">🧍</div><div class="throw-line"></div><div class="pin-mini">1</div><div class="pin-mini">2</div></div>
+    <div class="rule-text">モルッカーリから<b>3〜4m</b>離れた場所に、12本のスキットルを決められた形に並べてスタートします。<br><span class="rule-jma-note">※ JMA（日本モルック協会）主催のセットでは<b>3.5mを基準</b>とします。</span></div>
+    <div class="skittle-layout">
+      <div class="sk-row"><span>7</span><span>9</span><span>8</span></div>
+      <div class="sk-row"><span>5</span><span>11</span><span>12</span><span>6</span></div>
+      <div class="sk-row"><span>3</span><span>10</span><span>4</span></div>
+      <div class="sk-row"><span>1</span><span>2</span></div>
+      <div class="sk-arrow">↑ 投げる方向</div>
+    </div>
+  </div>
+
+  <div class="rule-section-label">② 投げる・得点する</div>
+  <div class="rule-card">
+    <div class="rule-title">🎯 モルックを投げる</div>
+    <div class="rule-illust"><div class="throw-person">🧍</div><div class="wood-stick"></div><div style="font-size:20px">➜</div><div class="pin-mini">10</div></div>
+    <div class="rule-text">決めた順番で1投ずつ交代。モルックは基本的に<b>下手投げ</b>でスキットルを狙います。</div>
+  </div>
+
+  <div class="rule-score-compare">
+    <div class="rule-score-box"><div class="rule-score-icon">1本</div><b>数字が得点</b><span>「12」だけ倒す<br>→ 12点</span></div>
+    <div class="rule-score-box"><div class="rule-score-icon">2本〜</div><b>本数が得点</b><span>4本倒す<br>→ 4点</span></div>
+  </div>
+
+  <div class="rule-card rule-caution">
+    <div class="rule-title">⚠️ 「倒れた」の判定</div>
+    <div class="rule-text">スキットルが他のスキットルやモルックに<b>もたれかかり、完全に地面についていない場合は得点に数えません。</b></div>
+  </div>
+
+  <div class="rule-card">
+    <div class="rule-title">🌲 倒したあとは？</div>
+    <div class="rule-text">倒れたスキットルは<b>倒れて止まったその場所で立て直します。</b>元の場所には戻しません。セットが進むほど配置が広がっていきます。</div>
+  </div>
+
+  <div class="rule-section-label">③ 勝敗・特殊ルール</div>
+  <div class="rule-card rule-win">
+    <div class="rule-title">🏆 50点ぴったりで勝利</div>
+    <div class="rule-text">先に合計<b>50点ちょうど</b>になったチームが勝ち。その時点でセット終了です。</div>
+  </div>
+
+  <div class="rule-card rule-burst">
+    <div class="rule-title">⚠️ 50点を超えたら</div>
+    <div class="over50-illust"><b>46</b><span>＋5点</span><b>51</b><span>→</span><b>25</b></div>
+    <div class="rule-text">50点を超えてしまったら<b>25点に戻って</b>セットを続けます。</div>
+    <div class="rule-example"><b>46点 ＋ 5点 ＝ 51点</b><br>→ 25点に戻る</div>
+  </div>
+
+  <div class="rule-card rule-miss">
+    <div class="rule-title">⭕ 3回連続MISSで失格</div>
+    <div class="rule-text">スキットルを1本も倒せず<b>0点が3回連続</b>すると、そのセットは失格になります。</div>
+    <div class="miss-demo"><span>🔴</span><span>🔴</span><span>🔴</span><b> → 失格</b></div>
+  </div>
+
+  <div class="rule-card">
+    <div class="rule-title">🚫 フォルト</div>
+    <div class="rule-text">投擲時にモルッカーリに触れたり、踏み越えたりするとそのターンの得点は<b>0点</b>になります。</div>
+  </div>
+
+  <div class="rule-section-label">④ チーム戦</div>
+  <div class="rule-card">
+    <div class="rule-title">👥 投擲順</div>
+    <div class="rule-text">各チームが1投ずつ交代します。チーム内に複数人いる場合も、決めたメンバー順で交代して投げます。</div>
+    <div class="rule-example">例：Aチーム① → Bチーム① → Aチーム② → Bチーム② → …</div>
+  </div>
+
+  <div class="rule-mini-note">※ このページはプレー中に確認しやすいよう、基本ルールを簡潔にまとめています。</div>
+  <a class="official-rule-link" href="https://share.google/sNBYD4Xy6a3H2CTSa" target="_blank" rel="noopener noreferrer">📘 公式ルールブックを確認する <span>↗</span></a>
+  <div class="external-link-note">※ 外部ページが開きます。</div>
+  <button class="secondary back" onclick="closeRules()">ホームに戻る</button>
+</div>
+
+<div id="savedGames" class="card hidden">
+  <div class="saved-games-head">
+    <div class="step-title">📚 過去のセット</div>
+    <button class="saved-clear-all" onclick="deleteAllSavedGames()">すべて削除</button>
+  </div>
+  <p class="small">終了したセットはこの端末に自動保存されます。</p>
+  <div id="savedGamesList"></div>
+  <button class="secondary back" onclick="closeSavedGames()">ホームに戻る</button>
+</div>
+<div id="savedGameDetail" class="card hidden">
+  <div class="saved-detail-top">
+    <button class="secondary saved-detail-back" onclick="closeSavedGameDetail()">← 履歴一覧</button>
+    <div class="small" id="savedDetailDate"></div>
+  </div>
+  <div id="savedGameDetailContent"></div>
+</div>
+
+<div id="names" class="card hidden">
+  <div class="step-title">② チーム・メンバーを入力</div>
+  <p class="small">チーム名とメンバー名を入力してください。メンバーは1〜4人。名前を入れると次の入力欄が表示されます。</p>
+  <div class="name-list" id="nameList"></div>
+  <button class="primary" onclick="startGame()">セット開始 🎯</button>
+  <button class="secondary back" onclick="backToSetup()">チーム数を変更</button>
+</div>
+
+<div id="orderScreen" class="card hidden">
+  <div class="step-title">次のセットの投球順</div>
+  <p class="order-note">基本の順番は前のセットから1チームずつローテーションします。必要なら ↑ ↓ で変更できます。</p>
+  <div id="orderList" class="order-list"></div>
+  <button class="primary" onclick="startNextGame()">この順番でセット開始 🎯</button>
+  <button class="secondary back" onclick="cancelOrderChange()">結果に戻る</button>
+</div>
+
+<div id="game" class="hidden">
+  <div id="winner"></div>
+  <div class="card">
+    <div class="players" id="players"></div>
+  </div>
+
+  <div id="scoreInput" class="card game-input">
+    <div id="turnLabel" class="thrower-box">今回の得点</div>
+    <div class="keypad">
+      <button data-score="1" onclick="setPoint(1)">1</button><button data-score="2" onclick="setPoint(2)">2</button>
+      <button data-score="3" onclick="setPoint(3)">3</button><button data-score="4" onclick="setPoint(4)">4</button>
+      <button data-score="5" onclick="setPoint(5)">5</button><button data-score="6" onclick="setPoint(6)">6</button>
+      <button data-score="7" onclick="setPoint(7)">7</button><button data-score="8" onclick="setPoint(8)">8</button>
+      <button data-score="9" onclick="setPoint(9)">9</button><button data-score="10" onclick="setPoint(10)">10</button>
+      <button data-score="11" onclick="setPoint(11)">11</button><button data-score="12" onclick="setPoint(12)">12</button>
+    </div>
+    <div class="turn score-actions">
+      <button class="secondary" onclick="undoLast()">↶ 戻す</button>
+      <button class="miss-btn action-miss" onclick="registerMiss()">MISS</button>
+      <button class="primary" onclick="registerScore()">得点登録</button>
+    </div>
+  </div>
+
+  <div id="resultTopActions" class="card hidden">
+    <div class="end-actions" style="margin-top:0">
+      <button class="primary" onclick="goHome()">ホームに戻る</button>
+      <button class="primary" onclick="nextGame()">次のセット</button>
+    </div>
+  </div>
+  <div id="result" class="card hidden"></div>
+  <div id="sessionSummary" class="card session hidden"></div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <strong>履歴</strong>
+      
+    </div>
+    <div class="history" id="history"></div>
+  </div>
+</div>
+</div></div>
+
+<div id="resultCaptureHost" class="result-capture-host" aria-hidden="true"></div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+let players=[], current=0, pending=0, history=[];
+let selectedTeamCount=2;
+let seriesGames=0;
+let gameEnded=false;
+let undoStack=[];
+let pendingOrder=[];
+let gameStartedAt=null;
+let currentGameSaved=false;
+let savedSeriesId=null;
+
+function $(id){return document.getElementById(id)}
+
+function loadPreviousTeams(){
+  try{
+    const raw=localStorage.getItem('molkkyPreviousTeams');
+    const data=raw?JSON.parse(raw):null;
+    return Array.isArray(data)?data:[];
+  }catch(e){return [];}
+}
+
+function savePreviousTeams(){
+  try{
+    const data=players.map(p=>({name:p.name,members:Array.isArray(p.members)?p.members:[]}));
+    localStorage.setItem('molkkyPreviousTeams',JSON.stringify(data));
+  }catch(e){}
+}
+
+
+function loadSavedGames(){
+  try{
+    const raw=localStorage.getItem('molkkySavedGames');
+    const data=raw?JSON.parse(raw):[];
+    return Array.isArray(data)?data:[];
+  }catch(e){return [];}
+}
+
+function saveCompletedGame(winnerName){
+  if(currentGameSaved)return;
+  try{
+    const ranking=[...players].sort((a,b)=>b.score-a.score);
+    const setRecord={
+      setNumber:seriesGames||1,
+      startedAt:gameStartedAt||new Date().toISOString(),
+      endedAt:new Date().toISOString(),
+      winner:winnerName||'',
+      history:[...history].reverse(),
+      teams:ranking.map((p,i)=>({
+        rank:i+1,name:p.name,score:p.score,turns:p.turns,points:p.totalPoints,
+        misses:p.misses,best:p.best,
+        members:(p.memberStats||[]).filter(ms=>ms.turns>0).map(ms=>({
+          name:ms.name,turns:ms.turns,points:ms.points,misses:ms.misses,bursts:ms.bursts||0
+        }))
+      }))
+    };
+    const seriesTeams=[...players].sort((a,b)=>(b.wins-a.wins)||(b.seriesScore-a.seriesScore)).map((p,i)=>({
+      rank:i+1,name:p.name,wins:p.wins||0,score:p.seriesScore||0,
+      turns:p.seriesTurns||0,misses:p.seriesMisses||0,
+      members:(p.memberStats||[]).filter(ms=>(ms.seriesTurns||0)>0).map(ms=>({
+        name:ms.name,turns:ms.seriesTurns||0,points:ms.seriesPoints||0,
+        misses:ms.seriesMisses||0,bursts:ms.seriesBursts||0
+      }))
+    }));
+    const games=loadSavedGames();
+    let record=savedSeriesId?games.find(g=>String(g.id)===String(savedSeriesId)):null;
+    if(record){
+      record.endedAt=setRecord.endedAt;
+      record.winner=winnerName||'';
+      record.seriesGames=seriesGames||1;
+      record.seriesTeams=seriesTeams;
+      if(!Array.isArray(record.sets))record.sets=[];
+      record.sets.push(setRecord);
+      record.teams=setRecord.teams;
+    }else{
+      savedSeriesId=Date.now();
+      record={
+        id:savedSeriesId,favorite:false,
+        startedAt:setRecord.startedAt,endedAt:setRecord.endedAt,
+        winner:winnerName||'',seriesGames:seriesGames||1,
+        seriesTeams,teams:setRecord.teams,sets:[setRecord]
+      };
+      games.unshift(record);
+    }
+    localStorage.setItem('molkkySavedGames',JSON.stringify(games.slice(0,30)));
+    currentGameSaved=true;
+  }catch(e){}
+}
+
+function toggleFavoriteGame(id,event){
+  if(event)event.stopPropagation();
+  try{
+    const games=loadSavedGames();
+    const game=games.find(g=>Number(g.id)===Number(id));
+    if(!game)return;
+    game.favorite=!game.favorite;
+    localStorage.setItem('molkkySavedGames',JSON.stringify(games));
+    renderSavedGames();
+  }catch(e){}
+}
+
+function deleteAllSavedGames(){
+  const games=loadSavedGames();
+  if(!games.length)return;
+  if(!confirm('すべてのセット履歴を削除しますか？\n削除すると元に戻せません。'))return;
+  try{
+    localStorage.setItem('molkkySavedGames',JSON.stringify([]));
+    savedSeriesId=null;
+    renderSavedGames();
+  }catch(e){}
+}
+
+function deleteSavedGame(id,event){
+  if(event)event.stopPropagation();
+  if(!confirm('このセット履歴を削除しますか？\n削除すると元に戻せません。'))return;
+  try{
+    const games=loadSavedGames().filter(g=>Number(g.id)!==Number(id));
+    localStorage.setItem('molkkySavedGames',JSON.stringify(games));
+    renderSavedGames();
+  }catch(e){}
+}
+
+function formatSavedDate(value){
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return '';
+  return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function updateHeaderHome(show){
+  $('headerHome').classList.toggle('hidden',!show);
+}
+
+function openRules(){
+  $('setup').classList.add('hidden');
+  $('rulesBook').classList.remove('hidden');
+  updateHeaderHome(true);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function closeRules(){
+  $('rulesBook').classList.add('hidden');
+  $('setup').classList.remove('hidden');
+  updateHeaderHome(false);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openSavedGames(){
+  $('setup').classList.add('hidden');
+  $('savedGames').classList.remove('hidden');
+  updateHeaderHome(true);
+  renderSavedGames();
+}
+
+function closeSavedGames(){
+  $('savedGames').classList.add('hidden');
+  $('savedGameDetail').classList.add('hidden');
+  $('setup').classList.remove('hidden');
+  updateHeaderHome(false);
+}
+
+function openSavedGameDetail(id){
+  const g=loadSavedGames().find(x=>String(x.id)===String(id));
+  if(!g)return;
+  $('savedGames').classList.add('hidden');
+  $('savedGameDetail').classList.remove('hidden');
+  updateHeaderHome(true);
+  $('savedDetailDate').textContent=formatSavedDate(g.startedAt);
+  const sets=(Array.isArray(g.sets)&&g.sets.length)?g.sets:[{
+    setNumber:1,startedAt:g.startedAt,endedAt:g.endedAt,winner:g.winner,
+    teams:g.teams||[],history:[]
+  }];
+  const cumulative=(g.seriesTeams&&g.seriesTeams.length)?g.seriesTeams:g.teams||[];
+  $('savedGameDetailContent').innerHTML=`
+    <div class="step-title">📚 セット詳細</div>
+    <div class="saved-series-summary" id="savedSeriesCapture">
+      <div class="saved-team-top"><b>📊 累計成績</b><b>${g.seriesGames||sets.length}セット</b></div>
+      ${cumulative.map((t,ti)=>`
+        <div style="padding:8px 0;${ti?'border-top:1px solid #dfe7e1':''}">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <b>${escapeHtml(t.name)}</b><b>${t.wins!=null?(t.wins||0)+'勝・':''}${t.score||0}点</b>
+          </div>
+          <div class="small">平均 ${t.turns?((t.score||t.points||0)/t.turns).toFixed(1):'0.0'}点 ／ ミス ${t.misses||0}回 ／ ${t.turns||0}投</div>
+          ${(t.members||[]).map((m,mi)=>`
+            <div class="saved-member">
+              <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}">${escapeHtml(m.name)}さん</div>
+              <div class="saved-member-stat"><b>${m.points||0}点</b>累計</div>
+              <div class="saved-member-stat"><b>${m.turns?(m.points/m.turns).toFixed(1):'0.0'}</b>平均</div>
+              <div class="saved-member-stat"><b>${m.misses||0}回</b>ミス</div>
+              <div class="saved-member-stat"><b>${m.turns?(m.misses/m.turns*100).toFixed(1):'0.0'}%</b>ミス率${m.bursts?`<br>💥${m.bursts}`:''}</div>
+            </div>`).join('')}
+        </div>`).join('')}
+      <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'series',-1)">📥 累計成績を保存</button>
+    </div>
+    <div style="font-weight:900;margin:13px 0 8px">セット別</div>
+    ${sets.map((set,si)=>`
+      <div class="saved-set-card" id="savedSetCapture${si}">
+        <div class="saved-set-title"><span>第${set.setNumber||si+1}セット</span><span>🏆 ${escapeHtml(set.winner||'結果なし')}</span></div>
+        ${(set.teams||[]).map(t=>`
+          <div class="saved-team">
+            <div class="saved-team-top"><b>${t.rank||''}位　${escapeHtml(t.name)}</b><b>${t.score||0}点</b></div>
+            <div class="small">平均 ${t.turns?(t.points/t.turns).toFixed(1):'0.0'}点 ／ ミス ${t.misses||0}回 ／ ${t.turns||0}投</div>
+          </div>`).join('')}
+        <div style="font-weight:800;font-size:11px;margin:9px 0 5px">投擲履歴</div>
+        ${(set.history&&set.history.length)?set.history.map((h,hi)=>`
+          <div class="small" style="padding:4px 0;border-top:${hi?'1px solid #edf0ee':'0'}">
+            <span class="saved-history-team t${savedTeamColor(h.name,set.teams||[])}">${escapeHtml(h.name||'')}</span>${h.thrower?`・<span class="member-color-text c${globalMemberColor(h.name,h.thrower,set.teams||[])}">${escapeHtml(h.thrower)}</span>`:''}：<b>${h.points||0}点</b>${h.note==='50点超え→25点'?`　<span class="saved-history-total t${savedTeamColor(h.name,set.teams||[])}">${escapeHtml(h.note)}</span>`:` → <span class="saved-history-total t${savedTeamColor(h.name,set.teams||[])}">合計 ${h.after||0}点</span>${h.note?'　'+escapeHtml(h.note):''}`}
+          </div>`).join(''):'<div class="small">このセットの投擲履歴は保存されていません。</div>'}
+        <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'set',${si})">📥 このセットの結果を保存</button>
+      </div>`).join('')}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildSavedSeriesLikeLive(g){
+  const cumulative=(g.seriesTeams&&g.seriesTeams.length)?g.seriesTeams:(g.teams||[]);
+  const games=g.seriesGames||(Array.isArray(g.sets)?g.sets.length:1)||1;
+  const wrap=document.createElement('div');
+  wrap.className='card session capture-card';
+  wrap.innerHTML=`
+    <div style="font-size:20px;font-weight:800">📊 累計成績</div>
+    <div class="small">全 ${games} セット</div>
+    <div class="session-grid">
+      ${cumulative.map(t=>`
+        <div class="session-player">
+          <b>${escapeHtml(t.name)}</b>
+          <span>🏆 ${t.wins||0}勝　／　累計 ${t.score||0}点</span>
+          <div style="margin-top:7px;font-size:12px;line-height:1.7">
+            平均得点：<strong>${t.turns?((t.score||0)/t.turns).toFixed(1):'0.0'}</strong><br>
+            ミス数：<strong>${t.misses||0}回</strong><br>
+            ミス率：<strong>${t.turns?((t.misses||0)/t.turns*100).toFixed(1):'0.0'}%</strong>
+          </div>
+          ${(t.members||[]).filter(m=>(m.turns||0)>0).length?`
+            <div class="member-results">
+              <div class="small" style="font-weight:800;margin-bottom:2px">メンバー別・累計</div>
+              ${(t.members||[]).filter(m=>(m.turns||0)>0).map(m=>`
+                <div class="member-result">
+                  <div class="member-result-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}">${escapeHtml(m.name)}さん</div>
+                  <div class="member-result-stat"><b>${m.points||0}点</b><span>合計得点</span></div>
+                  <div class="member-result-stat"><b>${m.turns?((m.points||0)/m.turns).toFixed(1):'0.0'}</b><span>平均得点</span></div>
+                  <div class="member-result-stat"><b>${m.misses||0}回</b><span>ミス</span></div>
+                  <div class="member-result-stat"><b>${m.turns?((m.misses||0)/m.turns*100).toFixed(1):'0.0'}%</b><span>ミス率</span></div>
+                  ${(m.bursts||0)>0?`<div class="member-burst">バースト ${m.bursts}回</div>`:''}
+                </div>`).join('')}
+            </div>`:''}
+        </div>`).join('')}
+    </div>`;
+  return wrap;
+}
+
+async function saveSavedResultImage(id,kind,setIndex){
+  try{
+    if(typeof html2canvas!=='function'){
+      alert('画像保存機能の読み込みに失敗しました。通信環境を確認してもう一度お試しください。');
+      return;
+    }
+    const g=loadSavedGames().find(x=>String(x.id)===String(id));
+    if(!g)return;
+    const source=kind==='series' ? null : $(`savedSetCapture${setIndex}`);
+    if(kind!=='series' && !source)return;
+
+    const host=$('resultCaptureHost');
+    host.innerHTML='';
+
+    const brand=document.createElement('div');
+    brand.className='result-capture-brand';
+    brand.textContent='🎯 MOLKKY SCORE';
+    host.appendChild(brand);
+
+    const meta=document.createElement('div');
+    meta.className='result-capture-meta';
+    meta.textContent=kind==='series'
+      ? `全 ${g.seriesGames||(Array.isArray(g.sets)?g.sets.length:1)||1} セット・累計成績`
+      : `第 ${((g.sets||[])[setIndex]?.setNumber)||setIndex+1} セット`;
+    host.appendChild(meta);
+
+    if(kind==='series'){
+      host.appendChild(buildSavedSeriesLikeLive(g));
+    }else{
+      const clone=source.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.classList.add('capture-card');
+      clone.querySelectorAll('button,.saved-image-btn').forEach(el=>el.remove());
+      host.appendChild(clone);
+    }
+
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const canvas=await html2canvas(host,{backgroundColor:'#eef2ef',scale:2,useCORS:true,logging:false});
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.94));
+    if(!blob)throw new Error('image');
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`molkky-${kind==='series'?'total':'set'}-result-${Date.now()}.jpg`;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(e){
+    alert('結果画像を保存できませんでした。');
+  }
+}
+
+function closeSavedGameDetail(){
+  $('savedGameDetail').classList.add('hidden');
+  $('savedGames').classList.remove('hidden');
+  renderSavedGames();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderSavedGames(){
+  const games=loadSavedGames();
+  if(!games.length){
+    $('savedGamesList').innerHTML='<div class="saved-empty">まだ保存されたセットはありません。</div>';
+    return;
+  }
+  $('savedGamesList').innerHTML=games.map(g=>{
+    const teams=(g.seriesTeams&&g.seriesTeams.length)?g.seriesTeams:(g.teams||[]);
+    return `
+    <div class="saved-game-card">
+      <button class="saved-game-head" onclick="openSavedGameDetail(${Number(g.id)})">
+        <div>
+          <div class="saved-game-date">${g.favorite?'<span class="saved-favorite-mark">★</span>':''}${formatSavedDate(g.startedAt)}</div>
+          <div class="saved-game-winner">🎯 ${g.seriesGames||1}セット　・　${teams.length}チーム</div>
+          <div class="saved-game-participants">
+            ${teams.map(t=>`<div class="saved-game-teamline"><b>${escapeHtml(t.name)}</b>：${t.wins!=null?(t.wins||0)+'勝・':''}${t.score||0}点</div>`).join('')}
+          </div>
+        </div>
+        <span class="saved-game-arrow">›</span>
+      </button>
+      <div class="saved-game-actions">
+        <button class="saved-favorite-btn ${g.favorite?'on':''}" onclick="toggleFavoriteGame(${Number(g.id)},event)" aria-label="${g.favorite?'お気に入り解除':'お気に入り登録'}">${g.favorite?'★':'☆'}</button>
+        <button class="saved-delete-btn" onclick="deleteSavedGame(${Number(g.id)},event)">削除</button>
+      </div>
+    </div>`}).join('');
+}
+
+function showNames(n){
+  selectedTeamCount=n;
+  const previous=loadPreviousTeams();
+  $('nameList').innerHTML='';
+  for(let i=0;i<n;i++){
+    const saved=previous[i]||null;
+    const defaultTeam=`チーム${String.fromCharCode(65+i)}`;
+    // チーム名は履歴を使わず、毎回「チームA/B/C/D」に戻す。
+    const teamName=defaultTeam;
+    // メンバー名だけ前回データを引き継ぐ。
+    const savedMembers=saved&&Array.isArray(saved.members)?saved.members.slice(0,4).filter(Boolean):[];
+    const box=document.createElement('div');
+    box.className='team-entry';
+    box.innerHTML=`
+      <div class="team-entry-title">チーム ${String.fromCharCode(65+i)}</div>
+      <div class="clear-input-row">
+        <input id="name${i}" type="text" maxlength="12" value="${escapeHtml(teamName)}">
+        <button type="button" class="member-remove" onclick="clearField('name${i}')" aria-label="チーム名を空欄にする">×</button>
+      </div>
+      <div class="member-label">メンバー</div>
+      <div id="members${i}" class="member-list"></div>`;
+    $('nameList').appendChild(box);
+    renderMemberInputs(i,savedMembers);
+  }
+  $('setup').classList.add('hidden');
+  $('names').classList.remove('hidden');
+  setTimeout(()=>$('name0').focus(),100);
+}
+
+function renderMemberInputs(teamIndex,values){
+  values=(values||[]).map(v=>(v||'').trim()).filter(Boolean).slice(0,4);
+  const container=$(`members${teamIndex}`);
+  if(!container)return;
+  container.innerHTML='';
+  // Show all named members plus exactly one empty "next member" field, up to 4 total.
+  const count=Math.min(4,values.length+(values.length<4?1:0));
+  for(let m=0;m<count;m++){
+    const hasValue=m<values.length;
+    const row=document.createElement('div');
+    row.className='member-input-row';
+    row.id=`memberRow${teamIndex}_${m}`;
+    row.innerHTML=`
+      <input id="member${teamIndex}_${m}" class="member-input" type="text" maxlength="12"
+        placeholder="${m+1}人目の名前" value="${hasValue?escapeHtml(values[m]):''}"
+        oninput="memberChanged(${teamIndex},${m})">
+      ${hasValue?`<button type="button" class="member-remove" onclick="clearMember(${teamIndex},${m})" aria-label="${m+1}人目の名前を削除">×</button>`:'<span class="member-spacer"></span>'}`;
+    container.appendChild(row);
+  }
+}
+
+function getMemberValues(teamIndex){
+  const values=[];
+  for(let m=0;m<4;m++){
+    const el=$(`member${teamIndex}_${m}`);
+    if(el && el.value.trim())values.push(el.value.trim());
+  }
+  return values;
+}
+
+function clearField(id){
+  const el=$(id);
+  if(!el)return;
+  el.value='';
+  el.focus();
+}
+
+function clearMember(teamIndex,memberIndex){
+  const values=[];
+  for(let m=0;m<4;m++){
+    const el=$(`member${teamIndex}_${m}`);
+    if(el && m!==memberIndex && el.value.trim())values.push(el.value.trim());
+  }
+  renderMemberInputs(teamIndex,values);
+}
+
+function memberChanged(teamIndex,memberIndex){
+  const input=$(`member${teamIndex}_${memberIndex}`);
+  if(!input)return;
+  const row=$(`memberRow${teamIndex}_${memberIndex}`);
+  const hasText=!!input.value.trim();
+
+  // 入力された欄には×を表示。最後の空欄には×を表示しない。
+  if(row){
+    let btn=row.querySelector('.member-remove');
+    let spacer=row.querySelector('.member-spacer');
+    if(hasText && !btn){
+      if(spacer)spacer.remove();
+      btn=document.createElement('button');
+      btn.type='button';
+      btn.className='member-remove';
+      btn.textContent='×';
+      btn.setAttribute('aria-label',`${memberIndex+1}人目の名前を削除`);
+      btn.onclick=()=>clearMember(teamIndex,memberIndex);
+      row.appendChild(btn);
+    }else if(!hasText && btn){
+      btn.remove();
+      if(!spacer){
+        spacer=document.createElement('span');
+        spacer.className='member-spacer';
+        row.appendChild(spacer);
+      }
+    }
+  }
+
+  // 文字が入ったら次の空欄だけ追加。フォーカスは現在の欄に残す。
+  if(hasText && memberIndex<3 && !$(`member${teamIndex}_${memberIndex+1}`)){
+    const m=memberIndex+1;
+    const nextRow=document.createElement('div');
+    nextRow.className='member-input-row';
+    nextRow.id=`memberRow${teamIndex}_${m}`;
+    nextRow.innerHTML=`
+      <input id="member${teamIndex}_${m}" class="member-input" type="text" maxlength="12"
+        placeholder="${m+1}人目の名前"
+        oninput="memberChanged(${teamIndex},${m})">
+      <span class="member-spacer"></span>`;
+    $(`members${teamIndex}`).appendChild(nextRow);
+  }
+}
+
+function backToSetup(){
+  $('names').classList.add('hidden');
+  $('setup').classList.remove('hidden');
+}
+
+function startGame(){
+  const n=selectedTeamCount;
+  players=Array.from({length:n},(_,i)=>{
+    const input=$('name'+i);
+    const fallback=`チーム${String.fromCharCode(65+i)}`;
+    const name=(input.value.trim()||fallback);
+    const members=[];
+    for(let m=0;m<4;m++){
+      const el=$(`member${i}_${m}`);
+      if(el && el.value.trim())members.push(el.value.trim());
+    }
+    return {name,members,score:0,zeros:0,eliminated:false,turns:0,totalPoints:0,misses:0,best:0,
+      seriesScore:0,wins:0,seriesTurns:0,seriesMisses:0};
+  });
+  savePreviousTeams();
+  current=0;pending=0;history=[];
+  gameStartedAt=new Date().toISOString();
+  currentGameSaved=false;
+  seriesGames=0;
+  savedSeriesId=null;
+  gameEnded=false;
+  undoStack=[];
+  $('scoreInput').classList.remove('locked');
+  $('sessionSummary').classList.add('hidden');
+  $('names').classList.add('hidden');
+  $('game').classList.remove('hidden');
+  $('headerHome').classList.remove('hidden');
+  render();
+}
+
+function setPoint(n){if(gameEnded)return;pending=n;renderPending()}
+function registerMiss(){if(gameEnded)return;pending=0;registerScore()}
+function addPoint(n){if(gameEnded)return;pending=n;renderPending()}
+function renderPending(){
+  document.querySelectorAll('#scoreInput [data-score]').forEach(btn=>{
+    btn.classList.toggle('score-selected',Number(btn.dataset.score)===Number(pending));
+  });
+}
+
+function registerScore(){
+  if(!players.length || gameEnded)return;
+  undoStack.push({
+    players: JSON.parse(JSON.stringify(players)),
+    current,
+    pending,
+    history: JSON.parse(JSON.stringify(history)),
+    seriesGames,
+    gameEnded
+  });
+  if(undoStack.length>30)undoStack.shift();
+
+  const p=players[current], before=p.score;
+  const thrower=(p.members&&p.members.length)?p.members[p.memberTurn||0]:'';
+
+  // 個人別成績を投球ごとに記録
+  if(thrower){
+    if(!Array.isArray(p.memberStats))p.memberStats=[];
+    let ms=p.memberStats.find(x=>x.name===thrower);
+    if(!ms){
+      ms={name:thrower,turns:0,points:0,misses:0,bursts:0,seriesTurns:0,seriesPoints:0,seriesMisses:0,seriesBursts:0};
+      p.memberStats.push(ms);
+    }
+    ms.turns++;
+    ms.points+=pending;
+    ms.seriesTurns++;
+    ms.seriesPoints+=pending;
+    if(pending===0){
+      ms.misses++;
+      ms.seriesMisses++;
+    }
+  }
+
+  p.turns++;
+  p.totalPoints+=pending;
+  p.seriesScore+=pending;
+  p.seriesTurns++;
+  if(pending===0){p.zeros++;p.misses++;p.seriesMisses++;}else p.zeros=0;
+  if(pending>p.best)p.best=pending;
+
+  let after=before+pending, note='';
+  if(after>50){
+    after=25;
+    note='50点超え→25点';
+    if(thrower && Array.isArray(p.memberStats)){
+      const burstMember=p.memberStats.find(x=>x.name===thrower);
+      if(burstMember){
+        burstMember.bursts=(burstMember.bursts||0)+1;
+        burstMember.seriesBursts=(burstMember.seriesBursts||0)+1;
+      }
+    }
+  }
+  p.score=after;
+
+  // 履歴にも投球者名を保存
+  const historyItem={name:p.name,thrower,points:pending,after,note};
+  history.unshift(historyItem);
+
+  if(p.zeros>=3){
+    p.eliminated=true;
+    // 同じ投球を二重登録せず、この投球の注記だけ更新
+    historyItem.note='3回連続0点→失格';
+    render();
+    $('winner').innerHTML=`<div class="win"><b>${escapeHtml(p.name)} は3回連続0点で失格</b></div>`;
+    if(players.filter(x=>!x.eliminated).length===1){
+      const remaining=players.find(x=>!x.eliminated);
+      if(remaining){
+        remaining.wins++;
+        seriesGames++;
+        gameEnded=true;
+        saveCompletedGame(remaining.name);
+        $('winner').innerHTML=`<div class="win"><div style="font-size:28px">🏆</div><b>${escapeHtml(remaining.name)} の勝利！</b></div>`;
+        render();
+        renderResults(remaining.name);
+        $('resultTopActions').classList.remove('hidden');
+        renderSessionSummary();
+        $('scoreInput').classList.add('locked');
+        return;
+      }
+    }
+  }else if(after===50){
+    render();
+    p.wins++;
+    seriesGames++;
+    gameEnded=true;
+    saveCompletedGame(p.name);
+    $('winner').innerHTML=`<div class="win"><div style="font-size:28px">🏆</div><b>${escapeHtml(p.name)} の勝利！</b></div>`;
+    render();
+    renderResults(p.name);
+    $('resultTopActions').classList.remove('hidden');
+    renderSessionSummary();
+    $('scoreInput').classList.add('locked');
+    return;
+  }
+
+  if(p.members && p.members.length){
+    p.memberTurn=(Number.isInteger(p.memberTurn)?p.memberTurn:0)+1;
+    p.memberTurn%=p.members.length;
+  }
+  pending=0;
+  for(let i=1;i<=players.length;i++){
+    const idx=(current+i)%players.length;
+    if(!players[idx].eliminated){current=idx;break;}
+  }
+  render();
+}
+
+function undoLast(){
+  if(gameEnded || !undoStack.length)return;
+  const last=undoStack.pop();
+  players=last.players;
+  current=last.current;
+  pending=0;
+  history=last.history;
+  seriesGames=last.seriesGames;
+  gameEnded=last.gameEnded;
+  $('winner').innerHTML='';
+  render();
+}
+
+function renderSessionSummary(){
+  $('sessionSummary').classList.remove('hidden');
+  const ranked=[...players].sort((a,b)=>b.wins-a.wins || b.seriesScore-a.seriesScore);
+  $('sessionSummary').innerHTML=`
+    <div style="font-size:20px;font-weight:800">📊 累計成績</div>
+    <div class="small">全 ${seriesGames} セット</div>
+    <div class="session-grid">
+      ${ranked.map(p=>`
+        <div class="session-player">
+          <b>${escapeHtml(p.name)}</b>
+          <span>🏆 ${p.wins}勝　／　累計 ${p.seriesScore}点</span>
+          <div style="margin-top:7px;font-size:12px;line-height:1.7">
+            平均得点：<strong>${p.seriesTurns ? (p.seriesScore/p.seriesTurns).toFixed(1) : '0.0'}</strong><br>
+            ミス数：<strong>${p.seriesMisses}回</strong><br>
+            ミス率：<strong>${p.seriesTurns ? (p.seriesMisses/p.seriesTurns*100).toFixed(1) : '0.0'}%</strong>
+          </div>
+          ${(p.memberStats||[]).filter(ms=>ms.seriesTurns>0).length?`
+            <div class="member-results">
+              <div class="small" style="font-weight:800;margin-bottom:2px">メンバー別・累計</div>
+              ${(p.memberStats||[]).filter(ms=>ms.seriesTurns>0).map(ms=>`
+                <div class="member-result">
+                  <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}">${escapeHtml(ms.name)}さん</div>
+                  <div class="member-result-stat"><b>${ms.seriesPoints}点</b><span>合計得点</span></div>
+                  <div class="member-result-stat"><b>${(ms.seriesPoints/ms.seriesTurns).toFixed(1)}</b><span>平均得点</span></div>
+                  <div class="member-result-stat"><b>${ms.seriesMisses}回</b><span>ミス</span></div>
+                  <div class="member-result-stat"><b>${(ms.seriesMisses/ms.seriesTurns*100).toFixed(1)}%</b><span>ミス率</span></div>
+                  ${(ms.seriesBursts||0)>0?`<div class="member-burst">バースト ${ms.seriesBursts}回</div>`:''}
+                </div>`).join('')}
+            </div>`:''}
+        </div>`).join('')}
+    </div>
+    <div class="end-actions">
+      <button class="end-action-btn" onclick="goHome()">ホームに戻る</button>
+      <button class="end-action-btn" onclick="nextGame()">次のセット</button>
+    </div>
+    <button class="end-action-btn result-share-btn result-share-wide" onclick="saveResultSectionImage('series')">📥 累計成績を保存</button>`;
+}
+
+function nextGame(){
+  // Rotate one place: 1-2 -> 2-1, 1-2-3 -> 2-3-1.
+  pendingOrder=players.map((_,i)=>i);
+  if(pendingOrder.length>1){
+    pendingOrder.push(pendingOrder.shift());
+  }
+  renderOrderScreen();
+  $('game').classList.add('hidden');
+  $('orderScreen').classList.remove('hidden');
+}
+
+function renderOrderScreen(){
+  $('orderList').innerHTML=pendingOrder.map((playerIndex,pos)=>`
+    <div class="order-row">
+      <div class="order-pos">${pos+1}</div>
+      <div class="order-name">${escapeHtml(players[playerIndex].name)}
+        ${players[playerIndex].members&&players[playerIndex].members.length?`<div style="font-size:10px;font-weight:500;color:#718078">${players[playerIndex].members.map(escapeHtml).join('・')}</div>`:''}
+      </div>
+      <div class="order-controls">
+        <button onclick="moveOrder(${pos},-1)" ${pos===0?'disabled':''} aria-label="上へ">↑</button>
+        <button onclick="moveOrder(${pos},1)" ${pos===pendingOrder.length-1?'disabled':''} aria-label="下へ">↓</button>
+      </div>
+    </div>`).join('');
+}
+
+function moveOrder(pos,dir){
+  const next=pos+dir;
+  if(next<0 || next>=pendingOrder.length)return;
+  [pendingOrder[pos],pendingOrder[next]]=[pendingOrder[next],pendingOrder[pos]];
+  renderOrderScreen();
+}
+
+function cancelOrderChange(){
+  $('orderScreen').classList.add('hidden');
+  $('game').classList.remove('hidden');
+}
+
+function startNextGame(){
+  players=pendingOrder.map(i=>players[i]);
+  players.forEach(p=>{
+    p.score=0;p.zeros=0;p.eliminated=false;p.turns=0;p.totalPoints=0;p.misses=0;p.best=0;p.memberTurn=0;
+    if(Array.isArray(p.memberStats))p.memberStats.forEach(ms=>{ms.turns=0;ms.points=0;ms.misses=0;ms.bursts=0;});
+  });
+  current=0;pending=0;history=[];gameEnded=false;undoStack=[];pendingOrder=[];
+  gameStartedAt=new Date().toISOString();currentGameSaved=false;
+  $('orderScreen').classList.add('hidden');
+  $('game').classList.remove('hidden');
+  $('winner').innerHTML='';
+  $('result').classList.add('hidden');
+  $('result').innerHTML='';
+  $('resultTopActions').classList.add('hidden');
+  $('sessionSummary').classList.add('hidden');
+  $('scoreInput').classList.remove('locked');
+  render();
+}
+
+function changePlayers(){
+  players=[];current=0;pending=0;history=[];seriesGames=0;savedSeriesId=null;gameEnded=false;undoStack=[];pendingOrder=[];
+  $('game').classList.add('hidden');
+  $('orderScreen').classList.add('hidden');
+  $('winner').innerHTML='';
+  $('result').classList.add('hidden');
+  $('result').innerHTML='';
+  $('resultTopActions').classList.add('hidden');
+  $('sessionSummary').classList.add('hidden');
+  $('scoreInput').classList.remove('locked');
+  $('setup').classList.remove('hidden');
+  $('headerHome').classList.add('hidden');
+}
+
+function renderResults(winnerName){
+  const ranking=[...players].sort((a,b)=>b.score-a.score);
+  $('result').classList.remove('hidden');
+  $('result').innerHTML=`
+    <div class="result-title">🏆 セットリザルト</div>
+    <div class="small" style="margin-bottom:10px">${winnerName?escapeHtml(winnerName)+' が勝利！':''}</div>
+    <div style="display:grid;gap:8px">
+      ${ranking.map((p,i)=>{
+        const avg=p.turns?p.totalPoints/p.turns:0;
+        const memberRows=(p.memberStats||[]).filter(ms=>ms.turns>0).map(ms=>{
+          const mAvg=ms.turns?ms.points/ms.turns:0;
+          const missRate=ms.turns?ms.misses/ms.turns*100:0;
+          return `<div class="member-result">
+            <div class="member-result-name member-color-text c${globalMemberColor(p.name,ms.name,players)}">${escapeHtml(ms.name)}さん</div>
+            <div class="member-result-stat"><b>${ms.points}点</b><span>合計得点</span></div>
+            <div class="member-result-stat"><b>${mAvg.toFixed(1)}</b><span>平均得点</span></div>
+            <div class="member-result-stat"><b>${ms.misses}回</b><span>ミス</span></div>
+            <div class="member-result-stat"><b>${missRate.toFixed(1)}%</b><span>ミス率</span></div>
+            ${(ms.bursts||0)>0?`<div class="member-burst">バースト ${ms.bursts}回</div>`:''}
+          </div>`;
+        }).join('');
+        return `<div class="result-item">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <b>${i+1}位　${escapeHtml(p.name)}</b><b>${p.score}点</b>
+          </div>
+          <div class="result-grid" style="margin-top:8px">
+            <div><div class="label">平均得点</div><div class="value">${avg.toFixed(1)}</div></div>
+            <div><div class="label">ミス（0点）</div><div class="value">${p.misses}回</div></div>
+            <div><div class="label">ターン数</div><div class="value">${p.turns}</div></div>
+            <div><div class="label">1回の最高得点</div><div class="value">${p.best}点</div></div>
+          </div>
+          ${memberRows?`<div class="member-results"><div class="small" style="font-weight:800;margin-bottom:2px">メンバー別</div>${memberRows}</div>`:''}
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="secondary result-share-btn result-share-wide" onclick="saveResultSectionImage('set')">📥 このセットの結果を保存</button>`;
+}
+
+
+
+function savedTeamColor(teamName,teamList){
+  const list=Array.isArray(teamList)?teamList:[];
+  const idx=list.findIndex(t=>t.name===teamName);
+  return Math.max(0,idx)%4;
+}
+
+function globalMemberColor(teamName,memberName,teamList){
+  const list=Array.isArray(teamList)?teamList:players;
+  let idx=0;
+  for(const t of list){
+    const members=Array.isArray(t.members)?t.members:[];
+    for(const m of members){
+      const name=typeof m==='string'?m:m.name;
+      if(t.name===teamName && name===memberName)return idx%16;
+      idx++;
+    }
+  }
+  return 0;
+}
+
+function historyPersonColor(team,thrower){
+  if(!thrower)return 0;
+  return globalMemberColor(team,thrower,players);
+}
+
+function render(){
+  renderPending();
+  if(players[current]){
+    const cp=players[current];
+    const member=(cp.members&&cp.members.length)?cp.members[cp.memberTurn||0]:'';
+    const memberColor=(cp.members&&member)?globalMemberColor(cp.name,member,players):0;
+    $('turnLabel').innerHTML=member
+      ? `<div class="thrower-team">${escapeHtml(cp.name)}</div><div class="thrower-name"><span class="member-color-text c${memberColor}">${escapeHtml(member)} さん</span>の番</div>`
+      : `<div class="thrower-team">現在のチーム</div><div class="thrower-name">${escapeHtml(cp.name)}の番</div>`;
+  }else{
+    $('turnLabel').textContent='今回の得点';
+  }
+  $('players').innerHTML=players.map((p,i)=>`
+    <div class="player ${i===current?'active':''} ${p.eliminated?'eliminated':''}">
+      <div class="name">${escapeHtml(p.name)}${p.eliminated?'（失格）':''}</div>
+      ${p.members&&p.members.length?`<div class="player-members">${p.members.map((m,mi)=>`${mi===(p.memberTurn||0)&&i===current?'<b>':''}<span class="member-color-text c${globalMemberColor(p.name,m,players)}">${escapeHtml(m)}さん</span>${mi===(p.memberTurn||0)&&i===current?'</b>':''}`).join('・')}</div>`:'<div class="player-members"></div>'}
+      <div class="score">${p.score}</div>
+      <div class="score-remaining">50点まで <b>あと${Math.max(0,50-p.score)}点</b></div>
+      <div class="miss-row">
+        <span class="miss-label">MISS</span>
+        ${[0,1,2].map(n=>`<span class="miss-dot ${n<p.zeros?'on':''}"></span>`).join('')}
+      </div>
+      <div class="meta" style="margin-top:5px;font-weight:700;color:#173b2c">通算 ${p.wins}勝 ｜ ${p.seriesScore}点</div>
+    </div>`).join('');
+  if(!history.length){
+    $('history').innerHTML='<div class="small" style="padding:10px 0">まだありません</div>';
+  }else{
+    $('history').innerHTML=`<div class="history-teams">${
+      players.map(p=>{
+        const entries=history.filter(h=>h.name===p.name).slice().reverse();
+        return `<div class="history-team">
+          <div class="history-team-title">${escapeHtml(p.name)}</div>
+          ${entries.length?entries.map((h,i)=>`
+            <div class="history-entry">
+              <span class="history-turn">${h.thrower?`<span class="history-person c${historyPersonColor(p.name,h.thrower)}">${escapeHtml(h.thrower)}さん</span>`:(i+1)+'投'}</span>
+              <span class="history-score">+${h.points}</span>
+              <span class="history-total">${h.note==='50点超え→25点'?'50点超え→25点':`→ ${h.after}点${h.note?' · '+h.note:''}`}</span>
+            </div>`).join(''):'<div class="small" style="padding-top:8px">まだ投球なし</div>'}
+        </div>`;
+      }).join('')
+    }</div>`;
+  }
+}
+
+function buildResultCapture(kind){
+  const host=$('resultCaptureHost');
+  const source=kind==='series' ? $('sessionSummary') : $('result');
+  const clone=source.cloneNode(true);
+
+  clone.id=kind==='series'?'resultCaptureSession':'resultCaptureResult';
+  clone.classList.remove('hidden');
+  clone.classList.add('capture-card');
+
+  // 保存画像には操作ボタンを含めない。
+  clone.querySelectorAll('button,.end-actions,.result-share-btn').forEach(el=>el.remove());
+
+  host.innerHTML='';
+
+  const brand=document.createElement('div');
+  brand.className='result-capture-brand';
+  brand.textContent='🎯 MOLKKY SCORE';
+  host.appendChild(brand);
+
+  const meta=document.createElement('div');
+  meta.className='result-capture-meta';
+  meta.textContent=kind==='series' ? `全 ${seriesGames||1} セット・累計成績` : `第 ${seriesGames||1} セット`;
+  host.appendChild(meta);
+
+  host.appendChild(clone);
+
+  if(kind==='set'){
+    const historyBox=document.createElement('div');
+    historyBox.className='result-capture-history';
+    const title=document.createElement('div');
+    title.className='result-capture-history-title';
+    title.textContent='🎯 投擲履歴';
+    historyBox.appendChild(title);
+
+    const list=document.createElement('div');
+    list.className='result-capture-history-list';
+    const chronological=[...history].reverse();
+
+    if(chronological.length){
+      chronological.forEach((h,i)=>{
+        const row=document.createElement('div');
+        row.className='result-capture-history-row';
+
+        const turn=document.createElement('span');
+        turn.className='result-capture-history-turn';
+        turn.textContent=`${i+1}投`;
+        row.appendChild(turn);
+
+        const team=document.createElement('span');
+        const teamName=h.name||'';
+        const teamIndex=Math.max(0,players.findIndex(p=>p.name===teamName))%4;
+        team.className=`result-capture-team t${teamIndex}`;
+        team.textContent=teamName||'チーム';
+        row.appendChild(team);
+
+        if(h.thrower){
+          const member=document.createElement('span');
+          member.className=`result-capture-member member-color-text c${historyPersonColor(teamName,h.thrower)}`;
+          member.textContent=`${h.thrower}さん`;
+          row.appendChild(member);
+        }
+
+        const pts=document.createElement('span');
+        pts.className='result-capture-points';
+        const points=Number(h.points)||0;
+        pts.textContent=points===0?'MISS':`+${points}`;
+        row.appendChild(pts);
+
+        const total=document.createElement('span');
+        if(h.note==='50点超え→25点'){
+          total.className=`result-capture-special t${teamIndex}`;
+          total.textContent='50点超え → 25点';
+        }else{
+          total.className=`result-capture-total t${teamIndex}`;
+          total.textContent=`→ ${h.after}点`;
+        }
+        row.appendChild(total);
+
+        if(h.note && h.note!=='50点超え→25点'){
+          const note=document.createElement('span');
+          note.className=`result-capture-special t${teamIndex}`;
+          note.textContent=h.note;
+          row.appendChild(note);
+        }
+        list.appendChild(row);
+      });
+    }else{
+      const empty=document.createElement('div');
+      empty.className='small';
+      empty.textContent='投擲履歴はありません。';
+      list.appendChild(empty);
+    }
+    historyBox.appendChild(list);
+    host.appendChild(historyBox);
+  }
+
+  return host;
+}
+
+async function saveResultSectionImage(kind){
+  if(!gameEnded)return;
+  try{
+    if(typeof html2canvas!=='function'){
+      alert('画像保存機能の読み込みに失敗しました。通信環境を確認してもう一度お試しください。');
+      return;
+    }
+    const host=buildResultCapture(kind);
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const canvas=await html2canvas(host,{
+      backgroundColor:'#eef2ef',
+      scale:2,
+      useCORS:true,
+      logging:false
+    });
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.94));
+    if(!blob)throw new Error('image');
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    const label=kind==='series'?'total':'set';
+    a.download=`molkky-${label}-result-${Date.now()}.jpg`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(e){
+    alert('結果画像を保存できませんでした。');
+  }
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function goHome(){
+  const onFinishedResult = gameEnded && !$('game').classList.contains('hidden');
+  if(onFinishedResult && !confirm('ホーム画面に戻りますか？\n現在のセットと累計成績はリセットされます。'))return;
+  players=[];current=0;pending=0;history=[];seriesGames=0;gameEnded=false;undoStack=[];pendingOrder=[];
+  ['names','orderScreen','game','savedGames','savedGameDetail','rulesBook'].forEach(id=>$(id).classList.add('hidden'));
+  $('setup').classList.remove('hidden');
+  $('headerHome').classList.add('hidden');
+  $('winner').innerHTML='';
+  $('result').innerHTML='';
+  $('result').classList.add('hidden');
+  $('resultTopActions').classList.add('hidden');
+  $('sessionSummary').classList.add('hidden');
+  $('scoreInput').classList.remove('locked');
+}
+
+function resetGame(){
+  if(!confirm('現在のセットと累計成績をリセットしますか？'))return;
+  changePlayers();
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

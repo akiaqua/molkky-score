@@ -1,0 +1,14 @@
+{
+  "name": "MOLKKY SCORE",
+  "short_name": "MOLKKY",
+  "description": "モルックのセット得点・履歴・個人成績を記録するスコアアプリ",
+  "start_url": "./molkk_score.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2ef",
+  "theme_color": "#0b4a38",
+  "icons": [
+    {"src":"./icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
