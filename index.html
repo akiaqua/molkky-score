@@ -2553,6 +2553,64 @@ body:has(#setup.hidden) .title-row{
 }
 </style>
 
+
+<style>
+/* v21: 得点入力中の履歴を v17 相当のコンパクトさへ戻す */
+#gameLiveHistoryCard .history-entry{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 78px 112px!important;
+  gap:6px!important;
+  align-items:center!important;
+  padding:7px 0!important;
+}
+#gameLiveHistoryCard .history-turn{
+  min-width:0!important;
+}
+#gameLiveHistoryCard .history-score{
+  min-width:0!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:3px 4px!important;
+  border-radius:7px!important;
+  font-size:12px!important;
+  line-height:1.1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#gameLiveHistoryCard .history-score:not(.miss):not(.wrong){
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  color:#17211d!important;
+  font-size:16px!important;
+  font-weight:1000!important;
+}
+#gameLiveHistoryCard .history-score.miss{
+  font-size:12px!important;
+}
+#gameLiveHistoryCard .history-score.wrong{
+  font-size:11px!important;
+}
+#gameLiveHistoryCard .history-total{
+  min-width:0!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  font-size:14px!important;
+  white-space:nowrap!important;
+  padding:5px 7px!important;
+}
+@media(max-width:390px){
+  #gameLiveHistoryCard .history-entry{
+    grid-template-columns:minmax(0,1fr) 72px 104px!important;
+    gap:4px!important;
+  }
+  #gameLiveHistoryCard .history-score.wrong{font-size:10px!important}
+  #gameLiveHistoryCard .history-total{font-size:13px!important}
+}
+</style>
+
 </head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
@@ -3973,6 +4031,6 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v20</div>
+<div id="appVersionBadge">Web v21</div>
 </body>
 </html>
