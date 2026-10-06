@@ -286,13 +286,13 @@ input::placeholder{color:#aab5ae;opacity:1}
 .result-capture-history-list{display:grid;gap:4px}
 .result-capture-history-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:7px;align-items:center;padding:6px 0;border-bottom:1px solid #edf1ee;font-size:12px}
 .result-capture-history-row:last-child{border-bottom:0}
-.result-capture-history-turn{font-size:10px;color:#718078;font-weight:800}
+.result-capture-history-turn{font-size:10px;color:#718078;font-weight:800;white-space:nowrap}
 .result-capture-history-who{font-weight:800;min-width:0}
 .result-capture-history-score{font-weight:900;color:#173b2c;white-space:nowrap}
 .result-capture-history-note{grid-column:2/-1;font-size:10px;color:#8a5a00;margin-top:-3px}
 
 .result-capture-history-row{display:flex!important;align-items:center;gap:5px!important;flex-wrap:wrap;padding:7px 0!important}
-.result-capture-history-turn{width:34px;flex:0 0 34px}
+.result-capture-history-turn{width:54px;flex:0 0 54px;white-space:nowrap}
 .result-capture-team{display:inline-block;font-weight:900;padding:3px 7px;border-radius:7px;font-size:11px;white-space:nowrap}
 .result-capture-team.t0{background:#e8f0fe;color:#185abc}
 .result-capture-team.t1{background:#fce8e6;color:#b3261e}
@@ -317,6 +317,396 @@ input::placeholder{color:#aab5ae;opacity:1}
 .saved-history-total.t2{background:#e6f4ea;color:#137333;border-color:#c8e6d0}
 .saved-history-total.t3{background:#fef7e0;color:#8a6800;border-color:#f1e2ad}
 .saved-image-btn{width:100%;margin-top:9px;background:#eef3ef!important;color:#173b2c!important;border:1px solid #d4dfd7!important}
+
+.thrower-turn{display:inline-block;margin-bottom:4px;padding:3px 8px;border-radius:999px;background:#edf5f0;color:#496657;font-size:11px;font-weight:900}
+.history-turn-no{display:block;font-size:9px;color:#718078;font-weight:800;margin-bottom:2px;white-space:nowrap}
+.saved-turn-no{display:inline-block;color:#718078;font-size:10px;font-weight:900;min-width:58px;white-space:nowrap}
+
+.turn-label-inline{display:flex;align-items:center;gap:10px;min-width:0;text-align:left}
+.turn-label-inline .thrower-turn{display:inline-block;flex:0 0 auto;margin:0;padding:0;background:transparent;border-radius:0;color:#173b2c;font-size:18px;font-weight:900;line-height:1.2;white-space:nowrap}
+.turn-label-inline .thrower-current{display:flex;align-items:baseline;gap:5px;min-width:0;font-size:15px;font-weight:800;color:#173b2c;white-space:nowrap}
+.turn-label-inline .thrower-current .thrower-team-inline{font-weight:900;white-space:nowrap}
+.turn-label-inline .thrower-current .member-color-text{font-size:17px;font-weight:900}
+@media(max-width:360px){
+  .turn-label-inline{gap:7px}
+  .turn-label-inline .thrower-turn{font-size:16px}
+  .turn-label-inline .thrower-current{font-size:13px;gap:3px}
+  .turn-label-inline .thrower-current .member-color-text{font-size:15px}
+}
+
+.turn-label-inline{display:block!important;text-align:left}
+.turn-label-inline .thrower-turn{display:block!important;margin:0 0 5px 0!important;font-size:18px!important;line-height:1.2}
+.turn-label-inline .thrower-current{display:flex!important;align-items:baseline;gap:5px;font-size:15px;white-space:nowrap}
+
+/* 得点入力：ターンは補助、チーム・投擲者を主役に */
+.turn-label-inline .thrower-turn{
+  font-size:14px!important;
+  font-weight:800!important;
+  color:#68766e!important;
+  margin-bottom:5px!important;
+}
+.turn-label-inline .thrower-current{
+  font-size:19px!important;
+  font-weight:900!important;
+  line-height:1.3!important;
+  gap:6px!important;
+}
+.turn-label-inline .thrower-current .thrower-team-inline{
+  font-size:19px!important;
+  font-weight:900!important;
+}
+.turn-label-inline .thrower-current .member-color-text{
+  font-size:21px!important;
+  font-weight:900!important;
+}
+@media(max-width:360px){
+  .turn-label-inline .thrower-turn{font-size:13px!important}
+  .turn-label-inline .thrower-current,
+  .turn-label-inline .thrower-current .thrower-team-inline{font-size:17px!important}
+  .turn-label-inline .thrower-current .member-color-text{font-size:19px!important}
+}
+
+/* 得点入力ヘッダー：ナチュラル＋ポップ */
+.turn-label-inline{
+  padding:10px 12px!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,#f7fbf8,#eef6f1)!important;
+  border:1px solid #dbe9df!important;
+}
+.turn-label-inline .thrower-turn{
+  display:inline-block!important;
+  width:auto!important;
+  padding:4px 9px!important;
+  margin:0 0 7px 0!important;
+  border-radius:999px!important;
+  background:#dfeee5!important;
+  color:#315e49!important;
+  font-size:13px!important;
+  font-weight:900!important;
+  letter-spacing:.02em!important;
+}
+.turn-label-inline .thrower-current{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  font-size:19px!important;
+  font-weight:900!important;
+  line-height:1.35!important;
+}
+.turn-label-inline .thrower-current .thrower-team-inline{
+  display:inline-block!important;
+  padding:3px 8px!important;
+  border-radius:8px!important;
+  background:#173b2c!important;
+  color:#fff!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+.turn-label-inline .thrower-current .member-color-text{
+  font-size:22px!important;
+  font-weight:900!important;
+  letter-spacing:.01em!important;
+}
+@media(max-width:360px){
+  .turn-label-inline{padding:9px 10px!important}
+  .turn-label-inline .thrower-turn{font-size:12px!important}
+  .turn-label-inline .thrower-current{font-size:17px!important;gap:4px!important}
+  .turn-label-inline .thrower-current .thrower-team-inline{font-size:15px!important;padding:3px 6px!important}
+  .turn-label-inline .thrower-current .member-color-text{font-size:19px!important}
+}
+
+/* ===== 得点入力画面：POP preview ===== */
+#game{background:linear-gradient(180deg,#f4faf6 0%,#eef5f0 100%);border-radius:20px;padding:10px}
+#game>.card{border:1px solid #dce9e0;box-shadow:0 5px 14px rgba(23,59,44,.07);border-radius:18px}
+
+/* チームカード */
+#players{gap:9px}
+#players .player{
+  border:2px solid #e1ebe4!important;
+  border-radius:17px!important;
+  background:#fff!important;
+  box-shadow:0 3px 8px rgba(23,59,44,.06)!important;
+  transition:.15s ease;
+}
+#players .player.active{
+  border-color:#6eaf8b!important;
+  background:linear-gradient(180deg,#ffffff,#f0faf4)!important;
+  box-shadow:0 0 0 3px #d9eee2,0 5px 12px rgba(23,59,44,.10)!important;
+  transform:translateY(-1px);
+}
+#players .player .name{
+  display:inline-block;
+  background:#edf5f0;
+  color:#173b2c;
+  border-radius:999px;
+  padding:3px 9px;
+  font-weight:900;
+}
+#players .player.active .name{background:#173b2c;color:#fff}
+#players .score{
+  font-size:35px!important;
+  font-weight:950!important;
+  line-height:1.05;
+  margin-top:7px!important;
+}
+#players .score-remaining{
+  background:#f2f7f4;
+  border-radius:8px;
+  padding:3px 5px;
+  margin:4px 0!important;
+}
+#players .miss-dot{box-shadow:inset 0 0 0 1px #fff}
+#players .miss-dot.on{box-shadow:0 0 0 2px #ffe0de}
+
+/* 現在の投擲者 */
+#turnLabel{
+  border-radius:16px;
+  overflow:hidden;
+}
+.turn-label-inline{
+  padding:11px 13px!important;
+  background:linear-gradient(135deg,#fff9e8 0%,#f2faf5 62%,#eef7ff 100%)!important;
+  border:2px solid #e5eadc!important;
+  box-shadow:0 4px 10px rgba(23,59,44,.06)!important;
+}
+.turn-label-inline .thrower-turn{
+  background:#fff0b8!important;
+  color:#735a00!important;
+  border:1px solid #efd77b!important;
+  box-shadow:0 2px 4px rgba(115,90,0,.08);
+}
+.turn-label-inline .thrower-current .thrower-team-inline{
+  background:#173b2c!important;
+  color:#fff!important;
+  box-shadow:0 2px 5px rgba(23,59,44,.16);
+}
+
+/* 得点キー */
+#scoreInput .keypad{
+  gap:9px!important;
+  margin-top:11px!important;
+}
+#scoreInput .keypad button{
+  min-height:56px!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  border:2px solid #dce9e0!important;
+  color:#173b2c!important;
+  font-size:20px!important;
+  font-weight:950!important;
+  box-shadow:0 3px 0 #d8e5dc!important;
+  transform:translateY(0);
+}
+#scoreInput .keypad button:active{
+  transform:translateY(2px);
+  box-shadow:0 1px 0 #d8e5dc!important;
+}
+#scoreInput .keypad button.score-selected{
+  background:linear-gradient(180deg,#2e6b50,#173b2c)!important;
+  color:#fff!important;
+  border-color:#173b2c!important;
+  box-shadow:0 3px 0 #0d2c20!important;
+}
+
+/* 下部操作 */
+#scoreInput .score-actions{gap:9px!important;margin-top:11px!important}
+#scoreInput .score-actions button{
+  border-radius:14px!important;
+  min-height:51px!important;
+  font-weight:900!important;
+  box-shadow:0 3px 0 rgba(0,0,0,.10)!important;
+}
+#scoreInput .score-actions .action-miss{
+  background:linear-gradient(180deg,#d95b52,#b9423a)!important;
+  border-color:#a83a34!important;
+}
+#scoreInput .score-actions .primary,
+#scoreInput .score-actions button:last-child{
+  background:linear-gradient(180deg,#2f6c51,#173b2c)!important;
+  color:#fff!important;
+}
+
+/* 履歴も少し明るく */
+#game .history-team{
+  background:#fff!important;
+  border:1px solid #dce9e0!important;
+  border-radius:15px!important;
+  box-shadow:0 2px 6px rgba(23,59,44,.04);
+}
+#game .history-team-title{
+  color:#173b2c;
+  font-weight:950!important;
+}
+#game .history-total{
+  border-radius:999px!important;
+  padding:4px 8px!important;
+}
+@media(max-width:390px){
+  #game{padding:7px}
+  #scoreInput .keypad button{min-height:52px!important;font-size:19px!important}
+}
+
+.title-row.non-home{justify-content:flex-end;margin-bottom:10px}
+.title-row.non-home #appTitle{display:none}
+.title-row.non-home + #appSubtitle{display:none}
+#headerHome.home-icon{
+  width:auto!important;
+  min-height:36px;
+  padding:7px 11px!important;
+  border-radius:11px;
+  background:#e7f0ea;
+  color:#173b2c;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+/* ===== MOLKKY ICON inspired POP theme ===== */
+#game{
+  background:
+    radial-gradient(circle at 8% 3%,rgba(255,210,70,.20) 0 28px,transparent 29px),
+    linear-gradient(180deg,#dff2df 0%,#eff7e8 38%,#f8f3df 100%)!important;
+  border-radius:22px!important;
+  padding:9px!important;
+}
+
+/* cards: warm wood-paper look */
+#game>.card{
+  background:#fffdf6!important;
+  border:2px solid #ead9ae!important;
+  box-shadow:0 5px 0 rgba(116,91,43,.10),0 8px 18px rgba(37,91,55,.08)!important;
+  border-radius:20px!important;
+}
+
+/* team cards: cheerful skittle-number palette */
+#players .player{
+  background:#fffaf0!important;
+  border:2px solid #e8d6aa!important;
+  border-radius:18px!important;
+  box-shadow:0 3px 0 #dcc99e!important;
+}
+#players .player:nth-child(1) .name{background:#4f87cf!important;color:#fff!important}
+#players .player:nth-child(2) .name{background:#e55d50!important;color:#fff!important}
+#players .player:nth-child(3) .name{background:#e3ad2e!important;color:#4b3910!important}
+#players .player:nth-child(4) .name{background:#55a76d!important;color:#fff!important}
+#players .player.active{
+  border-color:#2e7a4c!important;
+  background:#fffdf5!important;
+  box-shadow:0 0 0 3px #bfe2bd,0 4px 0 #6a9e70!important;
+}
+#players .player .score{color:#254f34!important;text-shadow:0 2px 0 #e7ead6}
+#players .score-remaining{background:#edf4dc!important;color:#56705c!important}
+
+/* current thrower: grass + sunshine + wood */
+.turn-label-inline{
+  background:
+    radial-gradient(circle at 92% 18%,#ffd85a 0 14px,transparent 15px),
+    linear-gradient(135deg,#f7e9bf 0%,#fff7dc 44%,#dff1dc 100%)!important;
+  border:2px solid #d7c58d!important;
+  box-shadow:0 4px 0 #c9b77f!important;
+}
+.turn-label-inline .thrower-turn{
+  background:#fff7db!important;
+  color:#446449!important;
+  border:2px solid #77ad72!important;
+  box-shadow:none!important;
+}
+.turn-label-inline .thrower-current .thrower-team-inline{
+  background:#36734b!important;
+  color:#fff!important;
+  border:2px solid #275a39!important;
+  box-shadow:0 2px 0 #214c31!important;
+}
+
+/* score buttons resemble numbered wooden Mölkky pins */
+#scoreInput .keypad button{
+  position:relative;
+  background:linear-gradient(180deg,#fff5d9 0%,#ead29b 100%)!important;
+  border:2px solid #c99f61!important;
+  color:#4b3a22!important;
+  border-radius:16px 16px 13px 13px!important;
+  box-shadow:0 4px 0 #b58a50!important;
+  text-shadow:0 1px 0 #fff8e9;
+}
+#scoreInput .keypad button:nth-child(3n+1){border-top-color:#4f87cf!important}
+#scoreInput .keypad button:nth-child(3n+2){border-top-color:#e55d50!important}
+#scoreInput .keypad button:nth-child(3n){border-top-color:#e3ad2e!important}
+#scoreInput .keypad button.score-selected{
+  background:linear-gradient(180deg,#66a875,#34734b)!important;
+  border-color:#285e3c!important;
+  color:#fff!important;
+  box-shadow:0 4px 0 #214d32!important;
+  text-shadow:none!important;
+  transform:translateY(-1px);
+}
+
+/* action buttons */
+#scoreInput .score-actions button{
+  border:2px solid transparent!important;
+  box-shadow:0 4px 0 rgba(74,61,34,.16)!important;
+}
+#scoreInput .score-actions button:first-child{
+  background:#f0e8d1!important;color:#536258!important;border-color:#d4c8a8!important;
+}
+#scoreInput .score-actions .action-miss{
+  background:linear-gradient(180deg,#f06b5e,#cf493f)!important;
+  border-color:#b93d35!important;
+  box-shadow:0 4px 0 #9e342e!important;
+}
+#scoreInput .score-actions .primary,
+#scoreInput .score-actions button:last-child{
+  background:linear-gradient(180deg,#4f9463,#2d6d46)!important;
+  border-color:#255a39!important;
+  box-shadow:0 4px 0 #214e32!important;
+}
+
+/* history: lighter, playful chips */
+#game .history-team{
+  background:#fffaf0!important;
+  border:2px solid #e7d6ad!important;
+  box-shadow:0 3px 0 #e0cea5!important;
+}
+#game .history-team-title{color:#365d40!important}
+#game .history-total{background:#e3f0d8!important;color:#376345!important}
+
+/* Team colors unified between cards and current-turn label */
+.turn-label-inline .thrower-current .thrower-team-inline{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:2px 0!important;
+  border-radius:0!important;
+  font-weight:950!important;
+}
+.turn-label-inline .thrower-team-inline.team-color-0{color:#3f79c5!important}
+.turn-label-inline .thrower-team-inline.team-color-1{color:#d95046!important}
+.turn-label-inline .thrower-team-inline.team-color-2{color:#b88408!important}
+.turn-label-inline .thrower-team-inline.team-color-3{color:#3f9259!important}
+
+/* Wooden score buttons: no red/blue/yellow edge accents */
+#scoreInput .keypad button,
+#scoreInput .keypad button:nth-child(3n+1),
+#scoreInput .keypad button:nth-child(3n+2),
+#scoreInput .keypad button:nth-child(3n){
+  border:2px solid #c99f61!important;
+  border-top-color:#c99f61!important;
+}
+#scoreInput .keypad button.score-selected{
+  border-color:#285e3c!important;
+}
+
+/* Current thrower: only team name uses team color; person name matches "さんの番" */
+.turn-label-inline .thrower-current .member-color-text{
+  color:#173b2c!important;
+}
+
+.game-bottom-home{
+  display:block;width:100%;min-height:48px;margin:4px 0 8px;
+  border:2px solid #d3c59d;border-radius:15px;background:#f3ead3;
+  color:#405448;font-size:14px;font-weight:900;box-shadow:0 3px 0 #d8c9a3;
+}
+.game-bottom-home:active{transform:translateY(2px);box-shadow:0 1px 0 #d8c9a3}
 </style>
   <meta name="theme-color" content="#0b4a38">
   <meta name="mobile-web-app-capable" content="yes">
@@ -329,10 +719,10 @@ input::placeholder{color:#aab5ae;opacity:1}
 <body>
 <div id="app"><div class="wrap">
 <div class="title-row">
-  <h1>🎯 MOLKKY SCORE</h1>
-  <button id="headerHome" class="home-icon hidden" onclick="goHome()" aria-label="ホーム画面に戻る" title="ホーム">⌂</button>
+  <h1 id="appTitle">🎯 MOLKKY SCORE</h1>
+  <button id="headerHome" class="home-icon hidden" onclick="goHome()" aria-label="ホーム画面に戻る" title="ホーム">⌂ ホーム</button>
 </div>
-<p class="sub">モルックの得点をかんたん計算</p>
+<p id="appSubtitle" class="sub">モルックの得点をかんたん計算</p>
 
 <div id="setup">
   <div class="card home-section home-play">
@@ -534,6 +924,8 @@ input::placeholder{color:#aab5ae;opacity:1}
     </div>
     <div class="history" id="history"></div>
   </div>
+
+  <button id="gameBottomHome" class="game-bottom-home" onclick="goHome()">⌂ ホームに戻る</button>
 </div>
 </div></div>
 
@@ -668,6 +1060,8 @@ function formatSavedDate(value){
 
 function updateHeaderHome(show){
   $('headerHome').classList.toggle('hidden',!show);
+  const row=document.querySelector('.title-row');
+  if(row)row.classList.toggle('non-home',!!show);
 }
 
 function openRules(){
@@ -696,6 +1090,15 @@ function closeSavedGames(){
   $('savedGameDetail').classList.add('hidden');
   $('setup').classList.remove('hidden');
   updateHeaderHome(false);
+}
+
+function savedHistoryTurnNumber(history,index,item){
+  if(item&&item.turn)return item.turn;
+  let n=0;
+  for(let i=0;i<=index;i++){
+    if(history[i]&&history[i].name===item.name)n++;
+  }
+  return n;
 }
 
 function openSavedGameDetail(id){
@@ -743,6 +1146,7 @@ function openSavedGameDetail(id){
         <div style="font-weight:800;font-size:11px;margin:9px 0 5px">投擲履歴</div>
         ${(set.history&&set.history.length)?set.history.map((h,hi)=>`
           <div class="small" style="padding:4px 0;border-top:${hi?'1px solid #edf0ee':'0'}">
+            <span class="saved-turn-no">第${savedHistoryTurnNumber(set.history,hi,h)}ターン</span>
             <span class="saved-history-team t${savedTeamColor(h.name,set.teams||[])}">${escapeHtml(h.name||'')}</span>${h.thrower?`・<span class="member-color-text c${globalMemberColor(h.name,h.thrower,set.teams||[])}">${escapeHtml(h.thrower)}</span>`:''}：<b>${h.points||0}点</b>${h.note==='50点超え→25点'?`　<span class="saved-history-total t${savedTeamColor(h.name,set.teams||[])}">${escapeHtml(h.note)}</span>`:` → <span class="saved-history-total t${savedTeamColor(h.name,set.teams||[])}">合計 ${h.after||0}点</span>${h.note?'　'+escapeHtml(h.note):''}`}
           </div>`).join(''):'<div class="small">このセットの投擲履歴は保存されていません。</div>'}
         <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'set',${si})">📥 このセットの結果を保存</button>
@@ -1024,6 +1428,7 @@ function startGame(){
   $('names').classList.add('hidden');
   $('game').classList.remove('hidden');
   $('headerHome').classList.remove('hidden');
+  document.querySelector('.title-row')?.classList.add('non-home');
   render();
 }
 
@@ -1091,7 +1496,7 @@ function registerScore(){
   p.score=after;
 
   // 履歴にも投球者名を保存
-  const historyItem={name:p.name,thrower,points:pending,after,note};
+  const historyItem={name:p.name,thrower,points:pending,after,note,turn:p.turns};
   history.unshift(historyItem);
 
   if(p.zeros>=3){
@@ -1262,6 +1667,7 @@ function changePlayers(){
   $('scoreInput').classList.remove('locked');
   $('setup').classList.remove('hidden');
   $('headerHome').classList.add('hidden');
+  document.querySelector('.title-row')?.classList.remove('non-home');
 }
 
 function renderResults(winnerName){
@@ -1331,13 +1737,16 @@ function historyPersonColor(team,thrower){
 
 function render(){
   renderPending();
+  $('headerHome').classList.add('hidden');
+  document.querySelector('.title-row')?.classList.add('non-home');
   if(players[current]){
     const cp=players[current];
     const member=(cp.members&&cp.members.length)?cp.members[cp.memberTurn||0]:'';
     const memberColor=(cp.members&&member)?globalMemberColor(cp.name,member,players):0;
+    const turnNo=(cp.turns||0)+1;
     $('turnLabel').innerHTML=member
-      ? `<div class="thrower-team">${escapeHtml(cp.name)}</div><div class="thrower-name"><span class="member-color-text c${memberColor}">${escapeHtml(member)} さん</span>の番</div>`
-      : `<div class="thrower-team">現在のチーム</div><div class="thrower-name">${escapeHtml(cp.name)}の番</div>`;
+      ? `<div class="turn-label-inline"><div class="thrower-turn">ターン ${turnNo}</div><div class="thrower-current"><span class="thrower-team-inline team-color-${current}">${escapeHtml(cp.name)}</span><span class="member-color-text c${memberColor}">${escapeHtml(member)} さん</span><span>の番</span></div></div>`
+      : `<div class="turn-label-inline"><div class="thrower-turn">ターン ${turnNo}</div><div class="thrower-current"><span class="thrower-team-inline team-color-${current}">${escapeHtml(cp.name)}</span><span>の番</span></div></div>`;
   }else{
     $('turnLabel').textContent='今回の得点';
   }
@@ -1363,7 +1772,7 @@ function render(){
           <div class="history-team-title">${escapeHtml(p.name)}</div>
           ${entries.length?entries.map((h,i)=>`
             <div class="history-entry">
-              <span class="history-turn">${h.thrower?`<span class="history-person c${historyPersonColor(p.name,h.thrower)}">${escapeHtml(h.thrower)}さん</span>`:(i+1)+'投'}</span>
+              <span class="history-turn"><span class="history-turn-no">第${h.turn||i+1}ターン</span>${h.thrower?`<span class="history-person c${historyPersonColor(p.name,h.thrower)}">${escapeHtml(h.thrower)}さん</span>`:''}</span>
               <span class="history-score">+${h.points}</span>
               <span class="history-total">${h.note==='50点超え→25点'?'50点超え→25点':`→ ${h.after}点${h.note?' · '+h.note:''}`}</span>
             </div>`).join(''):'<div class="small" style="padding-top:8px">まだ投球なし</div>'}
@@ -1412,13 +1821,16 @@ function buildResultCapture(kind){
     const chronological=[...history].reverse();
 
     if(chronological.length){
+      const captureTeamTurns={};
       chronological.forEach((h,i)=>{
+        captureTeamTurns[h.name]=(captureTeamTurns[h.name]||0)+1;
+        const turnNo=h.turn||captureTeamTurns[h.name];
         const row=document.createElement('div');
         row.className='result-capture-history-row';
 
         const turn=document.createElement('span');
         turn.className='result-capture-history-turn';
-        turn.textContent=`${i+1}投`;
+        turn.textContent=`第${turnNo}ターン`;
         row.appendChild(turn);
 
         const team=document.createElement('span');
