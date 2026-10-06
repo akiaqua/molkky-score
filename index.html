@@ -1219,6 +1219,61 @@ body:has(#setup.hidden) .title-row{
   margin:0!important;
   min-height:0!important;
 }
+
+/* ===== CUMULATIVE RESULTS readability fix ===== */
+/* Keep cumulative/session summary opaque and readable regardless of inherited theme colors. */
+#sessionSummary,
+#sessionSummary *{
+  text-shadow:none!important;
+}
+#sessionSummary{
+  color:#173b2c!important;
+}
+#sessionSummary .card,
+#sessionSummary .result-team,
+#sessionSummary .result-team-card,
+#sessionSummary .summary-team,
+#sessionSummary .team-result{
+  color:#173b2c!important;
+  opacity:1!important;
+}
+#sessionSummary h2,
+#sessionSummary h3,
+#sessionSummary h4,
+#sessionSummary .result-title,
+#sessionSummary .section-title,
+#sessionSummary .team-name,
+#sessionSummary .rank,
+#sessionSummary b,
+#sessionSummary strong{
+  color:#173b2c!important;
+  opacity:1!important;
+}
+#sessionSummary .muted,
+#sessionSummary .sub,
+#sessionSummary small,
+#sessionSummary .label{
+  color:#657268!important;
+  opacity:1!important;
+}
+#sessionSummary .member-row,
+#sessionSummary .member-stats,
+#sessionSummary .member-summary{
+  background:#f7faf6!important;
+  color:#173b2c!important;
+  border-color:#dce7dc!important;
+  opacity:1!important;
+}
+/* Preserve deliberate member-name colors while preventing faded text. */
+#sessionSummary .member-color-text,
+#sessionSummary .history-person{
+  opacity:1!important;
+  font-weight:900!important;
+}
+/* Cumulative cards must never inherit transparent/faded result styling. */
+#sessionSummary [style*="opacity"]{
+  opacity:1!important;
+}
 </style>
   <meta name="theme-color" content="#0b4a38">
   <meta name="mobile-web-app-capable" content="yes">
