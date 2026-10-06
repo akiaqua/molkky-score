@@ -2505,6 +2505,54 @@ body:has(#setup.hidden) .title-row{
 }
 </style>
 
+
+<style>
+/* v20: MISS / 誤ヒットのハイライトを全履歴表示で確実に統一 */
+.history-score{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:54px!important;
+  padding:4px 7px!important;
+  border-radius:8px!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+.history-score.miss,
+.throw-history-result.miss{
+  color:#fff!important;
+  background:#d93025!important;
+  border:2px solid #b3261e!important;
+  box-shadow:0 1px 3px rgba(179,38,30,.20)!important;
+}
+.history-score.wrong,
+.throw-history-result.wrong{
+  color:#fff!important;
+  background:#e65f19!important;
+  border:2px solid #b94710!important;
+  box-shadow:0 1px 3px rgba(185,71,16,.20)!important;
+}
+
+/* リザルト・保存履歴でもバッジが小さくならないよう固定 */
+#result .throw-history-result,
+#savedDetail .throw-history-result,
+.saved-set-card .throw-history-result{
+  font-size:13px!important;
+  line-height:1.15!important;
+  font-weight:1000!important;
+  opacity:1!important;
+}
+
+/* 得点入力の誤ヒットボタン：ON状態を明確に維持 */
+#wrongHitBtn.active{
+  background:linear-gradient(180deg,#f36b2b 0%,#d94216 100%)!important;
+  color:#fff!important;
+  border:3px solid #8f260d!important;
+  box-shadow:0 4px 0 #84230c,0 0 0 4px rgba(230,67,22,.24)!important;
+  font-weight:1000!important;
+}
+</style>
+
 </head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
@@ -3778,7 +3826,7 @@ function render(){
           ${entries.length?entries.map((h,i)=>`
             <div class="history-entry">
               <span class="history-turn"><span class="history-turn-no">第${h.turn||i+1}ターン</span>${h.thrower?`<span class="history-person c${historyPersonColor(p.name,h.thrower)}">${escapeHtml(h.thrower)}さん</span>`:''}</span>
-              <span class="history-score">+${h.points}</span>
+              <span class="history-score${h.points===0?' miss':(h.wrongHit?' wrong':'')}">${h.points===0?'MISS':(h.wrongHit?`誤ヒット ${h.points}点`:`${h.points}点`)}</span>
               <span class="history-total">${h.note==='50点超え→25点'?'50点超え→25点':`→ ${h.after}点${h.note?' · '+h.note:''}`}</span>
             </div>`).join(''):'<div class="small" style="padding-top:8px">まだ投球なし</div>'}
         </div>`;
@@ -3925,6 +3973,6 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v19</div>
+<div id="appVersionBadge">Web v20</div>
 </body>
 </html>
