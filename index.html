@@ -4122,6 +4122,33 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
 }
 </style>
 
+<style>
+/* v32.1: 得点入力の投擲履歴は端末幅によらず縦並び */
+#game .history-teams,
+#gameLiveHistoryCard .history-teams{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  gap:10px!important;
+}
+#game .history-team,
+#gameLiveHistoryCard .history-team{
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+#gameLiveHistoryCard .history-entry{
+  grid-template-columns:minmax(0,1fr) minmax(48px,78px) minmax(72px,112px)!important;
+}
+@media(max-width:360px){
+  #gameLiveHistoryCard .history-entry{
+    grid-template-columns:minmax(0,1fr) 58px 88px!important;
+    gap:4px!important;
+  }
+}
+</style>
 </head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
@@ -5590,7 +5617,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v32</div>
+<div id="appVersionBadge">Web v32.1</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
