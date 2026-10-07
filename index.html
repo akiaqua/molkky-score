@@ -2611,6 +2611,370 @@ body:has(#setup.hidden) .title-row{
 }
 </style>
 
+
+<style>
+/* v22: バーストは黒背景＋白文字で統一 */
+.history-score.burst,
+.throw-history-result.burst{
+  color:#fff!important;
+  background:#171717!important;
+  border:2px solid #000!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.24)!important;
+  font-weight:1000!important;
+}
+#gameLiveHistoryCard .history-score.burst{
+  font-size:10px!important;
+}
+</style>
+
+
+<style>
+/* v23: MISS / 誤ヒット / バーストのバッジ形状を完全統一 */
+.history-score.miss,
+.history-score.wrong,
+.history-score.burst,
+.throw-history-result.miss,
+.throw-history-result.wrong,
+.throw-history-result.burst{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  min-width:0!important;
+  height:26px!important;
+  padding:3px 6px!important;
+  border-radius:8px!important;
+  border-width:2px!important;
+  border-style:solid!important;
+  font-size:11px!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  color:#fff!important;
+}
+.history-score.miss,
+.throw-history-result.miss{
+  background:#d93025!important;
+  border-color:#b3261e!important;
+}
+.history-score.wrong,
+.throw-history-result.wrong{
+  background:#e65f19!important;
+  border-color:#b94710!important;
+}
+.history-score.burst,
+.throw-history-result.burst{
+  background:#171717!important;
+  border-color:#000!important;
+}
+
+/* 得点入力中・リザルト・保存履歴・画像出力で同じバッジ寸法 */
+#gameLiveHistoryCard .history-score.miss,
+#gameLiveHistoryCard .history-score.wrong,
+#gameLiveHistoryCard .history-score.burst,
+#result .throw-history-result.miss,
+#result .throw-history-result.wrong,
+#result .throw-history-result.burst,
+.saved-set-card .throw-history-result.miss,
+.saved-set-card .throw-history-result.wrong,
+.saved-set-card .throw-history-result.burst,
+#resultCaptureHost .throw-history-result.miss,
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  height:26px!important;
+  padding:3px 6px!important;
+  border-radius:8px!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+
+/* 画像内でも黒バーストが薄くならない */
+#resultCaptureHost .throw-history-result.burst{
+  background:#171717!important;
+  color:#fff!important;
+  border:2px solid #000!important;
+  opacity:1!important;
+}
+</style>
+
+
+<style>
+/* v24: 保存画像の履歴バッジは画面より少しコンパクト */
+#resultCaptureHost .throw-history-result.miss,
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  width:auto!important;
+  min-width:44px!important;
+  max-width:76px!important;
+  height:22px!important;
+  padding:2px 5px!important;
+  border-width:1.5px!important;
+  border-radius:7px!important;
+  font-size:9px!important;
+  line-height:1!important;
+  justify-self:center!important;
+}
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  font-size:8.5px!important;
+}
+
+/* v24: 個人成績の合計得点を主役に */
+#result .member-total-score,
+#resultCaptureHost .member-total-score{
+  padding:5px 11px!important;
+  border-radius:10px!important;
+  background:#e2f2df!important;
+  border:2px solid #9fc39b!important;
+  color:#173f29!important;
+  font-size:19px!important;
+  font-weight:1000!important;
+  line-height:1.05!important;
+  box-shadow:0 1px 0 rgba(23,63,41,.10)!important;
+  white-space:nowrap!important;
+}
+#resultCaptureHost .member-total-score{
+  font-size:19px!important;
+}
+
+/* チームの最終得点も少し視線を集める */
+#result .result-item>div:first-child b:last-child{
+  font-size:21px!important;
+  font-weight:1000!important;
+}
+</style>
+
+
+<style>
+/* v25: 画像出力バッジを v23 と v24 の中間サイズへ */
+#resultCaptureHost .throw-history-result.miss,
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  width:auto!important;
+  min-width:48px!important;
+  max-width:82px!important;
+  height:24px!important;
+  padding:2.5px 5.5px!important;
+  border-width:1.5px!important;
+  border-radius:7.5px!important;
+  font-size:10px!important;
+  line-height:1!important;
+  justify-self:center!important;
+}
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  font-size:9.5px!important;
+}
+
+/* 合計得点はほんの少し大きく、少しだけ左へ */
+#result .member-total-score,
+#resultCaptureHost .member-total-score{
+  font-size:20px!important;
+  transform:translateX(-4px)!important;
+}
+</style>
+
+
+<style>
+/* v26: 画像出力のステータスバッジを少し大きく */
+#resultCaptureHost .throw-history-result.miss,
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  width:auto!important;
+  min-width:51px!important;
+  max-width:86px!important;
+  height:25px!important;
+  padding:3px 6px!important;
+  border-radius:8px!important;
+  font-size:10.5px!important;
+  line-height:1!important;
+  justify-self:center!important;
+}
+#resultCaptureHost .throw-history-result.wrong,
+#resultCaptureHost .throw-history-result.burst{
+  font-size:10px!important;
+}
+
+/* v26: リザルトの累計成績をセット成績と同じ見やすさへ */
+#result .series-stats,
+#result .series-summary,
+#result .cumulative-stats,
+#result .cumulative-summary{
+  font-size:inherit!important;
+}
+#result .series-stats .stat-label,
+#result .series-summary .stat-label,
+#result .cumulative-stats .stat-label,
+#result .cumulative-summary .stat-label{
+  font-size:13px!important;
+  font-weight:900!important;
+  color:#263a32!important;
+}
+#result .series-stats .stat-value,
+#result .series-summary .stat-value,
+#result .cumulative-stats .stat-value,
+#result .cumulative-summary .stat-value{
+  font-size:19px!important;
+  font-weight:1000!important;
+  line-height:1.05!important;
+}
+</style>
+
+
+<style>
+/* v27: 累計成績をセット成績と同一レイアウト・同一サイズに統一 */
+#sessionSummary .session-player{
+  padding:11px!important;
+  border-radius:12px!important;
+}
+#sessionSummary .cumulative-team-top{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:8px!important;
+  margin-top:3px!important;
+}
+#sessionSummary .cumulative-team-top b{
+  display:block!important;
+  font-size:15px!important;
+  font-weight:1000!important;
+}
+#sessionSummary .cumulative-result-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:4px!important;
+  margin-top:8px!important;
+}
+#sessionSummary .cumulative-result-grid>div{
+  min-width:0!important;
+  text-align:center!important;
+}
+#sessionSummary .cumulative-result-grid .label{
+  font-size:11px!important;
+  line-height:1.15!important;
+  color:#6d7a72!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+#sessionSummary .cumulative-result-grid .value{
+  font-size:22px!important;
+  line-height:1.05!important;
+  font-weight:800!important;
+  margin-top:2px!important;
+  color:#173b2c!important;
+}
+
+/* 累計のメンバー別もセットリザルトと完全に同じ4列 */
+#sessionSummary .member-result,
+#savedGameDetail .saved-member{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:auto auto!important;
+  gap:5px 3px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#sessionSummary .member-result-name,
+#savedGameDetail .saved-member-name{
+  grid-column:1 / -1!important;
+  grid-row:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  font-size:17px!important;
+  font-weight:1000!important;
+  padding:2px 3px 6px!important;
+}
+#sessionSummary .member-result-stat,
+#savedGameDetail .saved-member-stat{
+  grid-row:2!important;
+  display:block!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:6px 1px!important;
+  text-align:center!important;
+}
+#sessionSummary .member-result-stat b,
+#savedGameDetail .saved-member-stat b{
+  display:block!important;
+  font-size:19px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  font-weight:1000!important;
+}
+#sessionSummary .member-result-stat span,
+#savedGameDetail .saved-member-stat span{
+  display:block!important;
+  margin-top:3px!important;
+  font-size:13px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  color:#263a32!important;
+  font-weight:900!important;
+  opacity:1!important;
+}
+#sessionSummary .member-total-score,
+#savedGameDetail .member-total-score{
+  flex:0 0 auto!important;
+  padding:5px 11px!important;
+  border-radius:10px!important;
+  background:#e2f2df!important;
+  border:2px solid #9fc39b!important;
+  color:#173f29!important;
+  font-size:20px!important;
+  font-weight:1000!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  transform:translateX(-4px)!important;
+}
+
+/* 履歴画面：累計チーム成績も各セットと同じ4項目レイアウト */
+#savedGameDetail .cumulative-saved-team-summary{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:4px!important;
+  margin-top:8px!important;
+}
+#savedGameDetail .cumulative-saved-team-summary>div{
+  min-width:0!important;
+  text-align:center!important;
+}
+#savedGameDetail .cumulative-saved-team-summary span{
+  display:block!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  color:#6d7a72!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+#savedGameDetail .cumulative-saved-team-summary b{
+  display:block!important;
+  font-size:22px!important;
+  line-height:1.05!important;
+  margin-top:2px!important;
+  font-weight:800!important;
+  color:#173b2c!important;
+}
+</style>
+
+
+<style>
+/* v30: 履歴詳細の最下段ホームボタン */
+.saved-detail-home-btn{
+  width:100%!important;
+  min-height:50px!important;
+  margin:16px 0 4px!important;
+  border-radius:13px!important;
+  font-size:15px!important;
+  font-weight:1000!important;
+}
+</style>
+
 </head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
@@ -3063,10 +3427,13 @@ function openSavedGameDetail(id){
       <div class="saved-team-top"><b>📊 累計成績</b><b>${g.seriesGames||sets.length}セット</b></div>
       ${cumulative.map((t,ti)=>`
         <div style="padding:8px 0;${ti?'border-top:1px solid #dfe7e1':''}">
-          <div style="display:flex;justify-content:space-between;gap:8px">
-            <b>${escapeHtml(t.name)}</b><b>${t.wins!=null?(t.wins||0)+'勝・':''}${t.score||0}点</b>
+          <div class="saved-team-top"><b>${escapeHtml(t.name)}</b><b>${t.wins!=null?(t.wins||0)+'勝・':''}${t.score||0}点</b></div>
+          <div class="saved-team-summary cumulative-saved-team-summary">
+            <div><span>ミス回数</span><b>${t.misses||0}回</b></div>
+            <div><span>ミス率</span><b>${t.turns?Math.round((t.misses||0)/t.turns*100):0}%</b></div>
+            <div><span>誤ヒット率</span><b>${t.turns?Math.round((t.wrongHits||0)/t.turns*100):0}%</b></div>
+            <div><span>合計ターン</span><b>${t.turns||0}回</b></div>
           </div>
-          <div class="small">平均 ${t.turns?((t.score||t.points||0)/t.turns).toFixed(1):'0.0'}点 ／ ミス ${t.misses||0}回 ／ ${t.turns||0}投</div>
           ${(t.members||[]).map((m,mi)=>`
             <div class="saved-member">
               <div class="saved-member-name member-color-text c${globalMemberColor(t.name,m.name,cumulative)}"><span>${escapeHtml(m.name)}さん</span><span class="member-total-score">合計 ${m.points||0}点</span></div>
@@ -3108,7 +3475,8 @@ function openSavedGameDetail(id){
         <div style="font-weight:800;font-size:11px;margin:9px 0 5px">投擲履歴</div>
         ${throwHistoryMarkupByTeam(set.history||[],set.teams||[])}
         <button class="saved-image-btn" onclick="saveSavedResultImage(${Number(g.id)},'set',${si})">📥 このセットの結果を保存</button>
-      </div>`).join('')}`;
+      </div>`).join('')}
+    <button class="secondary saved-detail-home-btn" onclick="goHome()">🏠 ホームに戻る</button>`;
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -3596,11 +3964,12 @@ function renderSessionSummary(){
       ${ranked.map(p=>`
         <div class="session-player">
           <b>${escapeHtml(p.name)}</b>
-          <span>🏆 ${p.wins}勝　／　累計 ${p.seriesScore}点</span>
-          <div style="margin-top:7px;font-size:12px;line-height:1.7">
-            平均得点：<strong>${p.seriesTurns ? (p.seriesScore/p.seriesTurns).toFixed(1) : '0.0'}</strong><br>
-            ミス数：<strong>${p.seriesMisses}回</strong><br>
-            ミス率：<strong>${p.seriesTurns ? (p.seriesMisses/p.seriesTurns*100).toFixed(1) : '0.0'}%</strong>
+          <div class="cumulative-team-top"><b>🏆 ${p.wins}勝</b><b>累計 ${p.seriesScore}点</b></div>
+          <div class="result-grid cumulative-result-grid">
+            <div><div class="label">ミス回数</div><div class="value">${p.seriesMisses||0}回</div></div>
+            <div><div class="label">ミス率</div><div class="value">${teamMissRate(p,true)}%</div></div>
+            <div><div class="label">誤ヒット率</div><div class="value">${teamWrongHitRate(p,true)}%</div></div>
+            <div><div class="label">合計ターン</div><div class="value">${p.seriesTurns||0}回</div></div>
           </div>
           ${(p.memberStats||[]).filter(ms=>ms.seriesTurns>0).length?`
             <div class="member-results">
@@ -3712,7 +4081,8 @@ function throwHistoryMarkup(items, teamList){
     const member=h.thrower?`${escapeHtml(h.thrower)}さん`:'—';
     let result='';
     let resultClass='';
-    if(points===0){ result='MISS'; resultClass=' miss'; }
+    if(h.note==='50点超え→25点'){ result=`バースト ${points}点`; resultClass=' burst'; }
+    else if(points===0){ result='MISS'; resultClass=' miss'; }
     else if(h.wrongHit){ result=`誤ヒット ${points}点`; resultClass=' wrong'; }
     else { result=`${points}点`; }
     const total=h.note==='50点超え→25点'?'→25点':`→${Number(h.after)||0}点`;
@@ -3743,7 +4113,8 @@ function throwHistoryMarkupByTeam(items, teamList){
         const points=Number(h.points)||0;
         const member=h.thrower?`${escapeHtml(h.thrower)}さん`:'—';
         let result='',resultClass='';
-        if(points===0){result='MISS';resultClass=' miss';}
+        if(h.note==='50点超え→25点'){result=`バースト ${points}点`;resultClass=' burst';}
+        else if(points===0){result='MISS';resultClass=' miss';}
         else if(h.wrongHit){result=`誤ヒット ${points}点`;resultClass=' wrong';}
         else{result=`${points}点`;}
         const total=h.note==='50点超え→25点'?'→25点':`→${Number(h.after)||0}点`;
@@ -3884,7 +4255,7 @@ function render(){
           ${entries.length?entries.map((h,i)=>`
             <div class="history-entry">
               <span class="history-turn"><span class="history-turn-no">第${h.turn||i+1}ターン</span>${h.thrower?`<span class="history-person c${historyPersonColor(p.name,h.thrower)}">${escapeHtml(h.thrower)}さん</span>`:''}</span>
-              <span class="history-score${h.points===0?' miss':(h.wrongHit?' wrong':'')}">${h.points===0?'MISS':(h.wrongHit?`誤ヒット ${h.points}点`:`${h.points}点`)}</span>
+              <span class="history-score${h.note==='50点超え→25点'?' burst':(h.points===0?' miss':(h.wrongHit?' wrong':''))}">${h.note==='50点超え→25点'?`バースト ${h.points}点`:(h.points===0?'MISS':(h.wrongHit?`誤ヒット ${h.points}点`:`${h.points}点`))}</span>
               <span class="history-total">${h.note==='50点超え→25点'?'50点超え→25点':`→ ${h.after}点${h.note?' · '+h.note:''}`}</span>
             </div>`).join(''):'<div class="small" style="padding-top:8px">まだ投球なし</div>'}
         </div>`;
@@ -4031,6 +4402,369 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v21</div>
+<div id="appVersionBadge">Web v30</div>
+
+<script>
+/* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
+(function(){
+  const APP_STATE_KEY = 'molkkyScoreScreen';
+  let handlingPop = false;
+
+  function visibleScreen(){
+    const candidates=['home','setup','game','result','historyScreen','savedGameDetail','rulebook','orderConfirm'];
+    for(const id of candidates){
+      const el=document.getElementById(id);
+      if(!el) continue;
+      const cs=getComputedStyle(el);
+      if(cs.display!=='none' && cs.visibility!=='hidden') return id;
+    }
+    return 'home';
+  }
+
+  function pushCurrentScreen(){
+    if(handlingPop) return;
+    const screen=visibleScreen();
+    const cur=history.state && history.state[APP_STATE_KEY];
+    if(cur===screen) return;
+    history.pushState({...(history.state||{}),[APP_STATE_KEY]:screen},'',location.href);
+  }
+
+  function goHomeFromBack(){
+    if(typeof showHome==='function'){ showHome(); return true; }
+    const home=document.getElementById('home');
+    if(home){
+      document.querySelectorAll('#setup,#game,#result,#historyScreen,#savedGameDetail,#rulebook,#orderConfirm')
+        .forEach(el=>{if(el)el.style.display='none';});
+      home.style.display='';
+      window.scrollTo(0,0);
+      return true;
+    }
+    return false;
+  }
+
+  function restoreScreen(target){
+    const now=visibleScreen();
+    if(target===now) return;
+
+    /* 履歴詳細→履歴一覧 */
+    if(target==='historyScreen'){
+      if(typeof showSavedGames==='function'){ showSavedGames(); return; }
+      if(typeof showHistory==='function'){ showHistory(); return; }
+    }
+    /* ホーム */
+    if(target==='home'){ goHomeFromBack(); return; }
+
+    /* 得点入力中から戻る場合は誤操作防止 */
+    if(now==='game' && target!=='game'){
+      if(!confirm('セット中です。前の画面に戻りますか？')){
+        history.pushState({[APP_STATE_KEY]:'game'},'',location.href);
+        return;
+      }
+    }
+
+    /* 既存の画面遷移を壊さない安全なフォールバック */
+    const targetEl=document.getElementById(target);
+    if(targetEl){
+      ['home','setup','game','result','historyScreen','savedGameDetail','rulebook','orderConfirm']
+        .forEach(id=>{
+          const el=document.getElementById(id);
+          if(el) el.style.display=(id===target?'':'none');
+        });
+      window.scrollTo(0,0);
+    }else{
+      goHomeFromBack();
+    }
+  }
+
+  /* 初期表示をアプリ履歴の起点にする */
+  history.replaceState({...(history.state||{}),[APP_STATE_KEY]:visibleScreen()},'',location.href);
+
+  /* 既存のボタンによる画面切替を監視し、その画面を履歴へ積む */
+  let lastScreen=visibleScreen();
+  const observer=new MutationObserver(()=>{
+    const now=visibleScreen();
+    if(now!==lastScreen){
+      lastScreen=now;
+      if(!handlingPop) setTimeout(pushCurrentScreen,0);
+    }
+  });
+  document.addEventListener('DOMContentLoaded',()=>{
+    ['home','setup','game','result','historyScreen','savedGameDetail','rulebook','orderConfirm']
+      .map(id=>document.getElementById(id)).filter(Boolean)
+      .forEach(el=>observer.observe(el,{attributes:true,attributeFilter:['style','class','hidden']}));
+  });
+
+  window.addEventListener('molkky-v28-disabled',(e)=>{
+    handlingPop=true;
+    const target=(e.state&&e.state[APP_STATE_KEY]) || 'home';
+    restoreScreen(target);
+    setTimeout(()=>{
+      lastScreen=visibleScreen();
+      handlingPop=false;
+    },0);
+  });
+})();
+</script>
+
+
+<script>
+/* v29: 実際の画面IDに合わせてスマホの戻る操作を制御 */
+(function(){
+  const KEY='molkkyNavV29';
+  let internalPop=false;
+  let last='home';
+
+  function shown(id){
+    const el=document.getElementById(id);
+    return !!el && !el.classList.contains('hidden') && getComputedStyle(el).display!=='none';
+  }
+  function screen(){
+    if(shown('savedGameDetail')) return 'savedDetail';
+    if(shown('savedGames')) return 'savedGames';
+    if(shown('rulesBook')) return 'rules';
+    if(shown('orderScreen')) return 'order';
+    if(shown('names')) return 'names';
+    if(shown('game')) return shown('result') ? 'result' : 'game';
+    return 'home'; // 実際のホームは #setup
+  }
+  function state(name){ return {[KEY]:name}; }
+
+  function push(name){
+    if(internalPop || !name || name===last) return;
+    history.pushState(state(name),'',location.href);
+    last=name;
+  }
+
+  function showOnly(name){
+    const ids=['setup','rulesBook','savedGames','savedGameDetail','names','orderScreen','game'];
+    ids.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.classList.add('hidden');
+    });
+
+    if(name==='home'){
+      document.getElementById('setup')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(false);
+    }else if(name==='rules'){
+      document.getElementById('rulesBook')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(true);
+    }else if(name==='savedGames'){
+      document.getElementById('savedGames')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(true);
+      if(typeof renderSavedGames==='function') renderSavedGames();
+    }else if(name==='savedDetail'){
+      /* 詳細内容は保持したまま再表示 */
+      document.getElementById('savedGameDetail')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(true);
+    }else if(name==='names'){
+      document.getElementById('names')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(true);
+    }else if(name==='order'){
+      document.getElementById('orderScreen')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(true);
+    }else if(name==='game' || name==='result'){
+      document.getElementById('game')?.classList.remove('hidden');
+      if(typeof updateHeaderHome==='function') updateHeaderHome(true);
+      /* result/game内部の表示状態はゲーム本体の状態を優先して壊さない */
+    }
+    window.scrollTo(0,0);
+  }
+
+  /* 最初のページをアプリ内履歴の起点にする */
+  last=screen();
+  history.replaceState(state(last),'',location.href);
+
+  /* 実際に使われている画面要素の hidden 変更を監視 */
+  const watchIds=['setup','rulesBook','savedGames','savedGameDetail','names','orderScreen','game','result'];
+  const observer=new MutationObserver(()=>{
+    setTimeout(()=>{
+      const now=screen();
+      if(now!==last) push(now);
+    },0);
+  });
+  function startWatch(){
+    watchIds.map(id=>document.getElementById(id)).filter(Boolean)
+      .forEach(el=>observer.observe(el,{attributes:true,attributeFilter:['class','style']}));
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',startWatch);
+  else startWatch();
+
+  window.addEventListener('molkky-v29-disabled',function(e){
+    const target=e.state&&e.state[KEY];
+    const now=screen();
+
+    /* 得点入力中に戻る時だけ確認 */
+    if(now==='game' && target && target!=='game'){
+      if(!confirm('セット中です。前の画面に戻りますか？')){
+        history.pushState(state('game'),'',location.href);
+        last='game';
+        return;
+      }
+    }
+
+    internalPop=true;
+    if(target){
+      showOnly(target);
+      last=target;
+    }else{
+      /* アプリの先頭より前へ行こうとした時は、まずホームに留める */
+      showOnly('home');
+      history.pushState(state('home'),'',location.href);
+      last='home';
+    }
+    setTimeout(()=>{internalPop=false;},0);
+  });
+})();
+</script>
+
+
+<script>
+/* v30: Android/ブラウザの戻る操作を、実際の画面遷移関数に直接連動 */
+(function(){
+  const KEY='molkkyNavV30';
+  let suppress=false;
+  let current='home';
+
+  const original={};
+  ['openRules','closeRules','openSavedGames','closeSavedGames','openSavedGameDetail',
+   'closeSavedGameDetail','showNames','backToSetup','startGame','nextGame',
+   'cancelOrderChange','startNextGame','changePlayers','goHome'].forEach(n=>{
+      if(typeof window[n]==='function') original[n]=window[n];
+   });
+
+  function put(name, replace){
+    current=name;
+    const fn=replace?'replaceState':'pushState';
+    history[fn]({[KEY]:name},'',location.href);
+  }
+
+  function wrapPush(name,target){
+    if(!original[name])return;
+    window[name]=function(...args){
+      const r=original[name].apply(this,args);
+      if(!suppress) put(typeof target==='function'?target(...args):target,false);
+      return r;
+    };
+  }
+
+  function wrapBack(name,fallback){
+    if(!original[name])return;
+    window[name]=function(...args){
+      if(suppress)return original[name].apply(this,args);
+      const st=history.state&&history.state[KEY];
+      if(st===current && current!=='home'){
+        history.back();
+        return;
+      }
+      const r=original[name].apply(this,args);
+      put(fallback,true);
+      return r;
+    };
+  }
+
+  /* 「進む」操作だけ履歴を1つ積む */
+  wrapPush('openRules','rules');
+  wrapPush('openSavedGames','savedGames');
+  wrapPush('openSavedGameDetail','savedDetail');
+  wrapPush('showNames','names');
+  wrapPush('startGame','game');
+  wrapPush('nextGame','order');
+  wrapPush('startNextGame','game');
+
+  /* 画面内の戻るボタンはブラウザ履歴と同期 */
+  wrapBack('closeRules','home');
+  wrapBack('closeSavedGames','home');
+  wrapBack('closeSavedGameDetail','savedGames');
+  wrapBack('backToSetup','home');
+  wrapBack('cancelOrderChange','game');
+
+  /* 明示的にホームへ行く操作は履歴の現在地もホームにする */
+  if(original.goHome){
+    window.goHome=function(...args){
+      const r=original.goHome.apply(this,args);
+      if(!suppress) put('home',true);
+      return r;
+    };
+  }
+  if(original.changePlayers){
+    window.changePlayers=function(...args){
+      const r=original.changePlayers.apply(this,args);
+      if(!suppress) put('home',true);
+      return r;
+    };
+  }
+
+  function showTarget(target){
+    suppress=true;
+    try{
+      if(target==='home'){
+        /* 状態を壊さずホーム表示だけ行う */
+        ['names','orderScreen','game','savedGames','savedGameDetail','rulesBook'].forEach(id=>{
+          document.getElementById(id)?.classList.add('hidden');
+        });
+        document.getElementById('setup')?.classList.remove('hidden');
+        if(typeof updateHeaderHome==='function')updateHeaderHome(false);
+      }else if(target==='rules'){
+        document.getElementById('setup')?.classList.add('hidden');
+        document.getElementById('rulesBook')?.classList.remove('hidden');
+        if(typeof updateHeaderHome==='function')updateHeaderHome(true);
+      }else if(target==='savedGames'){
+        document.getElementById('savedGameDetail')?.classList.add('hidden');
+        document.getElementById('setup')?.classList.add('hidden');
+        document.getElementById('savedGames')?.classList.remove('hidden');
+        if(typeof renderSavedGames==='function')renderSavedGames();
+        if(typeof updateHeaderHome==='function')updateHeaderHome(true);
+      }else if(target==='savedDetail'){
+        document.getElementById('savedGames')?.classList.add('hidden');
+        document.getElementById('savedGameDetail')?.classList.remove('hidden');
+        if(typeof updateHeaderHome==='function')updateHeaderHome(true);
+      }else if(target==='names'){
+        document.getElementById('setup')?.classList.add('hidden');
+        document.getElementById('game')?.classList.add('hidden');
+        document.getElementById('names')?.classList.remove('hidden');
+        if(typeof updateHeaderHome==='function')updateHeaderHome(true);
+      }else if(target==='game'){
+        document.getElementById('orderScreen')?.classList.add('hidden');
+        document.getElementById('names')?.classList.add('hidden');
+        document.getElementById('game')?.classList.remove('hidden');
+        if(typeof updateHeaderHome==='function')updateHeaderHome(true);
+      }else if(target==='order'){
+        document.getElementById('game')?.classList.add('hidden');
+        document.getElementById('orderScreen')?.classList.remove('hidden');
+        if(typeof updateHeaderHome==='function')updateHeaderHome(true);
+      }
+      window.scrollTo({top:0,left:0,behavior:'auto'});
+      current=target;
+    }finally{
+      suppress=false;
+    }
+  }
+
+  current='home';
+  history.replaceState({[KEY]:'home'},'',location.href);
+
+  window.addEventListener('popstate',function(e){
+    const target=e.state&&e.state[KEY];
+
+    /* 得点中にゲーム画面から離れる場合のみ確認 */
+    if(current==='game' && target && target!=='game' && !window.gameEnded){
+      if(!confirm('セット中です。前の画面に戻りますか？')){
+        history.pushState({[KEY]:'game'},'',location.href);
+        current='game';
+        return;
+      }
+    }
+
+    if(target){
+      showTarget(target);
+    }else{
+      /* このページを開く前のサイトへ即離脱させず、まずホームへ戻す */
+      showTarget('home');
+      history.pushState({[KEY]:'home'},'',location.href);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
