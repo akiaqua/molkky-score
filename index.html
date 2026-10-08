@@ -4202,7 +4202,197 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
 #names .member-input-row.registered-member .member-input{padding-right:105px!important}
 #names .registered-between-teams{text-align:left!important;display:flex!important;justify-content:flex-start!important;align-items:center!important}
 #names .registered-between-teams .names-picker-btn{margin:0!important;align-self:flex-start!important}
-</style></head>
+</style><style>
+/* v33.10: 登録管理ボタンの下端を選択ボタンの下端に揃える */
+#names .names-top-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;row-gap:8px;align-items:start;margin-bottom:12px}
+#names .names-heading-row{grid-column:1;grid-row:1;display:flex;align-items:flex-start;justify-content:flex-start;gap:7px;min-width:0}
+#names .names-heading-row .step-title{flex:0 1 auto;min-width:0;overflow-wrap:anywhere}
+#names .names-home-icon{flex:0 0 35px;width:35px;height:35px;min-width:35px;padding:7px;margin:0;border-radius:50%;background:#fff;color:#22533b;border:1px solid #c6d8cb;display:flex;align-items:center;justify-content:center;box-shadow:none}
+#names .names-home-icon svg{width:20px;height:20px}
+#names .names-picker-row{grid-column:1;grid-row:2;margin:0!important;align-self:end}
+#names .names-picker-btn{max-width:100%;font-size:clamp(10px,2.8vw,12px);white-space:normal}
+#names .names-registry-btn{grid-column:2;grid-row:1 / span 2;align-self:end;justify-self:stretch;width:100%;max-width:100%;min-width:0;flex:none;aspect-ratio:3/2;height:auto;margin:0;padding:6px 2px}
+@media(max-width:360px){#names .names-top-grid{column-gap:6px}#names .names-home-icon{width:31px;height:31px;flex-basis:31px;min-width:31px;padding:6px}#names .names-heading-row .step-title{font-size:16px}}
+</style><style>
+/* v33.11: ヘッダーを独立した2段組に整理 */
+#names .names-top-grid{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,34%)!important;
+  grid-template-rows:44px auto!important;
+  column-gap:10px!important;
+  row-gap:12px!important;
+  align-items:end!important;
+  padding:0!important;
+  margin:0 0 16px!important;
+}
+#names .names-heading-row{
+  grid-column:1 / -1!important;grid-row:1!important;
+  display:block!important;position:relative!important;
+  width:100%!important;min-width:0!important;
+  padding:0 47px 0 0!important;margin:0!important;
+  align-self:center!important;
+}
+#names .names-heading-row .step-title{
+  display:block!important;width:100%!important;max-width:none!important;
+  font-size:clamp(13px,3.6vw,19px)!important;
+  line-height:1.35!important;letter-spacing:-.045em!important;
+  font-weight:800!important;white-space:nowrap!important;
+  overflow-wrap:normal!important;word-break:keep-all!important;
+}
+#names .names-home-icon{
+  position:absolute!important;top:50%!important;right:0!important;
+  transform:translateY(-50%)!important;
+  width:39px!important;height:39px!important;min-width:39px!important;
+  padding:8px!important;margin:0!important;flex:none!important;
+  border-radius:50%!important;
+}
+#names .names-picker-row{
+  grid-column:1!important;grid-row:2!important;
+  display:flex!important;align-items:flex-end!important;
+  min-width:0!important;margin:0!important;padding:0!important;
+  align-self:end!important;
+}
+#names .names-picker-row .names-picker-btn{
+  width:100%!important;max-width:100%!important;
+  min-height:46px!important;height:46px!important;
+  margin:0!important;padding:5px 6px!important;
+  font-size:clamp(10px,2.65vw,13px)!important;
+  white-space:nowrap!important;letter-spacing:-.04em!important;
+}
+#names .names-registry-btn{
+  grid-column:2!important;grid-row:2!important;
+  display:flex!important;flex-direction:column!important;
+  justify-content:center!important;align-items:center!important;
+  align-self:end!important;justify-self:stretch!important;
+  width:100%!important;max-width:100%!important;
+  height:76px!important;min-height:76px!important;aspect-ratio:auto!important;
+  margin:0!important;padding:5px 3px!important;
+  font-size:20px!important;line-height:1.1!important;
+}
+#names .names-registry-btn span{font-size:clamp(10px,2.65vw,12px)!important;line-height:1.2!important}
+@media(max-width:340px){
+  #names .names-top-grid{column-gap:6px!important}
+  #names .names-heading-row .step-title{font-size:12px!important}
+  #names .names-picker-row .names-picker-btn{font-size:9px!important}
+}
+</style>
+<style>
+/* v33.12: 入力画面のヘッダーとチーム間ボタンを統一 */
+#names .names-top-grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,34%)!important;
+  grid-template-rows:42px 62px!important;
+  gap:8px 10px!important;
+  margin-bottom:12px!important;
+  align-items:stretch!important;
+}
+#names .names-heading-row{
+  grid-column:1/-1!important;grid-row:1!important;
+  align-self:center!important;padding-right:46px!important;
+}
+#names .names-home-icon{right:0!important;top:50%!important}
+#names .names-picker-row{
+  grid-column:1!important;grid-row:2!important;
+  align-self:end!important;align-items:flex-end!important;
+}
+#names .names-picker-row .names-picker-btn,
+#names .registered-between-teams .names-picker-btn{
+  display:inline-flex!important;
+  align-items:center!important;justify-content:center!important;
+  box-sizing:border-box!important;
+  width:auto!important;max-width:100%!important;
+  min-height:42px!important;height:42px!important;
+  padding:8px 11px!important;margin:0!important;
+  border-radius:14px!important;
+  font-size:clamp(10px,2.65vw,13px)!important;
+  font-weight:800!important;
+  letter-spacing:-.03em!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  background:#e8f0e8!important;
+  color:#174a31!important;
+  border:1px solid #c6d8c6!important;
+  box-shadow:none!important;
+}
+#names .names-registry-btn{
+  grid-column:2!important;grid-row:2!important;
+  height:62px!important;min-height:62px!important;
+  align-self:end!important;
+  border-radius:15px!important;
+  font-size:18px!important;
+}
+#names .names-registry-btn span{font-size:clamp(10px,2.65vw,12px)!important}
+#names .name-list{gap:0!important;margin:10px 0!important}
+#names .team-entry{margin-bottom:0!important}
+#names .registered-between-teams{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  margin:10px 0!important;padding:0!important;
+  text-align:left!important;border:0!important;
+}
+@media(max-width:360px){
+ #names .names-top-grid{column-gap:6px!important}
+ #names .names-picker-row .names-picker-btn,
+ #names .registered-between-teams .names-picker-btn{font-size:10px!important;padding:8px 7px!important}
+}
+</style>
+<style>
+/* v33.13: 見出しを装飾、操作ボタンは左右均等の1行デザイン */
+#names .names-top-grid{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ grid-template-rows:48px 52px!important;
+ column-gap:10px!important;row-gap:10px!important;
+ align-items:stretch!important;margin-bottom:15px!important;
+}
+#names .names-heading-row{
+ grid-column:1/-1!important;grid-row:1!important;
+ display:flex!important;align-items:center!important;
+ padding-right:52px!important;min-width:0!important;
+}
+#names .names-heading-row .step-title{
+ font-size:clamp(19px,5.1vw,25px)!important;
+ font-weight:900!important;letter-spacing:.015em!important;
+ white-space:nowrap!important;overflow-wrap:normal!important;
+ color:#175239!important;line-height:1.15!important;
+ text-shadow:0 1px 0 #fff!important;
+}
+#names .names-home-icon{right:0!important;top:50%!important}
+#names .names-picker-row{
+ grid-column:1!important;grid-row:2!important;
+ display:flex!important;align-items:stretch!important;
+ margin:0!important;padding:0!important;min-width:0!important;
+}
+#names .names-picker-row .names-picker-btn,
+#names .names-registry-btn{
+ box-sizing:border-box!important;
+ width:100%!important;max-width:100%!important;
+ min-width:0!important;height:52px!important;min-height:52px!important;
+ margin:0!important;padding:5px 4px!important;
+ border-radius:14px!important;
+ border:1px solid #c6d8c6!important;
+ background:#e8f0e8!important;color:#174a31!important;
+ box-shadow:none!important;
+ display:flex!important;flex-direction:row!important;
+ align-items:center!important;justify-content:center!important;
+ gap:3px!important;
+ font-size:clamp(10px,2.6vw,13px)!important;
+ font-weight:800!important;letter-spacing:-.035em!important;
+ line-height:1.15!important;white-space:nowrap!important;
+ aspect-ratio:auto!important;flex:none!important;
+}
+#names .names-registry-btn{grid-column:2!important;grid-row:2!important;align-self:stretch!important}
+#names .names-registry-btn span{
+ display:inline!important;font-size:inherit!important;
+ font-weight:inherit!important;line-height:inherit!important;
+ white-space:nowrap!important;
+}
+@media(max-width:360px){
+ #names .names-top-grid{column-gap:7px!important}
+ #names .names-picker-row .names-picker-btn,
+ #names .names-registry-btn{font-size:10px!important;letter-spacing:-.06em!important}
+}
+</style>
+</head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
 <div class="title-row">
@@ -4359,8 +4549,11 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
 </div>
 
 <div id="names" class="card hidden">
-  <div class="names-heading-row"><div class="step-title">チーム名とメンバー名を入力</div><button type="button" class="names-registry-btn" onclick="openMemberRegistry()">👥<span>登録メンバー<br>管理</span></button></div>
-  <div class="names-picker-row"><button type="button" class="names-picker-btn" onclick="openRegisteredPicker()">登録済みメンバーから選ぶ</button></div>
+  <div class="names-top-grid">
+    <div class="names-heading-row"><div class="step-title">🎯 ゲームスタート！</div><button type="button" class="names-home-icon" onclick="backToSetup()" aria-label="ホーム画面に戻る" title="ホーム画面に戻る"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></button></div>
+    <div class="names-picker-row"><button type="button" class="names-picker-btn" onclick="openRegisteredPicker()">👥 登録済みメンバーから選ぶ</button></div>
+    <button type="button" class="names-registry-btn" onclick="openMemberRegistry()">👥 <span>登録メンバー管理</span></button>
+  </div>
   <div id="registeredPicker" class="hidden"><p class="small">入力するメンバー欄を選んでから名前をタップしてください。</p><div id="quickRegisteredMembers"></div><button class="secondary" onclick="closeRegisteredPicker()">閉じる</button></div>
   
   <div class="name-list" id="nameList"></div>
@@ -5687,7 +5880,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v33.9</div>
+<div id="appVersionBadge">Web v33.13</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
