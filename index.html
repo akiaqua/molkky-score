@@ -4149,7 +4149,60 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
   }
 }
 </style>
-</head>
+<style>
+#personalStatsPanel .personal-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0}
+#personalStatsPanel .personal-metrics>div{background:#eaf3e7;border-radius:12px;text-align:center;padding:10px 4px;font-size:11px}
+#personalStatsPanel .personal-metrics b{display:block;font-size:18px;color:#174a31}
+#personalStatsPanel .chart-scroll{overflow-x:auto;max-width:100%;margin:12px 0}
+#personalStatsPanel svg{display:block;max-width:none}
+#personalStatsPanel .day-card,#memberRegistryPanel .registry-row{border:1px solid #d9e5d7;border-radius:12px;padding:10px;margin:7px 0;background:#fff}
+#memberRegistryPanel .registry-row{display:flex;align-items:center;gap:7px}
+#memberRegistryPanel .registry-row input{min-width:0;flex:1}
+#personalStatsPanel button,#memberRegistryPanel button{margin:3px}
+</style><style>
+/* v33.1: 入力画面をシンプルにし、登録済みメンバーの選択を独立 */
+#names .names-heading-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+#names .names-heading-row .step-title{flex:1;min-width:0;font-size:clamp(17px,4.5vw,22px)}
+#names .names-registry-btn{flex:0 0 33.333%;width:33.333%;aspect-ratio:3/2;height:auto;padding:5px 3px;background:#e6f0e6;color:#174a31;border:1px solid #b7d3b7;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;line-height:1.15}
+#names .names-registry-btn span{font-size:11px;font-weight:800}
+#names .names-picker-row{margin:8px 0}
+#names .names-picker-btn{background:#e8f0e8;color:#174a31;border:1px solid #c6d8c6;font-size:12px;padding:8px 11px;width:auto}
+#names #registeredPicker{border:1px solid #c7dec7;background:#f5faf4;border-radius:12px;padding:10px;margin:8px 0}
+#names #quickRegisteredMembers{display:flex;gap:6px;flex-wrap:wrap}
+#names #quickRegisteredMembers button{padding:8px 12px}
+.home-personal-icon{display:flex;align-items:center;justify-content:center;background:#e6f1e8;border-radius:12px;font-size:26px}
+@media(max-width:360px){#names .names-registry-btn span{font-size:10px}}
+</style><style>
+#setup .personal-art{background:transparent!important;box-shadow:none!important}
+#setup .personal-art svg{width:100%;height:100%;display:block}
+#setup .home-link-section{min-height:0}
+#personalStatsPanel .compare-legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0}
+#personalStatsPanel .compare-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+#personalStatsPanel .compare-legend-item i{display:inline-block;width:22px;height:5px;border-radius:3px}
+</style><style>
+/* v33.4 日別カード：2行の成績と右上の小型削除ボタン */
+#personalStatsPanel .personal-day-card{padding:11px 12px}
+#personalStatsPanel .personal-day-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#personalStatsPanel .personal-day-top b{font-size:clamp(13px,3.5vw,16px);min-width:0;line-height:1.4}
+#personalStatsPanel .personal-day-delete{flex:0 0 29px!important;width:29px!important;height:29px!important;min-height:0!important;min-width:0!important;padding:0!important;margin:0!important;border:1px solid #e9c3c3!important;border-radius:8px!important;background:#fff2f2!important;color:#a33c3c!important;font-size:21px!important;font-weight:600;line-height:1!important;box-shadow:none!important}
+#personalStatsPanel .personal-day-stats{font-size:clamp(11px,3.1vw,14px);color:#59645c;line-height:1.65;margin-top:5px;white-space:normal}
+</style><style>
+#personalStatsPanel .personal-page-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+#personalStatsPanel .personal-page-header h2{margin:0}
+#personalStatsPanel .personal-home-icon{display:flex;align-items:center;justify-content:center;flex:0 0 40px;width:40px;height:40px;min-width:40px;min-height:40px;margin:0;padding:0;border:1px solid #b8d5bd;border-radius:11px;background:#eaf3e9;color:#236b45;font-size:30px;line-height:1;box-shadow:none}
+</style><style>
+#names .member-input-row.registered-member .member-input{background:#edf8ef!important;border:2px solid #319b5b!important;padding-right:80px!important}
+#names .registered-member-mark{position:absolute;right:69px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:800;color:#176b39;pointer-events:none;white-space:nowrap}
+#names .member-input-row{position:relative}
+#names .registered-between-teams{text-align:center;margin:3px 0 5px;padding:0;border:0}
+#names .registered-between-teams .names-picker-btn{width:auto;max-width:100%;margin:0 auto;font-size:12px}
+</style><style>
+/* v33.9: 登録マークとチーム間ボタンの配置 */
+#names .registered-member-mark{right:91px!important;font-size:10px!important;max-width:72px;white-space:nowrap;line-height:1.2}
+#names .member-input-row.registered-member .member-input{padding-right:105px!important}
+#names .registered-between-teams{text-align:left!important;display:flex!important;justify-content:flex-start!important;align-items:center!important}
+#names .registered-between-teams .names-picker-btn{margin:0!important;align-self:flex-start!important}
+</style></head>
 <body class="home-screen">
 <div id="app"><div class="wrap">
 <div class="title-row">
@@ -4175,7 +4228,10 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
     </div>
   </div>
 
-  <div class="card home-section home-link-section" onclick="openSavedGames()" role="button" tabindex="0">
+  <div class="card home-section home-link-section" onclick="openPersonalStats()" role="button" tabindex="0">
+<div class="home-link-main"><span class="home-section-icon home-art-image clean-menu-art personal-art"><svg viewBox="0 0 112 112" aria-hidden="true"><defs><linearGradient id="chartPaper" x2="0" y2="1"><stop stop-color="#fff8e7"/><stop offset="1" stop-color="#ffe5b5"/></linearGradient></defs><ellipse cx="57" cy="98" rx="47" ry="8" fill="#87b64c" opacity=".6"/><rect x="19" y="14" width="76" height="84" rx="13" fill="#b66c2d" stroke="#84491f" stroke-width="3" transform="rotate(-6 57 56)"/><rect x="24" y="17" width="66" height="76" rx="10" fill="url(#chartPaper)" stroke="#e2b46e" stroke-width="3" transform="rotate(-6 57 56)"/><path d="M36 72 L49 60 L62 64 L80 36" fill="none" stroke="#25834b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="72" r="5" fill="#f1ad27"/><circle cx="49" cy="60" r="5" fill="#f1ad27"/><circle cx="62" cy="64" r="5" fill="#f1ad27"/><circle cx="80" cy="36" r="5" fill="#f1ad27"/><path d="M9 93q12-24 25 0M78 100q12-29 25 0" fill="#4b9c3c" stroke="#377a32" stroke-width="2"/><g fill="#fff9e5" stroke="#e9cf73" stroke-width="1"><circle cx="15" cy="88" r="5"/><circle cx="21" cy="84" r="5"/><circle cx="22" cy="92" r="5"/><circle cx="93" cy="92" r="5"/><circle cx="99" cy="88" r="5"/><circle cx="100" cy="96" r="5"/></g></svg></span><div><div class="home-link-title">個人成績確認</div><div class="small">投擲精度の推移・自己ベスト・メンバー比較</div></div></div><span class="home-chevron">›</span></div>
+
+<div class="card home-section home-link-section" onclick="openSavedGames()" role="button" tabindex="0">
     <div class="home-link-main">
       <span class="home-section-icon home-art-image clean-menu-art"><img src="data:image/webp;base64,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" alt=""></span>
       <div>
@@ -4198,6 +4254,12 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
   </div>
 </div>
 
+<div id="memberRegistryPanel" class="card hidden"><h2>登録メンバーの管理</h2><p class="small">最大20人。登録名をゲーム前の入力欄へ設定できます。</p><div id="memberRegistryList"></div><div style="display:flex;gap:6px"><input id="newRegisteredName" maxlength="4" placeholder="名前（4文字）" style="min-width:0;flex:1"><button class="primary" style="width:auto" onclick="addRegisteredMember()">追加</button></div><button class="secondary back" onclick="closeRegistryToNames()">前の画面に戻る</button></div>
+<div id="personalStatsPanel" class="card hidden"><div class="personal-page-header"><h2>📈 個人成績確認</h2><button type="button" class="personal-home-icon" onclick="closePersonalPanels()" aria-label="ホーム画面に戻る" title="ホーム画面に戻る">⌂</button></div><p class="small">同じ日に3セット以上の成績だけ記録。記録のある日を等間隔に表示します。</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><select id="personalMember" onchange="renderPersonalStats()" style="flex:1;min-width:100px"></select><button class="secondary" onclick="openMemberRegistry()">メンバー管理</button></div>
+<div id="personalStatsContent"></div><h3>メンバー比較</h3><div id="personalCompareChoices"></div><div id="personalCompareChart"></div>
+<h3>画像出力</h3><p class="small">個人成績・直近20記録日のグラフ・各日の成功数／投擲数を1枚の画像に保存します。</p><button type="button" class="primary" onclick="exportPersonalStatsImage()">📷 個人成績を画像で保存</button>
+<button class="secondary back" onclick="closePersonalPanels()">ホームに戻る</button></div>
 <div id="rulesBook" class="card hidden">
   <div class="step-title">📖 モルック ルールブック</div>
   <p class="small">初めてでもこれだけ見れば遊べる、基本ルールまとめ。</p>
@@ -4297,11 +4359,13 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
 </div>
 
 <div id="names" class="card hidden">
-  <div class="step-title">② チーム・メンバーを入力</div>
-  <p class="small">チーム名とメンバー名を入力してください。メンバーは1〜4人。名前を入れると次の入力欄が表示されます。</p>
+  <div class="names-heading-row"><div class="step-title">チーム名とメンバー名を入力</div><button type="button" class="names-registry-btn" onclick="openMemberRegistry()">👥<span>登録メンバー<br>管理</span></button></div>
+  <div class="names-picker-row"><button type="button" class="names-picker-btn" onclick="openRegisteredPicker()">登録済みメンバーから選ぶ</button></div>
+  <div id="registeredPicker" class="hidden"><p class="small">入力するメンバー欄を選んでから名前をタップしてください。</p><div id="quickRegisteredMembers"></div><button class="secondary" onclick="closeRegisteredPicker()">閉じる</button></div>
+  
   <div class="name-list" id="nameList"></div>
   <button class="primary" onclick="startGame()">セット開始 🎯</button>
-  <button class="secondary back" onclick="backToSetup()">チーム数を変更</button>
+  <button class="secondary back" onclick="backToSetup()">ホーム画面に戻る</button>
 </div>
 
 <div id="orderScreen" class="card hidden">
@@ -4800,6 +4864,12 @@ function showNames(n){
       <div id="members${i}" class="member-list"></div>`;
     $('nameList').appendChild(box);
     renderMemberInputs(i,savedMembers);
+    if(i<n-1){
+      const between=document.createElement('div');
+      between.className='registered-between-teams';
+      between.innerHTML='<button type="button" class="names-picker-btn" onclick="openRegisteredPickerForTeam('+ (i+1) +')">👥 登録済みメンバーから選ぶ</button>';
+      $('nameList').appendChild(between);
+    }
   }
   $('setup').classList.add('hidden');
   $('names').classList.remove('hidden');
@@ -5617,7 +5687,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v32.1</div>
+<div id="appVersionBadge">Web v33.9</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
@@ -5981,5 +6051,211 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 })();
 </script>
 
-</body>
+<script>
+/* v33 個人成績管理。ゲーム履歴とは独立した日別記録 */
+(function(){
+const REG='molkkyPersonalRegistryV1', DAYS='molkkyPersonalDaysV1';
+const $p=id=>document.getElementById(id);
+const get=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return Array.isArray(v)?v:d}catch(e){return d}};
+const put=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dayKey=iso=>{const d=new Date(iso);if(isNaN(d))return '';return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+function registry(){return get(REG,[])}
+function days(){return get(DAYS,[])}
+function hide(){['setup','names','game','savedGames','savedGameDetail','rulesBook','memberRegistryPanel','personalStatsPanel'].forEach(id=>$p(id)?.classList.add('hidden'))}
+function home(){hide();$p('setup')?.classList.remove('hidden');try{updateHeaderHome(false)}catch(e){}}
+window.closePersonalPanels=home;
+window.openMemberRegistry=function(){window.personalRegistryOrigin=(!$p('names').classList.contains('hidden'))?'names':(!$p('personalStatsPanel').classList.contains('hidden')?'stats':'home');hide();$p('memberRegistryPanel').classList.remove('hidden');renderRegistry();window.scrollTo(0,0)};
+window.openPersonalStats=function(){hide();$p('personalStatsPanel').classList.remove('hidden');renderPersonalStats();window.scrollTo(0,0)};
+window.addRegisteredMember=function(){let name=$p('newRegisteredName').value.trim();let r=registry();if(!name)return alert('名前を入力してください');if([...name].length>4)return alert('4文字以内で入力してください');if(r.length>=20)return alert('登録は20人までです');if(r.some(x=>x.name===name))return alert('同じ名前が登録されています');r.push({id:'m'+Date.now().toString(36)+Math.random().toString(36).slice(2,7),name});put(REG,r);$p('newRegisteredName').value='';renderRegistry()};
+window.renameRegisteredMember=function(id,value){let r=registry(),m=r.find(x=>x.id===id),name=value.trim();if(!m||!name||[...name].length>4)return alert('名前は1〜4文字です');if(r.some(x=>x.id!==id&&x.name===name))return alert('同じ名前が登録されています');m.name=name;put(REG,r);renderRegistry()};
+window.deleteRegisteredMember=function(id){let r=registry(),m=r.find(x=>x.id===id);if(!m||!confirm(m.name+'さんの登録と個人成績を削除しますか？'))return;put(REG,r.filter(x=>x.id!==id));put(DAYS,days().filter(x=>x.memberId!==id));renderRegistry()};
+window.useRegisteredMember=function(id){const m=registry().find(x=>x.id===id);if(!m)return;const inputs=[...document.querySelectorAll('#names input.member-input')];const empty=inputs.find(x=>!x.value.trim());if(!empty){alert('先にゲームスタートからチームとメンバーの入力画面を開いてください');return}empty.value=m.name;empty.dispatchEvent(new Event('input',{bubbles:true}));alert(m.name+'さんを入力しました')};
+function renderRegistry(){const r=registry();$p('memberRegistryList').innerHTML='<p class="small">'+r.length+'/20人</p>'+r.map(m=>`<div class="registry-row"><input maxlength="4" value="${esc(m.name)}" id="reg_${m.id}"><button class="secondary" onclick="renameRegisteredMember('${m.id}',document.getElementById('reg_${m.id}').value)">保存</button><button class="danger" onclick="deleteRegisteredMember('${m.id}')">削除</button></div>`).join('')};
+function drawChart(series,average,mode='date',comparisonAverages=[]){
+ const labels=series[0]?.labels||[],count=labels.length;
+ const W=Math.max(310,count*68+80),H=230,L=38,R=18,T=17,B=43,inner=W-L-R;
+ const x=i=>L+(count<=1?inner/2:i*inner/(count-1)),y=v=>T+(100-v)*(H-T-B)/100;
+ const grid=[0,25,50,75,100].map(v=>`<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="#dce5da"/><text x="${L-5}" y="${y(v)+4}" text-anchor="end" font-size="10">${v}</text>`).join('');
+ const palette=['#007a4d','#e18a22','#3d67c9'];
+ const paths=series.map((s,k)=>{
+   const pts=s.values.map((v,i)=>v===null?null:[x(i),y(v)]).filter(Boolean);
+   return `<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${palette[k%3]}" stroke-width="3.5" stroke-linejoin="miter" stroke-linecap="round"/>`+
+    pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${palette[k%3]}" stroke="white" stroke-width="1.5"/>`).join('');
+ }).join('');
+ const avg=average===null?'':`<line x1="${L}" y1="${y(average)}" x2="${W-R}" y2="${y(average)}" stroke="#d38324" stroke-width="2" stroke-dasharray="6 4"/><text x="${W-R}" y="${Math.max(12,y(average)-5)}" text-anchor="end" font-size="10" fill="#a26316">平均 ${average.toFixed(1)}%</text>`;
+ const compareLines=comparisonAverages.map((item,k)=>{
+  if(item.value===null)return '';
+  const color=palette[k%3],yy=y(item.value);
+  return `<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="${color}" stroke-width="2" stroke-dasharray="7 5" opacity=".75"/>`;
+ }).join('');
+ const tickLabels=labels.map((d,i)=>`<text x="${x(i)}" y="${H-15}" text-anchor="middle" font-size="10">${esc(mode==='round'?d:d.slice(5).replace('-','/'))}</text>`).join('');
+ return `<div class="chart-scroll"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="投擲精度の直線グラフ">${grid}${avg}${compareLines}${paths}${tickLabels}</svg></div>`;
+}
+function accuracy(x){return x.turns?100*(x.turns-x.misses-x.wrongHits)/x.turns:0}
+function records(id){return days().filter(x=>x.memberId===id).sort((a,b)=>a.date.localeCompare(b.date))}
+window.renderPersonalStats=function(){
+ const r=registry(),sel=$p('personalMember'),old=sel.value;sel.innerHTML=r.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join('');if(r.some(m=>m.id===old))sel.value=old;
+ const id=sel.value,ds=records(id),sum=ds.reduce((a,d)=>({turns:a.turns+d.turns,misses:a.misses+d.misses,wrongHits:a.wrongHits+d.wrongHits}),{turns:0,misses:0,wrongHits:0});
+ const avg=sum.turns?accuracy(sum):0,best=ds.length?Math.max(...ds.map(accuracy)):0;
+ const graphDays=ds.slice(-20);
+ const graphSum=graphDays.reduce((a,d)=>({turns:a.turns+d.turns,misses:a.misses+d.misses,wrongHits:a.wrongHits+d.wrongHits}),{turns:0,misses:0,wrongHits:0});
+ const graphAverage=graphSum.turns?accuracy(graphSum):0;
+ $p('personalStatsContent').innerHTML=!r.length?'<p>メンバーを登録してください。</p>':`<div class="personal-metrics"><div>平均精度<b>${avg.toFixed(1)}%</b></div><div>記録日<b>${ds.length}日</b></div><div>自己ベスト<b>${best.toFixed(1)}%</b></div></div>`+(ds.length?'<p class="small">グラフ：直近'+graphDays.length+'記録日（最大20日分）</p>'+drawChart([{labels:graphDays.map(d=>d.date),values:graphDays.map(accuracy)}],graphAverage):'<p class="small">まだ記録がありません。1日に3セット以上プレーすると自動記録されます。</p>')+ds.map(d=>`<div class="day-card personal-day-card"><div class="personal-day-top"><b>${esc(d.date)}　投擲精度 ${accuracy(d).toFixed(1)}%</b><button type="button" class="personal-day-delete" aria-label="${esc(d.date)}の成績を削除" title="この日の成績を削除" onclick="deletePersonalDay('${id}','${d.date}')">×</button></div><div class="personal-day-stats"><div>${d.setCount}セット　投擲${d.turns}回　成功${Math.max(0,d.turns-d.misses-d.wrongHits)}回</div><div>ミス${d.misses}回　誤ヒット${d.wrongHits}回</div></div></div>`).join('')+(ds.length?`<button class="danger" onclick="deleteAllPersonalDays('${id}')">このメンバーの全成績を削除</button>`:'');
+ $p('personalCompareChoices').innerHTML=r.map(m=>`<label style="display:inline-block;margin:4px"><input type="checkbox" class="compareMember" value="${esc(m.id)}" onchange="renderCompareChart()" ${m.id===id?'checked':''}>${esc(m.name)}</label>`).join('');
+ renderCompareChart();
+};
+window.renderCompareChart=function(){
+ const checks=[...document.querySelectorAll('.compareMember:checked')];
+ if(checks.length>3){checks[checks.length-1].checked=false;alert('比較は最大3人までです');}
+ const ids=[...document.querySelectorAll('.compareMember:checked')].map(x=>x.value),r=registry();
+ const groups=ids.map(id=>({id,name:r.find(m=>m.id===id)?.name||'',records:records(id).slice(-10)}));
+ const maxCount=Math.max(0,...groups.map(g=>g.records.length));
+ const labels=Array.from({length:maxCount},(_,i)=>i===maxCount-1?'最新':`${maxCount-1-i}回前`);
+ const colors=['#007a4d','#e18a22','#3d67c9'];
+ const averages=groups.map(g=>{
+  const total=g.records.reduce((a,d)=>({turns:a.turns+d.turns,misses:a.misses+d.misses,wrongHits:a.wrongHits+d.wrongHits}),{turns:0,misses:0,wrongHits:0});
+  return {value:total.turns?accuracy(total):null};
+ });
+ const legend=groups.map((g,k)=>`<span class="compare-legend-item"><i style="background:${colors[k]}"></i>${esc(g.name)} <small>平均 ${averages[k].value===null?'―':averages[k].value.toFixed(1)+'%'}</small></span>`).join('');
+ const plotted=groups.map(g=>({labels,values:labels.map((_,i)=>{
+  const offset=maxCount-g.records.length,index=i-offset;
+  return index>=0&&index<g.records.length?accuracy(g.records[index]):null;
+ })}));
+ $p('personalCompareChart').innerHTML=ids.length&&maxCount?
+ '<p class="small">各メンバー直近10日分。右端が最新です。破線は各メンバーの平均精度です。</p><div class="compare-legend">'+legend+'</div>'+
+ drawChart(plotted,null,'round',averages):
+ '<p class="small">記録のあるメンバーを選択してください。</p>';
+};
+window.deletePersonalDay=function(id,date){if(!confirm(date+'の成績を削除しますか？'))return;put(DAYS,days().filter(d=>!(d.memberId===id&&d.date===date)));renderPersonalStats()};
+window.deleteAllPersonalDays=function(id){if(!confirm('このメンバーのすべての個人成績を削除しますか？'))return;put(DAYS,days().filter(d=>d.memberId!==id));renderPersonalStats()};
+window.exportPersonalBackup=function(){const data={version:1,registry:registry(),days:days()},blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='molkky-personal-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+window.importPersonalBackup=async function(e){const file=e.target.files[0];if(!file)return;try{const d=JSON.parse(await file.text());if(d.version!==1||!Array.isArray(d.registry)||!Array.isArray(d.days)||d.registry.length>20)throw Error('形式が正しくありません');if(!confirm('登録メンバーと個人成績をバックアップ内容で置き換えますか？'))return;put(REG,d.registry);put(DAYS,d.days);renderPersonalStats();alert('復元しました')}catch(err){alert('復元できませんでした: '+err.message)}finally{e.target.value=''}};
+window.capturePersonalDay=function(){
+ const games=loadSavedGames(),r=registry(),store=days(),byDate={};
+ for(const game of games)for(const set of (game.sets||[])){
+  const date=dayKey(set.endedAt||set.startedAt);if(!date)continue;
+  if(!byDate[date])byDate[date]={sets:[],members:{}};
+  byDate[date].sets.push(set);
+  for(const team of set.teams||[])for(const m of team.members||[]){
+   const reg=r.find(x=>x.name===m.name);if(!reg)continue;
+   const key=reg.id,agg=byDate[date].members[key]||(byDate[date].members[key]={turns:0,misses:0,wrongHits:0});
+   agg.turns+=Number(m.turns)||0;agg.misses+=Number(m.misses)||0;agg.wrongHits+=Number(m.wrongHits)||0;
+  }
+ }
+ for(const [date,v] of Object.entries(byDate)){if(v.sets.length<3)continue;for(const [memberId,a] of Object.entries(v.members)){
+  if(!a.turns||store.some(d=>d.date===date&&d.memberId===memberId))continue;
+  store.push({date,memberId,setCount:v.sets.length,...a});
+ }}
+ put(DAYS,store);
+};
+const oldSave=window.saveCompletedGame;
+if(typeof oldSave==='function')window.saveCompletedGame=function(...args){const result=oldSave.apply(this,args);capturePersonalDay();return result};
+window.addEventListener('DOMContentLoaded',()=>{
+ const names=$p('names');
+ if(names)names.addEventListener('focusin',e=>{
+   if(e.target.matches('input.member-input'))window.personalFocusedInput=e.target;
+ });
+});
+window.openRegisteredPickerForTeam=function(teamIndex){
+ window.personalFocusedInput=[...document.querySelectorAll('#members'+teamIndex+' input.member-input')].find(el=>!el.value.trim())||document.querySelector('#members'+teamIndex+' input.member-input');
+ window.openRegisteredPicker();
+ const picker=document.getElementById('registeredPicker');
+ const anchor=document.querySelector('#members'+teamIndex);
+ if(picker&&anchor)anchor.parentNode.insertBefore(picker,anchor.nextSibling);
+ picker.scrollIntoView({block:'nearest',behavior:'smooth'});
+};
+window.openRegisteredPicker=function(){
+ const panel=$p('registeredPicker'),q=$p('quickRegisteredMembers');
+ q.innerHTML=registry().map(m=>`<button type="button" class="secondary" onclick="selectQuickMember('${m.id}')">${esc(m.name)}</button>`).join('')||'<p class="small">まだ登録メンバーがいません。右上の登録メンバー管理から追加してください。</p>';
+ panel.classList.remove('hidden');
+};
+window.closeRegisteredPicker=function(){$p('registeredPicker').classList.add('hidden')};
+window.closeRegistryToNames=function(){
+ hide();const origin=window.personalRegistryOrigin;$p(origin==='stats'?'personalStatsPanel':origin==='home'?'setup':'names').classList.remove('hidden');window.scrollTo(0,0);
+};
+window.selectQuickMember=function(id){const m=registry().find(x=>x.id===id);if(!m)return;let target=window.personalFocusedInput;if(!target||!target.isConnected)target=[...document.querySelectorAll('#names input.member-input')].find(x=>!x.value.trim());if(!target)return alert('入力欄を選択してください');target.value=m.name;target.dispatchEvent(new Event('input',{bubbles:true}));window.personalFocusedInput=null;};
+})();
+</script><script>
+window.exportPersonalStatsImage=async function(){
+ const btn=document.activeElement;
+ try{
+  const sel=document.getElementById('personalMember'),id=sel?.value;
+  const members=JSON.parse(localStorage.getItem('molkkyPersonalRegistryV1')||'[]');
+  const member=members.find(m=>m.id===id);
+  const all=JSON.parse(localStorage.getItem('molkkyPersonalDaysV1')||'[]').filter(d=>d.memberId===id).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!member||!all.length){alert('画像出力できる個人成績がありません。');return}
+  const recent=all.slice(-20),acc=d=>d.turns?100*(d.turns-d.misses-d.wrongHits)/d.turns:0;
+  const total=all.reduce((a,d)=>({turns:a.turns+(+d.turns||0),misses:a.misses+(+d.misses||0),wrongHits:a.wrongHits+(+d.wrongHits||0)}),{turns:0,misses:0,wrongHits:0});
+  const avg=acc(total),best=Math.max(...all.map(acc));
+  const recentTotal=recent.reduce((a,d)=>({turns:a.turns+(+d.turns||0),misses:a.misses+(+d.misses||0),wrongHits:a.wrongHits+(+d.wrongHits||0)}),{turns:0,misses:0,wrongHits:0});
+  const recentAvg=acc(recentTotal);
+  const W=1080,margin=70,chartTop=350,chartBottom=750,chartLeft=125,chartRight=1000;
+  const rows=Math.ceil(recent.length/2);
+  const H=955+rows*58;
+  const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');ctx.fillStyle='#f5f9f4';ctx.fillRect(0,0,W,H);
+  const txt=(t,x,y,size=26,color='#24452d',weight='normal',align='left')=>{ctx.fillStyle=color;ctx.font=`${weight} ${size}px sans-serif`;ctx.textAlign=align;ctx.fillText(String(t),x,y)};
+  const line=(x1,y1,x2,y2,color,width=2,dash=[])=>{ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([])};
+  const round=(x,y,w,h,color,r=18)=>{ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()};
+  round(35,30,1010,H-60,'#fff');
+  txt('MOLKKY SCORE+  個人成績',margin,100,39,'#175c3b','bold');
+  txt(member.name+' さん',margin,165,44,'#263c2b','bold');
+  const cards=[['平均投擲精度',avg.toFixed(1)+'%'],['記録日',all.length+'日'],['自己ベスト',best.toFixed(1)+'%']];
+  cards.forEach((v,i)=>{let x=margin+i*325;round(x,195,300,110,'#e9f3e7');txt(v[0],x+18,234,23,'#51725a');txt(v[1],x+18,283,39,'#1b623d','bold')});
+  txt('投擲精度の推移（直近'+recent.length+'記録日）',margin,337,27,'#24452d','bold');
+  const y=v=>chartBottom-(v/100)*(chartBottom-chartTop),x=i=>recent.length===1?(chartLeft+chartRight)/2:chartLeft+i*(chartRight-chartLeft)/(recent.length-1);
+  [0,25,50,75,100].forEach(v=>{line(chartLeft,y(v),chartRight,y(v),'#dce6db');txt(v+'%',chartLeft-16,y(v)+8,20,'#68806e','normal','right')});
+  line(chartLeft,y(recentAvg),chartRight,y(recentAvg),'#d18b29',3,[12,9]);
+  txt('平均 '+recentAvg.toFixed(1)+'%',chartRight,chartTop-12,21,'#a76a1d','bold','right');
+  recent.forEach((d,i)=>{if(i)line(x(i-1),y(acc(recent[i-1])),x(i),y(acc(d)),'#168455',5);ctx.beginPath();ctx.arc(x(i),y(acc(d)),7,0,Math.PI*2);ctx.fillStyle='#168455';ctx.fill();});
+  recent.forEach((d,i)=>{ctx.save();ctx.translate(x(i),chartBottom+18);ctx.rotate(-Math.PI/3.5);txt(d.date.slice(5).replace('-','/'),0,0,19,'#667d6c');ctx.restore()});
+  txt('日別の成功数／投擲数',margin,870,28,'#24452d','bold');
+  const colWidth=470, colGap=16, tableTop=913;
+  [0,1].forEach(col=>{const left=margin+col*(colWidth+colGap);
+    txt('日付',left,tableTop,19,'#667d6c','bold');
+    txt('成功/投擲',left+210,tableTop,19,'#667d6c','bold');
+    txt('精度',left+colWidth-10,tableTop,19,'#667d6c','bold','right');
+  });
+  // 左列に前半10件、右列に後半10件。日付の古い順に表示。
+  const leftCount=Math.ceil(recent.length/2);
+  recent.forEach((d,i)=>{
+    const col=i<leftCount?0:1,row=col===0?i:i-leftCount;
+    const left=margin+col*(colWidth+colGap),yy=952+row*58;
+    if(row%2===0)round(left-8,yy-32,colWidth+3,50,'#f2f7f1',8);
+    txt(d.date.slice(5).replace('-','/'),left,yy,22);
+    txt(Math.max(0,d.turns-d.misses-d.wrongHits)+'/'+d.turns+'回',left+210,yy,21);
+    txt(acc(d).toFixed(1)+'%',left+colWidth-10,yy,22,'#1b754b','bold','right');
+  });
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+  if(!blob)throw Error('画像を作成できませんでした');
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='molkky-personal-'+member.name+'-'+new Date().toISOString().slice(0,10)+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ }catch(e){console.error(e);alert('画像出力に失敗しました: '+e.message)}
+};
+</script><script>
+(function(){
+ function updateRegisteredMarks(){
+  let names=[];try{names=JSON.parse(localStorage.getItem('molkkyPersonalRegistryV1')||'[]').map(x=>x.name)}catch(e){}
+  document.querySelectorAll('#names .member-input-row').forEach(row=>{
+   const input=row.querySelector('input.member-input');if(!input)return;
+   const match=names.includes(input.value.trim())&&!!input.value.trim();
+   row.classList.toggle('registered-member',match);
+   let mark=row.querySelector('.registered-member-mark');
+   if(match&&!mark){mark=document.createElement('span');mark.className='registered-member-mark';mark.textContent='✓ 登録済み';row.appendChild(mark)}
+   if(!match&&mark)mark.remove();
+  });
+ }
+ document.addEventListener('input',e=>{if(e.target.matches('#names input.member-input'))updateRegisteredMarks()});
+ const target=document.getElementById('nameList');
+ if(target){new MutationObserver(updateRegisteredMarks).observe(target,{childList:true,subtree:true});updateRegisteredMarks()}
+ const oldSelect=window.selectQuickMember;
+ window.selectQuickMember=function(id){oldSelect(id);updateRegisteredMarks()};
+ const oldSave=window.renameRegisteredMember;
+ window.renameRegisteredMember=function(...args){oldSave(...args);updateRegisteredMarks()};
+ const oldDelete=window.deleteRegisteredMember;
+ window.deleteRegisteredMember=function(...args){oldDelete(...args);updateRegisteredMarks()};
+ const oldAdd=window.addRegisteredMember;
+ window.addRegisteredMember=function(...args){oldAdd(...args);updateRegisteredMarks()};
+})();
+</script></body>
 </html>
