@@ -2136,6 +2136,10 @@ body:has(#setup.hidden) .title-row{
 #resultCaptureHost .result-capture-history-row{display:grid!important;grid-template-columns:58px minmax(58px,.9fr) minmax(62px,1fr) minmax(76px,1.15fr) 58px!important;gap:5px!important;align-items:center!important;flex-wrap:nowrap!important;white-space:nowrap!important}
 #resultCaptureHost .result-capture-history-row>span{text-align:center!important;min-width:0!important}
 
+
+/* v33.14: disable browser pull-to-refresh while preserving normal scrolling */
+html,body{overscroll-behavior-y:none;overscroll-behavior-x:none}
+#app{overscroll-behavior-y:contain}
 </style>
   <meta name="theme-color" content="#0b4a38">
   <meta name="mobile-web-app-capable" content="yes">
@@ -5880,7 +5884,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v33.13</div>
+<div id="appVersionBadge">Web v33.14</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
