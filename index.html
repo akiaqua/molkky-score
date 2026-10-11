@@ -2140,6 +2140,14 @@ body:has(#setup.hidden) .title-row{
 /* v33.14: disable browser pull-to-refresh while preserving normal scrolling */
 html,body{overscroll-behavior-y:none;overscroll-behavior-x:none}
 #app{overscroll-behavior-y:contain}
+
+/* v33.15: setup member-order controls and iOS overscroll containment */
+html,body{overscroll-behavior:none!important}
+#names .member-order-toggle{width:100%;min-height:39px;margin:9px 0 2px;padding:8px 10px;background:#e8f0e8;color:#20523a;border:1px solid #c8dacb;border-radius:12px;font-size:12px;font-weight:800}
+#names .member-order-panel{margin:7px 0 12px;padding:10px;background:#f6faf6;border:1px solid #d8e6d9;border-radius:13px}
+#names .member-order-panel .order-row{margin:5px 0}
+#names .member-order-panel .order-name{font-size:13px}
+#names .member-order-panel .order-controls button{min-width:37px}
 </style>
   <meta name="theme-color" content="#0b4a38">
   <meta name="mobile-web-app-capable" content="yes">
@@ -4567,7 +4575,7 @@ html body #app #savedGameDetail #savedGameDetailContent .saved-team .saved-membe
 
 <div id="orderScreen" class="card hidden">
   <div class="step-title">次のセットの投球順</div>
-  <p class="order-note">基本の順番は前のセットから1チームずつローテーションします。必要なら ↑ ↓ で変更できます。</p>
+  <p class="order-note">前のセットと逆順が初期設定です。必要なら ↑ ↓ で変更できます。</p>
   <div id="orderList" class="order-list"></div>
   <button class="primary" onclick="startNextGame()">この順番でセット開始 🎯</button>
   <button class="secondary back" onclick="cancelOrderChange()">結果に戻る</button>
@@ -5058,7 +5066,9 @@ function showNames(n){
         <button type="button" class="member-remove" onclick="clearField('name${i}')" aria-label="チーム名を空欄にする">×</button>
       </div>
       <div class="member-label">メンバー</div>
-      <div id="members${i}" class="member-list"></div>`;
+      <div id="members${i}" class="member-list"></div>
+      <button type="button" class="member-order-toggle" onclick="toggleSetupMemberOrder(${i})">↕ メンバーの投擲順を変更</button>
+      <div id="memberOrderPanel${i}" class="member-order-panel hidden"></div>`;
     $('nameList').appendChild(box);
     renderMemberInputs(i,savedMembers);
     if(i<n-1){
@@ -5430,11 +5440,8 @@ function renderSessionSummary(){
 }
 
 function nextGame(){
-  // Rotate one place: 1-2 -> 2-1, 1-2-3 -> 2-3-1.
-  pendingOrder=players.map((_,i)=>i);
-  if(pendingOrder.length>1){
-    pendingOrder.push(pendingOrder.shift());
-  }
+  // Reverse the previous set's order by default (A-B-C -> C-B-A).
+  pendingOrder=players.map((_,i)=>i).reverse();
   renderOrderScreen();
   $('game').classList.add('hidden');
   $('orderScreen').classList.remove('hidden');
@@ -5884,7 +5891,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v33.14</div>
+<div id="appVersionBadge">Web v33.15</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
@@ -6454,5 +6461,51 @@ window.exportPersonalStatsImage=async function(){
  const oldAdd=window.addRegisteredMember;
  window.addRegisteredMember=function(...args){oldAdd(...args);updateRegisteredMarks()};
 })();
-</script></body>
+</script>
+<script>
+/* v33.15: reorder setup members before the first set */
+function toggleSetupMemberOrder(teamIndex){
+ const panel=document.getElementById('memberOrderPanel'+teamIndex);
+ if(!panel)return;
+ panel.classList.toggle('hidden');
+ if(!panel.classList.contains('hidden'))renderSetupMemberOrder(teamIndex);
+}
+function renderSetupMemberOrder(teamIndex){
+ const panel=document.getElementById('memberOrderPanel'+teamIndex);
+ if(!panel||panel.classList.contains('hidden'))return;
+ const names=getMemberValues(teamIndex);
+ panel.innerHTML=names.length<2
+   ?'<div class="small">順番を変更するにはメンバーを2人以上入力してください。</div>'
+   :'<div class="small" style="margin-bottom:7px">↑ ↓ で投擲順を変更できます。</div>'+
+    names.map((name,i)=>'<div class="order-row"><div class="order-pos">'+(i+1)+'</div><div class="order-name">'+escapeHtml(name)+'</div><div class="order-controls"><button type="button" onclick="moveSetupMemberOrder('+teamIndex+','+i+',-1)" '+(i===0?'disabled':'')+'>↑</button><button type="button" onclick="moveSetupMemberOrder('+teamIndex+','+i+',1)" '+(i===names.length-1?'disabled':'')+'>↓</button></div></div>').join('');
+}
+function moveSetupMemberOrder(teamIndex,pos,dir){
+ const names=getMemberValues(teamIndex),other=pos+dir;
+ if(other<0||other>=names.length)return;
+ [names[pos],names[other]]=[names[other],names[pos]];
+ renderMemberInputs(teamIndex,names);
+ renderSetupMemberOrder(teamIndex);
+}
+/* Safari/iOS: stop downward swipe at the document's upper edge; normal scrolling stays enabled. */
+(function(){
+ let startY=0,startX=0,atTop=false;
+ document.addEventListener('touchstart',function(e){
+  if(e.touches.length!==1){atTop=false;return;}
+  startY=e.touches[0].clientY;startX=e.touches[0].clientX;
+  atTop=(window.scrollY||document.documentElement.scrollTop||0)<=0;
+ },{passive:true});
+ document.addEventListener('touchmove',function(e){
+  if(!atTop||!e.cancelable||e.touches.length!==1)return;
+  const dy=e.touches[0].clientY-startY,dx=e.touches[0].clientX-startX;
+  if(dy>5&&dy>Math.abs(dx)*1.15)e.preventDefault();
+ },{passive:false});
+ document.addEventListener('input',function(e){
+  if(e.target.matches&&e.target.matches('#names .member-input')) {
+   const m=e.target.id.match(/^member(\d+)_/);
+   if(m)renderSetupMemberOrder(Number(m[1]));
+  }
+ });
+})();
+</script>
+</body>
 </html>
