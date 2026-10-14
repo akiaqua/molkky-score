@@ -5310,7 +5310,7 @@ function registerScore(){
 
   p.turns++;
   p.totalPoints+=pending;
-  p.seriesScore+=pending;
+  // 累計点は投擲の獲得点ではなく、セット得点の増減分で更新する。
   p.seriesTurns++;
   if(pending===0){p.zeros++;p.misses++;p.seriesMisses++;}else p.zeros=0;
   if(wrongHit){p.wrongHits=(p.wrongHits||0)+1;p.seriesWrongHits=(p.seriesWrongHits||0)+1;}
@@ -5329,6 +5329,7 @@ function registerScore(){
     }
   }
   p.score=after;
+  p.seriesScore+=after-before; // バースト時は25点への減点も累計に反映
 
   // 履歴にも投球者名を保存
   const historyItem={name:p.name,thrower,points:pending,after,note,turn:p.turns,wrongHit:!!wrongHit};
@@ -5336,6 +5337,10 @@ function registerScore(){
 
   if(p.zeros>=3){
     p.eliminated=true;
+    // 3回連続MISSの失格チームはこのセット0点として累計も減算。
+    p.seriesScore-=p.score;
+    p.score=0;
+    historyItem.after=0;
     // 同じ投球を二重登録せず、この投球の注記だけ更新
     historyItem.note='3回連続0点→失格';
     render();
@@ -5343,6 +5348,9 @@ function registerScore(){
     if(players.filter(x=>!x.eliminated).length===1){
       const remaining=players.find(x=>!x.eliminated);
       if(remaining){
+        // 失格による勝利はセット50点として確定し、累計にも差額を加える。
+        remaining.seriesScore+=50-remaining.score;
+        remaining.score=50;
         remaining.wins++;
         seriesGames++;
         gameEnded=true;
@@ -5891,7 +5899,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v33.15</div>
+<div id="appVersionBadge">Web v33.16</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
