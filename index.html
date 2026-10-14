@@ -5899,7 +5899,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-<div id="appVersionBadge">Web v33.16</div>
+<div id="appVersionBadge">Web v33.17</div>
 
 <script>
 /* v28: スマホ/ブラウザの「戻る」をアプリ内画面の戻るとして扱う */
@@ -6356,8 +6356,10 @@ window.capturePersonalDay=function(){
   }
  }
  for(const [date,v] of Object.entries(byDate)){if(v.sets.length<3)continue;for(const [memberId,a] of Object.entries(v.members)){
-  if(!a.turns||store.some(d=>d.date===date&&d.memberId===memberId))continue;
-  store.push({date,memberId,setCount:v.sets.length,...a});
+  if(!a.turns)continue;
+  const existing=store.find(d=>d.date===date&&d.memberId===memberId);
+  if(existing){existing.setCount=v.sets.length;existing.turns=a.turns;existing.misses=a.misses;existing.wrongHits=a.wrongHits;}
+  else store.push({date,memberId,setCount:v.sets.length,...a});
  }}
  put(DAYS,store);
 };
